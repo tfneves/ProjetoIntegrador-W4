@@ -1,29 +1,18 @@
 package br.com.meliw4.projetointegrador.dto;
 
-public class VendedorDTO {
-    private static final long serialVersionUID=1l;
+import br.com.meliw4.projetointegrador.entity.Vendedor;
 
-    private Long id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+public class VendedorDTO {
+
+    @NotEmpty(message = "Nome não pode estar em branco")
+    @Size(max = 100, message = "Nome não pode exceder 100 caracteres")
     private String nome;
 
-    public VendedorDTO(Long id, String nome) {
-        this.id = id;
-        this.nome = nome;
+    public static Vendedor convert(VendedorDTO vendedorDTO){
+        return Vendedor.builder().nome(vendedorDTO.nome).build();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 }

@@ -1,30 +1,23 @@
 package br.com.meliw4.projetointegrador.dto;
 
-import java.io.Serializable;
+import br.com.meliw4.projetointegrador.entity.Representante;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-public class RepresentanteDTO implements Serializable {
-    private static final long serialVersionUID=1l;
-    private Long id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+@Data
+@AllArgsConstructor
+@Builder
+public class RepresentanteDTO {
+
+    @NotEmpty(message = "Nome não pode estar em branco")
+    @Size(max = 100, message = "Nome não pode exceder 100 caracteres")
     private String nome;
 
-    public RepresentanteDTO(Long id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public static Representante convert(RepresentanteDTO representanteDTO){
+        return Representante.builder().nome(representanteDTO.getNome()).build();
     }
 }
