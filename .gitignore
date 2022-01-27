@@ -12,6 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.env
 
 ### IntelliJ IDEA ###
 .idea
@@ -31,3 +32,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### VIM ###
+**/*.swp
+
+### MacOS ###
+**/.DS_Store
+
+### Project ENV Config ###
+src/main/resources/application.properties
