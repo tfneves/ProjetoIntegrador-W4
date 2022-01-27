@@ -18,11 +18,7 @@ public class Setor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSetor;
-    @NotEmpty(message = "A Categoria não pode estar vazia")
-    @NotNull()
     private String categoria;
-    @NotEmpty(message = "O volume não pode estar vazia")
-    @NotNull()
     private Double volume;
 
 }
