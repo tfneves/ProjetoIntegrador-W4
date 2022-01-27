@@ -1,7 +1,9 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
+import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +15,25 @@ public class SetorService {
 
     SetorRepository setorRepository;
 
-    @Autowired
+    private SetorDTO setorDTO;
+
     public SetorService(SetorRepository setorRepository) {
         this.setorRepository = setorRepository;
     }
 
-    SetorDTO setorDTO;
+    @Autowired
+    private ArmazemRepository armazemRepository;
 
-    public SetorDTO salva(SetorDTO payload) {
-        Setor setor = this.setorRepository.save(setorDTO.converte(payload));
-        return setorDTO.converte(setor);
+
+    public Setor salva(Setor payload) {
+        return setorRepository.save(payload);
     }
 
-    public List<Setor> retornaTodosOsSetores(){
+    public List<Setor> retornaTodosOsSetores() {
         return this.setorRepository.findAll();
+    }
+
+    public void possuiEspaco(Setor setor){
+
     }
 }

@@ -8,16 +8,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Setor {
+public class Armazem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer setor_id;
-    private String categoria;
+    private Long armazem_id;
+    private String nome;
     private Double volume;
-    @ManyToOne
-    private Armazem aemazem_id;
 }
