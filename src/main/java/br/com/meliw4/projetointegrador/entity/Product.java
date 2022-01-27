@@ -42,10 +42,10 @@ public class Product extends BaseEntity {
 	private int currentQuantity; // TODO: Integer for nul
 
 	@NotEmpty
-	private LocalDate manufacturingDate = LocalDate.MIN;
+	private LocalDate manufacturingDate;
 
 	@NotEmpty
-	private LocalDateTime manufacturingTime = LocalDateTime.MIN;
+	private LocalDateTime manufacturingTime;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_seller", referencedColumnName = "id") // TODO: map as referencedColumnName = "CPF / CNPJ"
