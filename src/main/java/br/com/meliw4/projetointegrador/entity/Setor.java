@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 public class Setor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idSetor;
+    private Integer setor_id;
     private String categoria;
     private Double volume;
 
