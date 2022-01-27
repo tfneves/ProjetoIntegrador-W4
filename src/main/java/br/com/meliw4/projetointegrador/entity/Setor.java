@@ -19,5 +19,5 @@ public class Setor {
     private String categoria;
     private Double volume;
     @ManyToOne
-    private Armazem aemazem_id;
+    private Armazem id;
 }

@@ -19,13 +19,17 @@ public class SetorController {
     @Autowired
     SetorService setorService;
 
+    @Autowired
+    SetorDTO setorDTO;
+
     @GetMapping()
     public ResponseEntity<List<Setor>> devolveTodosOsSetores() {
         return ResponseEntity.ok(setorService.retornaTodosOsSetores());
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Setor> cadastraSetor(@RequestBody Setor payload, UriComponentsBuilder uriBuilder) throws Exception {
-        return ResponseEntity.ok(setorService.salva(payload));
+    public ResponseEntity<Setor> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
+        Setor setor = setorDTO.converte(payload);
+        return ResponseEntity.ok(setorService.salva(setor));
     }
 }

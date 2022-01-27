@@ -10,13 +10,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.Optional;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 public class SetorDTO {
 
     @NotEmpty(message = "A Categoria não pode estar vazia")
@@ -30,11 +33,11 @@ public class SetorDTO {
     ArmazemRepository armazemRepository;
 
     public Setor converte(SetorDTO payload){
-        Armazem armazem = armazemRepository.getById(payload.armazem_id);
+        Optional<Armazem> armazem = armazemRepository.findById(payload.armazem_id);
         return Setor.builder()
                 .categoria(payload.categoria)
                 .volume(payload.volume)
-                .aemazem_id(armazem)
+                .id(armazem.get())
                 .build();
     }
 
@@ -42,7 +45,7 @@ public class SetorDTO {
         return SetorDTO.builder()
                 .categoria(payload.getCategoria())
                 .volume(payload.getVolume())
-                .armazem_id(payload.getAemazem_id().getArmazem_id())
+                .armazem_id(payload.getId().getId())
                 .build();
     }
 
