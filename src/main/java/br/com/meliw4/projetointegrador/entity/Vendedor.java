@@ -1,21 +1,10 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Vendedor {
+@Table(name = "vendedores")
+public class Vendedor extends EntidadeBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
 }
