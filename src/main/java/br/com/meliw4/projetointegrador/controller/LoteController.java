@@ -1,4 +1,5 @@
 package br.com.meliw4.projetointegrador.controller;
+
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.service.LoteService;
@@ -24,22 +25,10 @@ public class LoteController {
 		return ResponseEntity.created(uri).body(loteService.register(lote));
 	}
 
-<<<<<<< HEAD
-    @PutMapping(path = "/fresh-products/inboundorder/")
-    public ResponseEntity<List<Produto>> updateLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
-        URI uri = uriBuilder.path("").build().toUri();
-        Lote lote = LoteDTO.convert(loteDTO);
-        return ResponseEntity.created(uri).body(loteService.update(lote));
-    }
-
-
-=======
 	@PutMapping(path = "/fresh-products/inboundorder/")
 	public ResponseEntity<List<Produto>> updateLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("").build().toUri();
 		Lote lote = LoteDTO.convert(loteDTO);
 		return ResponseEntity.created(uri).body(loteService.update(lote));
 	}
->>>>>>> 0e7ec3a439ff44782bc1cf5ab05f44ba9358186f
 }
-
