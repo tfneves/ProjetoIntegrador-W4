@@ -31,11 +31,6 @@ public class LoteService {
 		this.registroLoteRepository = registroLoteRepository;
 	}
 
-	// Validar espaço disponível no setor
-
-	// Registrar lote no setor
-	// Criar registro de compra
-
 
 	public void registerLote(LoteDTO loteDTO, Lote lote) {
 		validateArmazem(loteDTO.getArmazemId());
@@ -43,14 +38,11 @@ public class LoteService {
 		validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
 		validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
 		saveLote(lote);
+		saveProdutos(lote.getId(), loteDTO.getVendedorId(), loteDTO.getProdutosDTO());
 		createRegister(lote.getId(), loteDTO.getRepresentanteId(), loteDTO.getVendedorId());
 	}
 
 	public void updateValidate(LoteDTO loteDTO) {
-		validateArmazem(loteDTO.getArmazemId());
-		validateVendedor(loteDTO.getVendedorId());
-		validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
-		validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
 	}
 
 	private void validateArmazem(Long armazemId) {
@@ -89,10 +81,20 @@ public class LoteService {
 				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
 			}
 		}
+		if (totalVolume > this.calculateRemainingSetorArea(setorId)) {
+			throw new BusinessValidationException("O volume restante do setor não comporta o volume lote.");
+		}
+	}
+
+	private Double calculateRemainingSetorArea(Long setorId) {
+		return 0.0;
 	}
 
 	private void saveLote(Lote lote) {
 		loteRepository.save(lote);
+	}
+
+	private void saveProdutos(long id, Long vendedorId, List<ProdutoDTO> produtosDTO) {
 	}
 
 	private void createRegister(Long loteId, Long representanteId, Long vendedorId) {
