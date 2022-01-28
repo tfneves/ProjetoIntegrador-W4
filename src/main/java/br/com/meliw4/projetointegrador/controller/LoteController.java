@@ -14,16 +14,17 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class LoteController {
 
-    @Autowired
-    LoteService loteService;
+	@Autowired
+	LoteService loteService;
 
-    @PostMapping(path = "/fresh-products/inboundorder/")
-    public ResponseEntity<List<Produto>> registerLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
-        URI uri = uriBuilder.path("").build().toUri();
-        Lote lote = LoteDTO.convert(loteDTO);
-        return ResponseEntity.created(uri).body(loteService.register(lote));
-    }
+	@PostMapping(path = "/fresh-products/inboundorder/")
+	public ResponseEntity<List<Produto>> registerLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
+		URI uri = uriBuilder.path("").build().toUri();
+		Lote lote = LoteDTO.convert(loteDTO);
+		return ResponseEntity.created(uri).body(loteService.register(lote));
+	}
 
+<<<<<<< HEAD
     @PutMapping(path = "/fresh-products/inboundorder/")
     public ResponseEntity<List<Produto>> updateLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
         URI uri = uriBuilder.path("").build().toUri();
@@ -32,5 +33,13 @@ public class LoteController {
     }
 
 
+=======
+	@PutMapping(path = "/fresh-products/inboundorder/")
+	public ResponseEntity<List<Produto>> updateLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
+		URI uri = uriBuilder.path("").build().toUri();
+		Lote lote = LoteDTO.convert(loteDTO);
+		return ResponseEntity.created(uri).body(loteService.update(lote));
+	}
+>>>>>>> 0e7ec3a439ff44782bc1cf5ab05f44ba9358186f
 }
 

@@ -16,8 +16,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
- * @see Abstract Class BaseEntity
- * @see Enum Type
+ * @see Abstract Class EntidadeBase
+ * @see Enum Tipo
  *
  * @author: André Arroxellas
  */
@@ -26,32 +26,32 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
-public class Product extends BaseEntity {
+@Table(name = "produtos")
+public class Produto extends EntidadeBase {
 
 	@NotEmpty
-	private LocalDate dueDate;
+	private LocalDate dataVencimento;
 
 	@NotEmpty
 	private Integer volume;
 
 	@NotEmpty
-	private int initialQuantity; // TODO: Integer for null
+	private int quantidadeInicial; // TODO: Integer for null
 
 	@NotEmpty
-	private int currentQuantity; // TODO: Integer for nul
+	private int quantidadeAtual; // TODO: Integer for nul
 
 	@NotEmpty
-	private LocalDate manufacturingDate;
+	private LocalDate dataManufatura;
 
 	@NotEmpty
-	private LocalDateTime manufacturingTime;
+	private LocalDateTime dataStampManufatura;
 
 	@ManyToOne
-	@JoinColumn(name = "fk_seller", referencedColumnName = "id") // TODO: map as referencedColumnName = "CPF / CNPJ"
-	private Seller seller;
+	@JoinColumn(name = "fk_vendedor", referencedColumnName = "id") // TODO: map as referencedColumnName = "CPF / CNPJ"
+	private Vendedor vendedor;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_category_id", referencedColumnName = "id")
-	private ProductCategory productCategory;
+	@JoinColumn(name = "fk_categoria", referencedColumnName = "tipo")
+	private ProdutoCategoria produtoCategoria;
 }

@@ -14,17 +14,17 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class LoteDTO {
 
-    @NotEmpty
-    private Setor setor;
-    @NotEmpty
-    private List<@Valid ProdutoDTO> produtos;
+	@NotEmpty
+	private Setor setor;
+	@NotEmpty
+	private List<@Valid ProdutoDTO> produtos;
 
-    public static Lote convert(LoteDTO loteDTO) {
-        return Lote.builder()
-                .setor(loteDTO.setor)
-                .produtos(loteDTO.produtos) // Mapear cada item ProdutoDTO para Produto
-                .build();
-    }
+	public static Lote convert(LoteDTO loteDTO) {
+		return Lote.builder()
+			.setor(loteDTO.setor)
+			.produtos(loteDTO.produtos) // Mapear cada item ProdutoDTO para Produto
+			.build();
+	}
 
 }
 

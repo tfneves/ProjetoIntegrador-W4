@@ -18,12 +18,12 @@ public class LoteService {
     // Criar registro de compra
 
 
-    public List<Produto> register(Lote lote) {
-        return new List<Produto>();
+     public List<Produto> register(Lote lote) {
+         return new List<Produto>();
     }
 
     public List<Produto> update(Lote lote) {
-        return new List<Produto>();
+       return new List<Produto>();
     }
 }
 
