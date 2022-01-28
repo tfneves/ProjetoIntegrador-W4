@@ -30,7 +30,8 @@ import javax.persistence.*;
 
 <<<<<<< HEAD
 }
-*/
+
 =======
 //}
->>>>>>> 0e7ec3a439ff44782bc1cf5ab05f44ba9358186f
+>>>>>>> 0e7ec3a439ff44782bc1cf5ab05f44ba9358186
+	*/
