@@ -8,10 +8,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class RepresentanteService {
 
-    @Autowired
-    private RepresentanteRepository representanteRepository;
-
-    public Representante register(Representante representante) {
-        return representanteRepository.save(representante);
-    }
 }

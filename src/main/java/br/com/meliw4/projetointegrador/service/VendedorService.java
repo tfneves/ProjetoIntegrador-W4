@@ -10,11 +10,4 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VendedorService {
-
-    @Autowired
-    private VendedorRepository vendedorRepository;
-
-    public Vendedor register(Vendedor vendedor) {
-        return vendedorRepository.save(vendedor);
-    }
 }

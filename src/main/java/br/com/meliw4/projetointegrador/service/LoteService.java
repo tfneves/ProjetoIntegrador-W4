@@ -26,3 +26,4 @@ public class LoteService {
         return new List<Produto>();
     }
 }
+

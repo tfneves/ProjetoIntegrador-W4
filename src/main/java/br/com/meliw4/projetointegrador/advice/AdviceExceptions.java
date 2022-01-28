@@ -15,37 +15,40 @@ import java.util.Map;
 @RestControllerAdvice
 public class AdviceExceptions {
 
-    /**
-     * Trata exception de argumento inválido
-     * @param e
-     * @return
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    private Map<String, String> argumentNotValidException(MethodArgumentNotValidException e){
-        Map<String, String> errors = new HashMap<>();
-        e.getBindingResult().getAllErrors().forEach((error) -> {
-            String field = ((FieldError) error).getField();
-            String errorMessage = ((FieldError) error).getDefaultMessage();
-            errors.put("error_message", errorMessage);
-        });
-        return errors;
-    }
+	/**
+	 * Trata exception de argumento inválido
+	 *
+	 * @param e
+	 * @return
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	private Map<String, String> argumentNotValidException(MethodArgumentNotValidException e) {
+		Map<String, String> errors = new HashMap<>();
+		e.getBindingResult().getAllErrors().forEach((error) -> {
+			String field = ((FieldError) error).getField();
+			String errorMessage = ((FieldError) error).getDefaultMessage();
+			errors.put("error_message", errorMessage);
+		});
+		return errors;
+	}
 
 
-    /**
-     * Trata exception de JSON Inválido
-     * @param e
-     * @return
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error_message", "Json inválido");
-        return errors;
-    }
+	/**
+	 * Trata exception de JSON Inválido
+	 *
+	 * @param e
+	 * @return
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", "Json inválido");
+		errors.put("exception_message", e.getMessage());
+		return errors;
+	}
 
 }
