@@ -3,9 +3,7 @@ package br.com.meliw4.projetointegrador.controller;
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.service.SetorService;
