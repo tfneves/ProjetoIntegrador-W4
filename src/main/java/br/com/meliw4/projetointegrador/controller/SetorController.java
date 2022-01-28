@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("/setor")
+@RequestMapping("/api/v1")
 public class SetorController {
 
 	@Autowired
@@ -21,13 +23,13 @@ public class SetorController {
 	@Autowired
 	SetorDTO setorDTO;
 
-	@GetMapping()
+	@GetMapping("/setor")
 	public ResponseEntity<List<Setor>> devolveTodosOsSetores() {
 		return ResponseEntity.ok(setorService.retornaTodosOsSetores());
 	}
 
-	@PostMapping("/cadastrar")
-	public ResponseEntity<Setor> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
+	@PostMapping("/setor")
+	public ResponseEntity<Setor> cadastraSetor(@RequestBody @Valid SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
 		Setor setor = setorDTO.converte(payload);
 		return ResponseEntity.ok(setorService.salva(setor));
 	}

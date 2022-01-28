@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Builder
@@ -21,11 +23,11 @@ import java.util.Optional;
 @Component
 public class SetorDTO {
 
-	@NotEmpty(message = "A Categoria não pode estar vazia")
+	@NotEmpty(message = "Categoria inválida")
 	private String categoria;
-	@NotEmpty(message = "O volume não pode estar vazia")
+	@NotNull(message = "Volume inválido")
 	private Double volume;
-	@NotEmpty
+	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
 
 	@Autowired

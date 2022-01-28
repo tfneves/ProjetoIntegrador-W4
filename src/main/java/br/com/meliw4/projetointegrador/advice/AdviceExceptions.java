@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.advice;
 
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -44,8 +45,19 @@ public class AdviceExceptions {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("error_message", "Json inválido");
+        errors.put("status", "Json inválido");
+		errors.put("error_message", e.getMessage());
         return errors;
     }
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(BusinessValidationException.class)
+	private Map<String, String> businessValidationException(BusinessValidationException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", "400");
+		return errors;
+	}
 
 }
