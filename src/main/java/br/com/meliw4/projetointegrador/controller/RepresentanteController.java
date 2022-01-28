@@ -1,4 +1,5 @@
 package br.com.meliw4.projetointegrador.controller;
+
 import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
 import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.service.RepresentanteService;
@@ -15,12 +16,12 @@ import java.net.URI;
 @RequestMapping("/api/v1")
 public class RepresentanteController {
 
-    private RepresentanteService representanteService;
+	private RepresentanteService representanteService;
 
-    @PostMapping(path = "/representante")
-    public Representante registerRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) {
-        URI uri = uriBuilder.path("").build().toUri();
-        Representante representante = RepresentanteDTO.convert(representanteDTO);
-        return representanteService.register(representante);
-    }
+	@PostMapping(path = "/representante")
+	public Representante registerRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) {
+		Representante representante = RepresentanteDTO.convert(representanteDTO);
+		URI uri = uriBuilder.path("/api/v1/getRepresentante").build().toUri();
+		return representanteService.register(representante);
+	}
 }
