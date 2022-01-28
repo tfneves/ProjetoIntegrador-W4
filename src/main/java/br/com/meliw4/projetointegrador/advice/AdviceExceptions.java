@@ -1,3 +1,4 @@
+
 package br.com.meliw4.projetointegrador.advice;
 
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class AdviceExceptions {
      * Trata exception de argumento inválido
      * @param e
      * @return
-     */
+	**/
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,11 +35,12 @@ public class AdviceExceptions {
     }
 
 
-    /**
+
+	/**
      * Trata exception de JSON Inválido
      * @param e
      * @return
-     */
+	 **/
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -49,3 +51,4 @@ public class AdviceExceptions {
     }
 
 }
+

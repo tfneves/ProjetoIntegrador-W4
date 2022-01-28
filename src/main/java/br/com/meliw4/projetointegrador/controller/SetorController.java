@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 
+import java.net.URI;
 import java.util.List;
 
 import br.com.meliw4.projetointegrador.entity.Setor;
@@ -29,7 +30,8 @@ public class SetorController {
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Setor> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
 		Setor setor = setorDTO.converte(payload);
-		return ResponseEntity.ok(setorService.salva(setor));
+		URI uri = uriBuilder.path("/setor").build().toUri();
+		return ResponseEntity.created(uri).body(setorService.salva(setor));
 	}
 
 }

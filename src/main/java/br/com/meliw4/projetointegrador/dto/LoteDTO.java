@@ -1,3 +1,4 @@
+/**
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Lote;
@@ -29,3 +30,4 @@ public class LoteDTO {
 	}
 
 }
+**/
