@@ -23,7 +23,7 @@ public class Lote {
     @JoinColumn(name = "setor_id")
     private Setor setor;
     private final LocalDate dataAquisicao = LocalDate.now();
-    //@OneToMany(mappedBy = "lote")
-    //private List<Produto> produtos;
+    @OneToMany(mappedBy = "lote")
+    private List<Produto> produtos;
 
 }
