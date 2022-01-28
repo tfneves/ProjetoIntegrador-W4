@@ -1,20 +1,20 @@
 package br.com.meliw4.projetointegrador.entity;
 
+import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
+
 
 @Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Representante {
+public class Representante{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
