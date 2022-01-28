@@ -7,6 +7,7 @@ import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -32,7 +33,4 @@ public class SetorService {
 		return this.setorRepository.findAll();
 	}
 
-	public void possuiEspaco(Setor setor){
-
-	}
 }

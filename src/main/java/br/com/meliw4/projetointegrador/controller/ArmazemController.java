@@ -26,7 +26,7 @@ public class ArmazemController {
      * Cadastra novo armazem no sistema
      * @param dto
      * @param uriBuilder
-     * @return Map
+     * @return ResponseEntity
      */
     @PostMapping("/insertWareHouse")
     public ResponseEntity<Map<String, String>> insertWareHouse(@RequestBody @Valid ArmazemDTO dto, UriComponentsBuilder uriBuilder){
@@ -46,7 +46,7 @@ public class ArmazemController {
 
     /**
      * Lista todos os armazens cadastrados
-     * @return
+     * @return ResponseEntity
      */
     @GetMapping("/getWareHouses")
     public ResponseEntity<List<Armazem>> getAllWareHouses() {

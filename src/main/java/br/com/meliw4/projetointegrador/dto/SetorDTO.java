@@ -32,11 +32,11 @@ public class SetorDTO {
 	ArmazemRepository armazemRepository;
 
 	public Setor converte(SetorDTO payload){
-		Optional<Armazem> armazem = armazemRepository.findById(payload.armazem_id);
+		Armazem armazem = armazemRepository.findById(payload.armazem_id).get();
 		return Setor.builder()
 			.categoria(payload.categoria)
 			.volume(payload.volume)
-			.id(armazem.get())
+			.armazem(armazem)
 			.build();
 	}
 
@@ -44,7 +44,7 @@ public class SetorDTO {
 		return SetorDTO.builder()
 			.categoria(payload.getCategoria())
 			.volume(payload.getVolume())
-			.armazem_id(payload.getId().getId())
+			.armazem_id(payload.getArmazem().getId())
 			.build();
 	}
 
