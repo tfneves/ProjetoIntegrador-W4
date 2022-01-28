@@ -32,7 +32,7 @@ public class SetorService {
 		if (possuiEspaco(payload)){
 			Setor setor = setorRepository.save(payload);
 			return setor;
-			//Double volume = payload.getVolume() - volumeTotalDosSetores(payload);
+			//Double volume = volumeRestante(payload);
 			//String espacoDisponivel = String.format("Espaço Disponível: .2f", volume);
 			//Map<String, String> response = new HashMap<>();
 			//response.put(setor, espacoDisponivel);
@@ -52,7 +52,11 @@ public class SetorService {
 		return setor.getVolume() <= (volumeTotalArmazem - volumeTotalSetores);
 	}
 
-	public  Double volumeTotalDosSetores(Setor setor){
+	private Double volumeResante(Setor setor){
+		return setor.getVolume() - volumeTotalDosSetores(setor);
+	}
+
+	private  Double volumeTotalDosSetores(Setor setor){
 		return setorRepository.findAll()
 			.stream()
 			.filter(s -> s.getArmazem() == setor.getArmazem())
