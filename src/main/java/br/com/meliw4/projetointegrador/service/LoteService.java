@@ -34,12 +34,12 @@ public class LoteService {
 
 	public void registerLote(LoteDTO loteDTO, Lote lote) {
 		validateArmazem(loteDTO.getArmazemId());
-		validateVendedor(loteDTO.getVendedorId());
-		validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
+		Vendedor vendedor = validateVendedor(loteDTO.getVendedorId());
+		Representante representante = validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
 		validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
 		saveLote(lote);
-		saveProdutos(lote.getId(), loteDTO.getVendedorId(), loteDTO.getProdutosDTO());
-		createRegister(lote.getId(), loteDTO.getRepresentanteId(), loteDTO.getVendedorId());
+		saveProdutos(lote, vendedor, loteDTO.getProdutosDTO());
+		createRegister(lote, representante, vendedor);
 	}
 
 	public void updateValidate(LoteDTO loteDTO) {
@@ -94,14 +94,14 @@ public class LoteService {
 		loteRepository.save(lote);
 	}
 
-	private void saveProdutos(long id, Long vendedorId, List<ProdutoDTO> produtosDTO) {
+	private void saveProdutos(Lote lote, Vendedor vendedor, List<ProdutoDTO> produtosDTO) {
 	}
 
-	private void createRegister(Long loteId, Long representanteId, Long vendedorId) {
+	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
 		RegistroLote registroLote = RegistroLote.builder()
-			.loteId(loteId)
-			.representanteId(representanteId)
-			.vendedorId(vendedorId)
+			.lote(lote)
+			.representante(representante)
+			.vendedor(vendedor)
 			.build();
 		registroLoteRepository.save(registroLote);
 	}

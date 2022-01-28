@@ -17,11 +17,11 @@ public class RegistroLote {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-    @Column(nullable = false)
-    private Long representanteId;
-	@Column(nullable = false)
-    private Long vendedorId;
-	@Column(nullable = false)
-    private Long loteId;
+	@ManyToOne
+    private Representante representante;
+    @ManyToOne
+    private Vendedor vendedor;
+	@ManyToOne
+    private Lote lote;
 
 }

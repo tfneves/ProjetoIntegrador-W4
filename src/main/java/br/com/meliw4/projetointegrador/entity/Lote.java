@@ -20,6 +20,8 @@ public class Lote {
     private long id;
     @ManyToOne
     private Setor setor;
+	@ManyToOne
+	private Representante representante;
     private final LocalDate dataAquisicao = LocalDate.now();
 
 }

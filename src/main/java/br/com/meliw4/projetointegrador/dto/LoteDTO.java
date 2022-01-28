@@ -1,7 +1,9 @@
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Lote;
+import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.repository.RepresentanteRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,8 +39,12 @@ public class LoteDTO {
 	@Autowired
 	private SetorRepository setorRepository;
 
+	@Autowired
+	private RepresentanteRepository representanteRepository;
+
 	public Lote convert(LoteDTO loteDTO) {
 		Setor setor = setorRepository.findById(loteDTO.setorId).get();
+		Representante representante = representanteRepository.findById(loteDTO.representanteId).get();
 		return Lote.builder()
 			.setor(setor)
 			.build();
