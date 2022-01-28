@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.advice;
 
+    /**
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -15,11 +16,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class AdviceExceptions {
 
-    /**
      * Trata exception de argumento inválido
      * @param e
      * @return
-     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -33,12 +32,12 @@ public class AdviceExceptions {
         return errors;
     }
 
+     */
 
     /**
      * Trata exception de JSON Inválido
      * @param e
      * @return
-     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -49,3 +48,4 @@ public class AdviceExceptions {
     }
 
 }
+     */

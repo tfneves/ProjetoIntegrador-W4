@@ -14,9 +14,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Armazem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long armazem_id;
-    private String nome;
-    private Double volume;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String nome;
+	private Double volume;
 }

@@ -13,11 +13,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 public class Setor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer setor_id;
-    private String categoria;
-    private Double volume;
-    @ManyToOne
-    private Armazem aemazem_id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer setor_id;
+	private String categoria;
+	private Double volume;
+	@ManyToOne
+	private Armazem id;
 }

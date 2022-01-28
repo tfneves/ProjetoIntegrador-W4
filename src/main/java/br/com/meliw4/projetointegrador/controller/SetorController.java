@@ -2,7 +2,6 @@ package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 
-import java.net.URI;
 import java.util.List;
 
 import br.com.meliw4.projetointegrador.entity.Setor;
@@ -16,16 +15,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/setor")
 public class SetorController {
 
-    @Autowired
-    SetorService setorService;
+	@Autowired
+	SetorService setorService;
 
-    @GetMapping()
-    public ResponseEntity<List<Setor>> devolveTodosOsSetores() {
-        return ResponseEntity.ok(setorService.retornaTodosOsSetores());
-    }
+	@Autowired
+	SetorDTO setorDTO;
 
-    @PostMapping("/cadastrar")
-    public ResponseEntity<Setor> cadastraSetor(@RequestBody Setor payload, UriComponentsBuilder uriBuilder) throws Exception {
-        return ResponseEntity.ok(setorService.salva(payload));
-    }
+	@GetMapping()
+	public ResponseEntity<List<Setor>> devolveTodosOsSetores() {
+		return ResponseEntity.ok(setorService.retornaTodosOsSetores());
+	}
+
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Setor> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
+		Setor setor = setorDTO.converte(payload);
+		return ResponseEntity.ok(setorService.salva(setor));
+	}
 }
