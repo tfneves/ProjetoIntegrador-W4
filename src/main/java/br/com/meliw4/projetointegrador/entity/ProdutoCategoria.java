@@ -1,12 +1,14 @@
 package br.com.meliw4.projetointegrador.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
@@ -41,4 +43,7 @@ public class ProdutoCategoria implements Serializable {
 	@NotEmpty
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaMinima;
+
+	@OneToMany(mappedBy = "id")
+	private List<Produto> produtos;
 }
