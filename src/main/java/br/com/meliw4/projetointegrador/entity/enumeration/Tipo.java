@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public enum Tipo {
-	FRESCO("FR"),
-	REFRIGERADO("RE"),
-	CONGELADO("CO");
+	FRESCO("FS"),
+	REFRIGERADO("RR"),
+	CONGELADO("FF");
 
 	private String ordinal;
 
