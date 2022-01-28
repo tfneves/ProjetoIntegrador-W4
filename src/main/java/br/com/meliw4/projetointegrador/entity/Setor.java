@@ -20,4 +20,5 @@ public class Setor {
 	private Double volume;
 	@ManyToOne
 	private Armazem armazem;
+
 }

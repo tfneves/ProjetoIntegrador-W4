@@ -31,4 +31,5 @@ public class SetorController {
 		Setor setor = setorDTO.converte(payload);
 		return ResponseEntity.ok(setorService.salva(setor));
 	}
+
 }
