@@ -28,10 +28,14 @@ public class SetorController {
 	}
 
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Setor> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
+	public ResponseEntity<?> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
 		Setor setor = setorDTO.converte(payload);
 		URI uri = uriBuilder.path("/setor").build().toUri();
-		return ResponseEntity.created(uri).body(setorService.salva(setor));
+		try {
+			return ResponseEntity.created(uri).body(setorService.salva(setor));
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 }
