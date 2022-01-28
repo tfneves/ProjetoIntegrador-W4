@@ -27,6 +27,8 @@ public class SetorDTO {
 	private Double volume;
 	@NotEmpty
 	private Long armazem_id;
+	@NotEmpty
+	private Double espaco_disponivel;
 
 	@Autowired
 	ArmazemRepository armazemRepository;

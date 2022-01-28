@@ -1,3 +1,4 @@
+/**
 package br.com.meliw4.projetointegrador.entity;
 
 import lombok.AllArgsConstructor;
@@ -27,3 +28,4 @@ public class Lote {
     private List<Produto> produtos;
 
 }
+**/
