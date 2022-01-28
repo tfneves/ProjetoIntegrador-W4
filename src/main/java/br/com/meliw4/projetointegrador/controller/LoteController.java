@@ -1,4 +1,3 @@
-/*
 package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
@@ -33,4 +32,4 @@ public class LoteController {
 		return ResponseEntity.created(uri).body(loteService.update(lote));
 	}
 }
-*/
+
