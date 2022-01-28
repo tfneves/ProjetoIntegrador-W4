@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+
 public class Lote {
 
     @Id

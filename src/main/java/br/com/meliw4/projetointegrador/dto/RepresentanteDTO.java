@@ -17,6 +17,7 @@ public class RepresentanteDTO {
     @Size(max = 100, message = "Nome não pode exceder 100 caracteres")
     private String nome;
 
+
     public static Representante convert(RepresentanteDTO representanteDTO){
         return Representante.builder().nome(representanteDTO.getNome()).build();
     }
