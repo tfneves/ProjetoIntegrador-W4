@@ -2,10 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
-import br.com.meliw4.projetointegrador.entity.Armazem;
-import br.com.meliw4.projetointegrador.entity.Lote;
-import br.com.meliw4.projetointegrador.entity.Representante;
-import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
@@ -22,14 +19,16 @@ public class LoteService {
 	private RepresentanteRepository representanteRepository;
 	private ProdutoRepository produtoRepository;
 	private LoteRepository loteRepository;
+	private RegistroLoteRepository registroLoteRepository;
 
-	public LoteService(ArmazemRepository armazemRepository, VendedorRepository vendedorRepository, SetorRepository setorRepository, RepresentanteRepository representanteRepository, ProdutoRepository produtoRepository, LoteRepository loteRepository) {
+	public LoteService(ArmazemRepository armazemRepository, VendedorRepository vendedorRepository, SetorRepository setorRepository, RepresentanteRepository representanteRepository, ProdutoRepository produtoRepository, LoteRepository loteRepository, RegistroLoteRepository registroLoteRepository) {
 		this.armazemRepository = armazemRepository;
 		this.vendedorRepository = vendedorRepository;
 		this.setorRepository = setorRepository;
 		this.representanteRepository = representanteRepository;
 		this.produtoRepository = produtoRepository;
 		this.loteRepository = loteRepository;
+		this.registroLoteRepository = registroLoteRepository;
 	}
 
 	// Validar espaço disponível no setor
@@ -38,11 +37,13 @@ public class LoteService {
 	// Criar registro de compra
 
 
-	public void registerValidate(LoteDTO loteDTO) {
+	public void registerLote(LoteDTO loteDTO, Lote lote) {
 		validateArmazem(loteDTO.getArmazemId());
 		validateVendedor(loteDTO.getVendedorId());
 		validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
 		validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
+		saveLote(lote);
+		createRegister(lote.getId(), loteDTO.getRepresentanteId(), loteDTO.getVendedorId());
 	}
 
 	public void updateValidate(LoteDTO loteDTO) {
@@ -58,13 +59,14 @@ public class LoteService {
 		}
 	}
 
-	private void validateVendedor(Long id) {
+	private Vendedor validateVendedor(Long id) {
 		if (!vendedorRepository.existsById(id)) {
 			throw new BusinessValidationException("O vendedor não existe.");
 		}
+		return vendedorRepository.getById(id);
 	}
 
-	private void validateRepresentante(Long representanteId, Long armazemId) {
+	private Representante validateRepresentante(Long representanteId, Long armazemId) {
 		if (!representanteRepository.existsById(representanteId)) {
 			throw new BusinessValidationException("O representante não existe.");
 		}
@@ -72,6 +74,7 @@ public class LoteService {
 		if (representante.getArmazem().getId() != armazemId) {
 			throw new BusinessValidationException("O representante não está associado a esse armazém.");
 		}
+		return representante;
 	}
 
 	private void validateSetor(Long setorId, List<ProdutoDTO> produtosDTO) {
@@ -89,9 +92,16 @@ public class LoteService {
 	}
 
 	private void saveLote(Lote lote) {
+		loteRepository.save(lote);
 	}
 
-	private void createRegister(LoteDTO loteDTO) {
+	private void createRegister(Long loteId, Long representanteId, Long vendedorId) {
+		RegistroLote registroLote = RegistroLote.builder()
+			.loteId(loteId)
+			.representanteId(representanteId)
+			.vendedorId(vendedorId)
+			.build();
+		registroLoteRepository.save(registroLote);
 	}
 
 }

@@ -27,7 +27,8 @@ public class LoteController {
 	@PostMapping(path = "/fresh-products/inboundorder/")
 	public ResponseEntity<List<ProdutoDTO>> registerLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("").build().toUri();
-		loteService.registerValidate(loteDTO);
+		Lote lote = dto.convert(loteDTO);
+		loteService.registerLote(loteDTO, lote);
 		return ResponseEntity.created(uri).body(loteDTO.getProdutosDTO());
 	}
 
