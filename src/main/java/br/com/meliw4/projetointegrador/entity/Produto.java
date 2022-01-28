@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -52,7 +51,7 @@ public class Produto extends EntidadeBase {
 	@JoinColumn(name = "fk_vendedor", referencedColumnName = "id") // TODO: map as referencedColumnName = "CPF / CNPJ"
 	private Vendedor vendedor;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_categoria", referencedColumnName = "tipo")
 	private ProdutoCategoria produtoCategoria;
 }
