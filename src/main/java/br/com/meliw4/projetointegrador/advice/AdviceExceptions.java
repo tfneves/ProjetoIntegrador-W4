@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.advice;
 
+import exception.ArmazemException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -18,7 +19,7 @@ public class AdviceExceptions {
     /**
      * Trata exception de argumento inválido
      * @param e
-     * @return
+     * @return Map
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -37,7 +38,7 @@ public class AdviceExceptions {
     /**
      * Trata exception de JSON Inválido
      * @param e
-     * @return
+     * @return Map
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -47,5 +48,20 @@ public class AdviceExceptions {
         errors.put("error_message", "Json inválido");
         return errors;
     }
+
+
+	/**
+	 * Trata excessao relacionadas as classes de Armazem
+	 * @param e
+	 * @return Map
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(ArmazemException.class)
+	private Map<String, String> armazemException(ArmazemException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		return errors;
+	}
 
 }
