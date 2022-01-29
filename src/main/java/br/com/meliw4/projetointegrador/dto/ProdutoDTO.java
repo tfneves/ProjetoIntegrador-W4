@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 @Data
 public class ProdutoDTO {
 
+	private Long id;
 	@NotEmpty(message = "Nome do produto inválido")
 	private String nome;
 	@NotNull(message = "Data de vencimento inválida")

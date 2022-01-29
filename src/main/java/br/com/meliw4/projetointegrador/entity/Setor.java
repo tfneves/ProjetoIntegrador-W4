@@ -22,7 +22,7 @@ public class Setor {
 	private Double volume;
 	@ManyToOne
 	private Armazem armazem;
-	@OneToMany(mappedBy = "setor", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "setor", fetch = FetchType.LAZY)
 	private List<Lote> lotes;
 
 }

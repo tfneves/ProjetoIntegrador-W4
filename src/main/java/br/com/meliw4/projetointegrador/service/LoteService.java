@@ -7,8 +7,8 @@ import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -93,8 +93,8 @@ public class LoteService {
 		Double totalVolume = 0.0;
 		// TODO Usar stream
 		List<Lote> lotes = setor.getLotes();
-		for(Lote lote : lotes) {
-			for(Produto produto: lote.getProdutos()) {
+		for (Lote lote : lotes) {
+			for (Produto produto : lote.getProdutos()) {
 				totalVolume += produto.getVolume() * produto.getQuantidadeAtual();
 			}
 		}
@@ -106,8 +106,10 @@ public class LoteService {
 	}
 
 	private void saveProdutos(Lote lote, Vendedor vendedor, List<ProdutoDTO> produtosDTO) {
-		for(ProdutoDTO produtoDTO: produtosDTO) {
-			produtoRepository.save(ProdutoDTO.convert(produtoDTO, vendedor, lote));
+		for (ProdutoDTO produtoDTO : produtosDTO) {
+			Produto produto = ProdutoDTO.convert(produtoDTO, vendedor, lote);
+			produtoRepository.save(produto);
+			produtoDTO.setId(produto.getId());
 		}
 	}
 

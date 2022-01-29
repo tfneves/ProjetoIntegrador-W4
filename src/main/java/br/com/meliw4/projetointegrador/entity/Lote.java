@@ -23,7 +23,7 @@ public class Lote {
     private Setor setor;
 	@ManyToOne
 	private Representante representante;
-	@OneToMany(mappedBy = "lote", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "lote", fetch = FetchType.LAZY)
 	private List<Produto> produtos;
     private final LocalDate dataAquisicao = LocalDate.now();
 

@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
+import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.service.LoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
