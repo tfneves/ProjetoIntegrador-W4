@@ -1,4 +1,4 @@
-/*
+
 package br.com.meliw4.projetointegrador.entity;
 
 import lombok.AllArgsConstructor;
@@ -25,4 +25,4 @@ public class Endereco {
 	private String cidade;
 	private String estado;
 }
-*/
+

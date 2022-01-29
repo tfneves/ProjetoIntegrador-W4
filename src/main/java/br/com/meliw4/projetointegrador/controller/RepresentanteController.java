@@ -19,14 +19,15 @@ import java.util.List;
 public class RepresentanteController {
 
 	@Autowired
-	private RepresentanteRepository representanteRepository;
+	RepresentanteRepository representanteRepository;
 
 	/**
 	 * Cadastra novo representante no sistema
-	 * @Author Francisco Alves
+	 *
 	 * @param representanteDTO
 	 * @param uriBuilder
 	 * @return ResponseEntity
+	 * @Author Francisco Alves
 	 */
 	@PostMapping(path = "/representante")
 	public ResponseEntity<Representante> registerRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) {
@@ -35,10 +36,11 @@ public class RepresentanteController {
 		URI uri = uriBuilder.path("/api/v1/getRepresentante").build().toUri();
 		return ResponseEntity.created(uri).body(representante);
 	}
+
 	/**
+	 * @return ResponseEntity
 	 * @Author Francisco Alves
 	 * Lista todos os representantes cadastrados
-	 * @return ResponseEntity
 	 */
 	@GetMapping("/getRepresentante")
 	public ResponseEntity<List<Representante>> getAllRepresentantes() {

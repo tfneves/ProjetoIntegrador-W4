@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.dto;
 
+import br.com.meliw4.projetointegrador.entity.Endereco;
 import br.com.meliw4.projetointegrador.entity.Representante;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,10 +30,13 @@ public class EnderecoDTO {
 	@Size(max = 30, message = "Nome não pode exceder 30 caracteres")
 	private String estado;
 
-
-	public static Representante convert(RepresentanteDTO representanteDTO) {
-		return Representante.builder()
-			.nome(representanteDTO.getNome())
+	public static Endereco convert(EnderecoDTO enderecoDTO) {
+		return Endereco.builder()
+			.logradouro(enderecoDTO.getLogradouro())
+			.numero(enderecoDTO.getNumero())
+			.bairro(enderecoDTO.getBairro())
+			.cidade(enderecoDTO.getCidade())
+			.estado(enderecoDTO.getEstado())
 			.build();
 	}
 }

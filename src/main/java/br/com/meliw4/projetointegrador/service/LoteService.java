@@ -1,4 +1,4 @@
-
+/*
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.entity.Lote;
@@ -28,3 +28,4 @@ public class LoteService {
     }
 }
 
+*/

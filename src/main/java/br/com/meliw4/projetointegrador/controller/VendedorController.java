@@ -21,7 +21,7 @@ import java.util.List;
 public class VendedorController {
 
 	@Autowired
-	private VendedorRepository vendedorRepository;
+	VendedorRepository vendedorRepository;
 
 	/**
 	 * Cadastra novo vendedor no sistema
