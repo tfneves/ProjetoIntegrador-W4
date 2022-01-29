@@ -8,6 +8,7 @@ import br.com.meliw4.projetointegrador.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -32,11 +33,12 @@ public class LoteService {
 	}
 
 
-	public void registerLote(LoteDTO loteDTO, Lote lote) {
+	public void registerLote(LoteDTO loteDTO) {
 		validateArmazem(loteDTO.getArmazemId());
 		Vendedor vendedor = validateVendedor(loteDTO.getVendedorId());
 		Representante representante = validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
-		validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
+		Setor setor = validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
+		Lote lote = LoteDTO.convert(loteDTO, setor, representante);
 		saveLote(lote);
 		saveProdutos(lote, vendedor, loteDTO.getProdutosDTO());
 		createRegister(lote, representante, vendedor);
@@ -69,7 +71,7 @@ public class LoteService {
 		return representante;
 	}
 
-	private void validateSetor(Long setorId, List<ProdutoDTO> produtosDTO) {
+	private Setor validateSetor(Long setorId, List<ProdutoDTO> produtosDTO) {
 		if (!setorRepository.existsById(setorId)) {
 			throw new BusinessValidationException("O setor não existe.");
 		}
@@ -77,17 +79,26 @@ public class LoteService {
 		Double totalVolume = 0.0;
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			totalVolume += produtoDTO.getVolume();
-			if (produtoDTO.getTipo().name() != setor.getCategoria()) {
+			if (produtoDTO.getTipo() != setor.getCategoria()) {
 				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
 			}
 		}
-		if (totalVolume > this.calculateRemainingSetorArea(setorId)) {
+		if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
 			throw new BusinessValidationException("O volume restante do setor não comporta o volume lote.");
 		}
+		return setor;
 	}
 
-	private Double calculateRemainingSetorArea(Long setorId) {
-		return 0.0;
+	private Double calculateRemainingSetorArea(Setor setor) {
+		Double totalVolume = 0.0;
+		// TODO Usar stream
+		List<Lote> lotes = setor.getLotes();
+		for(Lote lote : lotes) {
+			for(Produto produto: lote.getProdutos()) {
+				totalVolume += produto.getVolume() * produto.getQuantidadeAtual();
+			}
+		}
+		return setor.getVolume() - totalVolume;
 	}
 
 	private void saveLote(Lote lote) {
@@ -95,6 +106,9 @@ public class LoteService {
 	}
 
 	private void saveProdutos(Lote lote, Vendedor vendedor, List<ProdutoDTO> produtosDTO) {
+		for(ProdutoDTO produtoDTO: produtosDTO) {
+			produtoRepository.save(ProdutoDTO.convert(produtoDTO, vendedor, lote));
+		}
 	}
 
 	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {

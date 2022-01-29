@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +23,8 @@ public class Lote {
     private Setor setor;
 	@ManyToOne
 	private Representante representante;
+	@OneToMany(mappedBy = "lote", fetch = FetchType.EAGER)
+	private List<Produto> produtos;
     private final LocalDate dataAquisicao = LocalDate.now();
 
 }

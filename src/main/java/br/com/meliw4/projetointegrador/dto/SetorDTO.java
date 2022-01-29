@@ -3,6 +3,7 @@ package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,8 @@ import java.util.Optional;
 @Component
 public class SetorDTO {
 
-	@NotEmpty(message = "Categoria inválida")
-	private String categoria;
+	@NotNull(message = "Categoria inválida")
+	private Tipo categoria;
 	@NotNull(message = "Volume inválido")
 	private Double volume;
 	@NotNull(message = "Armazém inválido")

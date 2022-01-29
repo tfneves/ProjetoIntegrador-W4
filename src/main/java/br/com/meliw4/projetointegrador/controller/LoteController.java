@@ -2,8 +2,6 @@ package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
-import br.com.meliw4.projetointegrador.entity.Lote;
-import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.service.LoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +19,11 @@ public class LoteController {
 	@Autowired
 	LoteService loteService;
 
-	@Autowired
-	LoteDTO dto;
 
 	@PostMapping(path = "/fresh-products/inboundorder/")
 	public ResponseEntity<List<ProdutoDTO>> registerLote(@RequestBody @Valid LoteDTO loteDTO, UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("").build().toUri();
-		Lote lote = dto.convert(loteDTO);
-		loteService.registerLote(loteDTO, lote);
+		loteService.registerLote(loteDTO);
 		return ResponseEntity.created(uri).body(loteDTO.getProdutosDTO());
 	}
 

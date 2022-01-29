@@ -1,5 +1,8 @@
 package br.com.meliw4.projetointegrador.dto;
 
+import br.com.meliw4.projetointegrador.entity.Lote;
+import br.com.meliw4.projetointegrador.entity.Produto;
+import br.com.meliw4.projetointegrador.entity.Vendedor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,15 +28,17 @@ import java.time.LocalDateTime;
 @Data
 public class ProdutoDTO {
 
-	@NotNull(message = "Id do produto inválido")
-	private Long produtoId;
+	@NotEmpty(message = "Nome do produto inválido")
+	private String nome;
 	@NotNull(message = "Data de vencimento inválida")
 	private LocalDate dataVencimento;
 	@Digits(integer = 6, fraction = 2, message = "O valor inserido no campo volume não exceder 6 dígitos inteiros nem 2 dígitos decimais")
 	@NotNull(message = "Volume inválido")
 	private Double volume;
-	@NotNull(message = "Quantidade inválida")
-	private Integer quantidade;
+	@NotNull(message = "Quantidade Inicial inválida")
+	private Integer quantidadeInicial;
+	@NotNull(message = "Quantidade Atual inválida")
+	private Integer quantidadeAtual;
 	@NotNull(message = "Data de manufatura inválida")
 	private LocalDate dataManufatura;
 	@NotNull(message = "Tipo inválido")
@@ -44,5 +49,22 @@ public class ProdutoDTO {
 	private Float temperaturaMinima;
 	@NotNull(message = "Preço inválido")
 	private BigDecimal preco;
+
+	public static Produto convert(ProdutoDTO produtoDTO, Vendedor vendedor, Lote lote) {
+		return Produto.builder()
+			.dataManufatura(produtoDTO.getDataManufatura())
+			.dataVencimento(produtoDTO.getDataVencimento())
+			.quantidadeInicial(produtoDTO.getQuantidadeInicial())
+			.quantidadeAtual(produtoDTO.getQuantidadeAtual())
+			.vendedor(vendedor)
+			.temperaturaAtual(produtoDTO.getTemperaturaAtual())
+			.temperaturaMinima(produtoDTO.getTemperaturaMinima())
+			.tipo(produtoDTO.getTipo())
+			.lote(lote)
+			.preco(produtoDTO.getPreco())
+			.nome(produtoDTO.getNome())
+			.volume(produtoDTO.getVolume())
+			.build();
+	}
 
 }
