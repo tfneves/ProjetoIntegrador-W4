@@ -1,7 +1,9 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
+import br.com.meliw4.projetointegrador.dto.LoteUpdateDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
+import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.*;
@@ -44,7 +46,46 @@ public class LoteService {
 		createRegister(lote, representante, vendedor);
 	}
 
-	public void updateValidate(LoteDTO loteDTO) {
+	public List<ProdutoDTO> updateLote(LoteUpdateDTO loteUpdateDTO) {
+		validateLote(loteUpdateDTO.getLoteId());
+		validateProdutos(loteUpdateDTO.getProdutosUpdateDTO());
+		return updateLoteProdutos(loteUpdateDTO.getProdutosUpdateDTO());
+	}
+
+	private List<ProdutoDTO> updateLoteProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+		// TODO Usar stream
+		List<ProdutoDTO> produtosDTO = new ArrayList<>();
+		List<Produto> produtos = new ArrayList<>();
+		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
+			Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
+			Integer quantidadeAtual = produto.getQuantidadeAtual();
+			Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
+			if (quantidadeAtual < quantidadeRetira) {
+				throw new BusinessValidationException("A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+			}
+			produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
+			produtos.add(produto);
+		}
+		for (Produto produto : produtos) {
+			produtoRepository.save(produto);
+			produtosDTO.add(ProdutoDTO.convert(produto));
+		}
+		return produtosDTO;
+	}
+
+	private void validateProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+		// TODO Usar stream
+		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
+			if (!produtoRepository.existsById(produtoUpdateDTO.getId())) {
+				throw new BusinessValidationException("O produto de id " + produtoUpdateDTO.getId() + " não existe.");
+			}
+		}
+	}
+
+	private void validateLote(Long loteId) {
+		if (!loteRepository.existsById(loteId)) {
+			throw new BusinessValidationException("O lote não existe.");
+		}
 	}
 
 	private void validateArmazem(Long armazemId) {

@@ -68,4 +68,20 @@ public class ProdutoDTO {
 			.build();
 	}
 
+	public static ProdutoDTO convert(Produto produto) {
+		return ProdutoDTO.builder()
+			.id(produto.getId())
+			.dataManufatura(produto.getDataManufatura())
+			.dataVencimento(produto.getDataVencimento())
+			.quantidadeInicial(produto.getQuantidadeInicial())
+			.quantidadeAtual(produto.getQuantidadeAtual())
+			.temperaturaAtual(produto.getTemperaturaAtual())
+			.temperaturaMinima(produto.getTemperaturaMinima())
+			.tipo(produto.getTipo())
+			.preco(produto.getPreco())
+			.nome(produto.getNome())
+			.volume(produto.getVolume())
+			.build();
+	}
+
 }
