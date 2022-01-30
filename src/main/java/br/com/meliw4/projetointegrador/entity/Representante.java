@@ -1,12 +1,10 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import javax.validation.Valid;
 
 
 @Entity
@@ -20,5 +18,7 @@ public class Representante{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @OneToOne
+    private Armazem armazem;
 
 }
