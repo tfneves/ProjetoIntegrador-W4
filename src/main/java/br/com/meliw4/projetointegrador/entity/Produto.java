@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "produtos")
@@ -36,10 +38,10 @@ public class Produto extends EntidadeBase {
 	private Integer volume;
 
 	@NotEmpty
-	private int quantidadeInicial; // TODO: Integer for null
+	private int quantidadeInicial;
 
 	@NotEmpty
-	private int quantidadeAtual; // TODO: Integer for nul
+	private int quantidadeAtual;
 
 	@NotEmpty
 	private LocalDate dataManufatura;
@@ -47,11 +49,11 @@ public class Produto extends EntidadeBase {
 	@NotEmpty
 	private LocalDateTime dataStampManufatura;
 
-	@ManyToOne
-	@JoinColumn(name = "fk_vendedor", referencedColumnName = "id") // TODO: map as referencedColumnName = "CPF / CNPJ"
-	private Vendedor vendedor;
+	@NotEmpty
+	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
+	private Float temperaturaAtual;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_categoria", referencedColumnName = "tipo")
+	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@JoinColumn(name = "categoria_id", referencedColumnName = "categoria")
 	private ProdutoCategoria produtoCategoria;
 }
