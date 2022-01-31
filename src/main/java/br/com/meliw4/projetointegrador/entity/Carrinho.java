@@ -6,22 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 @Entity
-public class RegistroLote {
+public class Carrinho {
 
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
-    private Representante representante;
-    @ManyToOne
-    private Vendedor vendedor;
-	@ManyToOne
-    private Lote lote;
-
+	private LocalDate data;
+	//private Comprador
+	@OneToOne
+	private StatusPedido statusPedido;
 }

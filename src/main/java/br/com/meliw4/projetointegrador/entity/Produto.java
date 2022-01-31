@@ -1,4 +1,5 @@
 package br.com.meliw4.projetointegrador.entity;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,11 +17,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author: André Arroxellas
- * @see Abstract Class EntidadeBase
- * @see Enum Tipo
+ //* @author: André Arroxellas
+ //* @see Abstract Class EntidadeBase
+ //* @see Enum Tipo
  **/
-
 
 @Entity
 @Builder

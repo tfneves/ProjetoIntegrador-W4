@@ -7,21 +7,15 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Data
 @Entity
-public class RegistroLote {
-
-    @Id
+@Table(name = "StatusPedido")
+public class StatusPedido {
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
-    private Representante representante;
-    @ManyToOne
-    private Vendedor vendedor;
-	@ManyToOne
-    private Lote lote;
-
+	private String nome;
 }
