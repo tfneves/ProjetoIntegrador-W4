@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,6 +18,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Component
 public class RepresentanteDTO {
 
 	@NotEmpty(message = "Nome não pode estar em branco")
@@ -24,14 +27,10 @@ public class RepresentanteDTO {
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
 
-	@Autowired
-	ArmazemRepository armazemRepository;
-
-	public Representante convert(RepresentanteDTO payload) {
-		Armazem armazem = armazemRepository.findById(payload.armazem_id).get();
+	public static Representante convert(RepresentanteDTO representanteDTO ,Armazem armazem) {
 		return Representante.builder()
-			   .nome(payload.getNome())
-				.armazem(armazem)
-			   .build();
+			.nome(representanteDTO.getNome())
+			.armazem(armazem)
+			.build();
 	}
 }

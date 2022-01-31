@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,10 @@ public class Representante{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @ManyToOne
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "armazem_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Armazem armazem;
 
 }

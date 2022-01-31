@@ -1,8 +1,8 @@
-/*
+
 package br.com.meliw4.projetointegrador.service;
-<<<<<<< HEAD
+
 import br.com.meliw4.projetointegrador.entity.Lote;
-=======
+
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.LoteUpdateDTO;
@@ -11,7 +11,7 @@ import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.*;
->>>>>>> add495e876b2e6abcc94c0f1d939486c118a8ceb
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -169,5 +169,5 @@ public class LoteService {
 	}
 
 }
-*/
+
 

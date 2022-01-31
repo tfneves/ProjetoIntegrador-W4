@@ -19,5 +19,6 @@ public class Armazem {
 	private Long id;
 	private String nome;
 	private Double volume;
-
+	@OneToOne(mappedBy = "armazem")
+	private Representante representante;
 }

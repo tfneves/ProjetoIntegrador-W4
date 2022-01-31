@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,9 +27,11 @@ public class Comprador {
 	@Column
 	private String email;
 	@Column
-	private String dataNascimento;
+	private LocalDate dataNascimento;
 
-	@ManyToOne
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "endereco_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Endereco endereco;
 }

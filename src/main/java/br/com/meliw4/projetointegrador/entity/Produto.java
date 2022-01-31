@@ -1,4 +1,4 @@
- br.com.meliw4.projetointegrador.entity;
+package br.com.meliw4.projetointegrador.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
