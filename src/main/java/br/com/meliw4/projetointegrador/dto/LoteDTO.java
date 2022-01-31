@@ -2,10 +2,7 @@
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Lote;
-<<<<<<< HEAD
-import br.com.meliw4.projetointegrador.entity.Produto;
-=======
->>>>>>> d1248bd9d01ab02e9e3a1a647cabcd298808e9f8
+
 import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import lombok.AllArgsConstructor;

@@ -15,19 +15,17 @@ import javax.persistence.*;
 @Entity
 public class RegistroCompra {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "representante_id")
-    private Representante representante;
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "vendedor_id")
-    private Vendedor vendedor;
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "lote_id")
-    private Lote lote;
-
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "representante_id")
+	private Representante representante;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "vendedor_id")
+	private Vendedor vendedor;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "lote_id")
+	private Lote lote;
 }
-
-
+=
