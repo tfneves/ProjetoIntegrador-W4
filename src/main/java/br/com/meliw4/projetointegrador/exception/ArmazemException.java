@@ -1,4 +1,4 @@
-package exception;
+package br.com.meliw4.projetointegrador.exception;
 
 public class ArmazemException extends RuntimeException{
 
