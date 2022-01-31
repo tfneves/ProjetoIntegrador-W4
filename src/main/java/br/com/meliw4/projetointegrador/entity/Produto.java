@@ -1,5 +1,4 @@
-/*
-package br.com.meliw4.projetointegrador.entity;
+ br.com.meliw4.projetointegrador.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,7 +21,7 @@ import lombok.NoArgsConstructor;
  * @see Abstract Class EntidadeBase
  * @see Enum Tipo
  */
-/*
+
 @Entity
 @Builder
 @Data
@@ -68,4 +67,4 @@ public class Produto {
 	//@JoinColumn(name = "fk_categoria", referencedColumnName = "tipo")
 	//private ProdutoCategoria produtoCategoria;
 }
-*/
+

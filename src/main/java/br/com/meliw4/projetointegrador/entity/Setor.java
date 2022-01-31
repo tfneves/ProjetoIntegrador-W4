@@ -1,3 +1,4 @@
+
 package br.com.meliw4.projetointegrador.entity;
 
 import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
@@ -26,3 +27,4 @@ public class Setor {
 	private List<Lote> lotes;
 
 }
+

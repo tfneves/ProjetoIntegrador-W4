@@ -1,4 +1,4 @@
-/*
+
 package br.com.meliw4.projetointegrador.entity;
 
 import lombok.AllArgsConstructor;
@@ -28,10 +28,8 @@ import javax.persistence.*;
     //@JoinColumn(name = "lote_id")
     //private Lote lote;
 
-<<<<<<< HEAD
-}
 
-=======
 //}
->>>>>>> 0e7ec3a439ff44782bc1cf5ab05f44ba9358186
-	*/
+
+//}
+

@@ -29,8 +29,4 @@ public class Lote {
     private final LocalDate dataAquisicao = LocalDate.now();
 
 }
-<<<<<<< HEAD
 
-
-=======
->>>>>>> add495e876b2e6abcc94c0f1d939486c118a8ceb

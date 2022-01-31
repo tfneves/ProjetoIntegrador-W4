@@ -1,3 +1,4 @@
+
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Lote;
@@ -9,17 +10,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
@@ -85,3 +80,4 @@ public class ProdutoDTO {
 	}
 
 }
+

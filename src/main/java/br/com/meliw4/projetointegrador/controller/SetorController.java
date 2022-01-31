@@ -1,5 +1,7 @@
+/*
 package br.com.meliw4.projetointegrador.controller;
-
+*/
+/*
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 
 import java.util.List;
@@ -35,3 +37,4 @@ public class SetorController {
 	}
 
 }
+*/

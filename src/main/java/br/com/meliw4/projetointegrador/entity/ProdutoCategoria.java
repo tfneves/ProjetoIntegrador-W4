@@ -1,4 +1,4 @@
-/*
+
 package br.com.meliw4.projetointegrador.entity;
 
 import java.io.Serializable;
@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  *
  * @author: André Arroxellas
  */
-/*
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -48,4 +48,4 @@ public class ProdutoCategoria implements Serializable {
 	@OneToMany(mappedBy = "id")
 	private List<Produto> produtos;
 }
-*/
+

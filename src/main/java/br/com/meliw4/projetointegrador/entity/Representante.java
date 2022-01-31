@@ -18,7 +18,7 @@ public class Representante{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @OneToOne
+    @ManyToOne
     private Armazem armazem;
 
 }

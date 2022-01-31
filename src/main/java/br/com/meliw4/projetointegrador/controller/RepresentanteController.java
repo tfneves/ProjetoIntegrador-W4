@@ -20,18 +20,20 @@ public class RepresentanteController {
 
 	@Autowired
 	RepresentanteRepository representanteRepository;
+	RepresentanteDTO representanteDTO;
 
 	/**
 	 * Cadastra novo representante no sistema
 	 *
-	 * @param representanteDTO
+	 * @param payload
 	 * @param uriBuilder
 	 * @return ResponseEntity
 	 * @Author Francisco Alves
 	 */
+
 	@PostMapping(path = "/representante")
-	public ResponseEntity<Representante> registerRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) {
-		Representante representante = RepresentanteDTO.convert(representanteDTO);
+	public ResponseEntity<Representante> registerRepresentante(@RequestBody @Valid RepresentanteDTO payload, UriComponentsBuilder uriBuilder) {
+		Representante representante = representanteDTO.convert(payload);
 		representanteRepository.save(representante);
 		URI uri = uriBuilder.path("/api/v1/getRepresentante").build().toUri();
 		return ResponseEntity.created(uri).body(representante);
@@ -42,6 +44,7 @@ public class RepresentanteController {
 	 * @Author Francisco Alves
 	 * Lista todos os representantes cadastrados
 	 */
+
 	@GetMapping("/getRepresentante")
 	public ResponseEntity<List<Representante>> getAllRepresentantes() {
 		List<Representante> representantes = representanteRepository.findAll();
