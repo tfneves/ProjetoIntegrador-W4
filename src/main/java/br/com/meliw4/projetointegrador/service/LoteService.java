@@ -1,6 +1,5 @@
-
+/*
 package br.com.meliw4.projetointegrador.service;
-
 import br.com.meliw4.projetointegrador.entity.Lote;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +26,5 @@ public class LoteService {
        return new List<Produto>();
     }
 }
-
+*/
 

@@ -1,3 +1,4 @@
+/*
 package br.com.meliw4.projetointegrador.entity;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
  *
  * @author: André Arroxellas
  */
-
+/*
 @Entity
 @Builder
 @AllArgsConstructor
@@ -55,3 +56,4 @@ public class Produto extends EntidadeBase {
 	@JoinColumn(name = "fk_categoria", referencedColumnName = "tipo")
 	private ProdutoCategoria produtoCategoria;
 }
+*/

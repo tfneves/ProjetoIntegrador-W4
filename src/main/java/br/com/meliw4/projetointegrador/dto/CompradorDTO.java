@@ -30,7 +30,7 @@ public class CompradorDTO {
 	private String email;
 	@NotEmpty(message = "Data de Nascimento não pode estar em branco")
 	@Size(max = 10, message = "Nome não pode exceder 10 caracteres")
-	private LocalDate dataNascimento;
+	private String dataNascimento;
 	@NotEmpty(message = "Codigo Endereco não pode estar em branco")
 	private Endereco endereco;
 
@@ -39,7 +39,7 @@ public class CompradorDTO {
 			.nome(compradorDTO.getNome())
 			.telefone(compradorDTO.telefone)
 			.email(compradorDTO.getTelefone())
-			.dataNascimento(LocalDate.now())
+			.dataNascimento(compradorDTO.getDataNascimento())
 			.build();
 	}
 }
