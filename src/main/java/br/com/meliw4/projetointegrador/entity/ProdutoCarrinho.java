@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 @Builder
@@ -15,18 +14,14 @@ import java.io.Serializable;
 @Entity
 public class ProdutoCarrinho {
 
-	@EmbeddedId
-	private ProdutoCarrinhoId id;
-	private Integer quantidade;
-}
-
-@Embeddable
-class ProdutoCarrinhoId implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	@ManyToOne
 	@JoinColumn(name = "carrinho_id")
 	private Carrinho carrinho;
-
 	@ManyToOne
 	@JoinColumn(name = "produto_id")
 	private Produto produto;
+	private Integer quantidade;
 }
