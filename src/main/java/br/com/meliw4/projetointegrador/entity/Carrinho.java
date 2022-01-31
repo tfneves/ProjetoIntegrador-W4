@@ -1,29 +1,26 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
-@Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Setor {
+@Entity
+public class Carrinho {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Tipo categoria;
-	private Double volume;
-	@ManyToOne
-	private Armazem armazem;
-	@OneToMany(mappedBy = "setor", fetch = FetchType.LAZY)
-	private List<Lote> lotes;
-
+	private LocalDate data;
+	//private Comprador
+	@OneToOne
+	private StatusPedido statusPedido;
 }
-
