@@ -30,6 +30,7 @@ public class SetorService {
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
+		List<Setor> setores = this.setorRepository.findAll();
 		return this.setorRepository.findAll();
 	}
 

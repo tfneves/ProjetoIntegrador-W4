@@ -20,7 +20,6 @@ public class Carrinho {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDate data;
-	//private Comprador
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private StatusPedido statusPedido;
 }

@@ -17,11 +17,11 @@ public class StatusPedidoDTO {
 
 	@NotEmpty(message = "O campo nome não pode ser vazio")
 	@Size(max = 100, message = "O campo nome não pode exceder 100 caracteres")
-	private String nome;
+	private String statusCode;
 
 	public static StatusPedido parseToEntity(StatusPedidoDTO dto) {
 		return StatusPedido.builder()
-				.nome(dto.getNome())
+				.statusCode(dto.getStatusCode())
 				.build();
 	}
 }
