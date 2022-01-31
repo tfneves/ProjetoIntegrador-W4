@@ -12,10 +12,10 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-	public Optional<Produto> findById(Long productId);
+	//Optional<Produto> findById(Long productId);
 
-	List<Produto> findProductByType(Tipo productType);
+	//List<Produto> findProductByType(Tipo productType);
 
-	Optional<List<Produto>> findProductsBySellerId(Integer sellerId);
+	//Optional<List<Produto>> findProductsBySellerId(Integer sellerId);
 }
 
