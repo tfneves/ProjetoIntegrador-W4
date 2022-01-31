@@ -1,6 +1,7 @@
+
 package br.com.meliw4.projetointegrador.advice;
 
-import exception.ArmazemException;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
 
@@ -50,6 +51,7 @@ public class AdviceExceptions {
 	private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
 		Map<String, String> errors = new HashMap<>();
 		errors.put("error_message", "Json inválido");
+		errors.put("exception_message", e.getMessage());
 		return errors;
 	}
 
@@ -68,6 +70,12 @@ public class AdviceExceptions {
 		return errors;
 	}
 
+	/**
+	 * Trata exception de JSON Inválido
+	 *
+	 * @param e
+	 * @return
+	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
 	@ExceptionHandler(BusinessValidationException.class)
@@ -78,7 +86,7 @@ public class AdviceExceptions {
 		return errors;
 	}
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ResponseBody
 	@ExceptionHandler(NotFoundException.class)
 	private Map<String, String> notFoundException(NotFoundException e) {
