@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.dto;
 
 
 import br.com.meliw4.projetointegrador.entity.Armazem;
+import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
@@ -13,7 +14,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Builder
 @Data
@@ -28,6 +31,10 @@ public class SetorDTO {
 	private Double volume;
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
+	@NotEmpty
+	private Double espaco_disponivel;
+	@NotEmpty
+	private List<Lote> lotes;
 
 	@Autowired
 	ArmazemRepository armazemRepository;

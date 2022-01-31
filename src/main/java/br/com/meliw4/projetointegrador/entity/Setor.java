@@ -26,3 +26,4 @@ public class Setor {
 	private List<Lote> lotes;
 
 }
+
