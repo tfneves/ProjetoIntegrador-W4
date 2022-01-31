@@ -2,7 +2,9 @@ package br.com.meliw4.projetointegrador.dto;
 
 
 import br.com.meliw4.projetointegrador.entity.Armazem;
+import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Optional;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Builder
 @Data
@@ -21,14 +24,16 @@ import java.util.Optional;
 @Component
 public class SetorDTO {
 
-	@NotEmpty(message = "A Categoria não pode estar vazia")
-	private String categoria;
-	@NotEmpty(message = "O volume não pode estar vazia")
+	@NotNull(message = "Categoria inválida")
+	private Tipo categoria;
+	@NotNull(message = "Volume inválido")
 	private Double volume;
-	@NotEmpty
+	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
 	@NotEmpty
 	private Double espaco_disponivel;
+	@NotEmpty
+	private List<Lote> lotes;
 
 	@Autowired
 	ArmazemRepository armazemRepository;

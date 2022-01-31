@@ -1,5 +1,4 @@
 package br.com.meliw4.projetointegrador.repository;
-/**
 import java.util.List;
 import java.util.Optional;
 
@@ -11,10 +10,10 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-	public Optional<Produto> findById(Long productId);
+	Optional<Produto> findById(Long productId);
 
 	List<Produto> findProductByType(Tipo productType);
 
 	Optional<List<Produto>> findProductsBySellerId(Integer sellerId);
 }
-**/
+

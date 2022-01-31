@@ -1,6 +1,4 @@
-
 package br.com.meliw4.projetointegrador.entity;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,21 +11,16 @@ import javax.persistence.*;
 @Builder
 @Data
 @Entity
-public class RegistroCompra {
+public class RegistroLote {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "representante_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@ManyToOne
     private Representante representante;
-    @Id
     @ManyToOne
-    @JoinColumn(name = "vendedor_id")
     private Vendedor vendedor;
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "lote_id")
+	@ManyToOne
     private Lote lote;
 
 }
-
-
