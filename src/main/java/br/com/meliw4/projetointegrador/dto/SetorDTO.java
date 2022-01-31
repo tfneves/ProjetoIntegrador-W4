@@ -5,6 +5,7 @@ import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
+import exception.ArmazemException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,8 +35,9 @@ public class SetorDTO {
 	@Autowired
 	ArmazemRepository armazemRepository;
 
-	public Setor converte(SetorDTO payload){
-		Armazem armazem = armazemRepository.findById(payload.armazem_id).get();
+	public Setor converte(SetorDTO payload) {
+		Armazem armazem = armazemRepository.findById(payload.armazem_id).orElseThrow(
+			() -> new ArmazemException("O armazém informado não está cadastrado no sistema"));
 		return Setor.builder()
 			.categoria(payload.categoria)
 			.volume(payload.volume)
