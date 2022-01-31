@@ -2,6 +2,8 @@ package br.com.meliw4.projetointegrador.advice;
 
 import exception.ArmazemException;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -17,41 +19,43 @@ import java.util.Map;
 @RestControllerAdvice
 public class AdviceExceptions {
 
-    /**
-     * Trata exception de argumento inválido
-     * @param e
-     * @return Map
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    private Map<String, String> argumentNotValidException(MethodArgumentNotValidException e){
-        Map<String, String> errors = new HashMap<>();
-        e.getBindingResult().getAllErrors().forEach((error) -> {
-            String field = ((FieldError) error).getField();
-            String errorMessage = ((FieldError) error).getDefaultMessage();
-            errors.put("error_message", errorMessage);
-        });
-        return errors;
-    }
+	/**
+	 * Trata exception de argumento inválido
+	 *
+	 * @param e
+	 * @return Map
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	private Map<String, String> argumentNotValidException(MethodArgumentNotValidException e) {
+		Map<String, String> errors = new HashMap<>();
+		e.getBindingResult().getAllErrors().forEach((error) -> {
+			String field = ((FieldError) error).getField();
+			String errorMessage = ((FieldError) error).getDefaultMessage();
+			errors.put("error_message", errorMessage);
+		});
+		return errors;
+	}
 
-
-    /**
-     * Trata exception de JSON Inválido
-     * @param e
-     * @return Map
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error_message", "Json inválido");
-        return errors;
-    }
+	/**
+	 * Trata exception de JSON Inválido
+	 *
+	 * @param e
+	 * @return Map
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", "Json inválido");
+		return errors;
+	}
 
 	/**
 	 * Trata excessao relacionadas as classes de Armazem
+	 *
 	 * @param e
 	 * @return Map
 	 */
@@ -63,7 +67,6 @@ public class AdviceExceptions {
 		errors.put("error_message", e.getMessage());
 		return errors;
 	}
-  
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
@@ -72,6 +75,16 @@ public class AdviceExceptions {
 		Map<String, String> errors = new HashMap<>();
 		errors.put("error_message", e.getMessage());
 		errors.put("statusCode", "400");
+		return errors;
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(NotFoundException.class)
+	private Map<String, String> notFoundException(NotFoundException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", "404");
 		return errors;
 	}
 }

@@ -7,7 +7,6 @@ import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -23,7 +22,6 @@ public class SetorService {
 
 	@Autowired
 	private ArmazemRepository armazemRepository;
-
 
 	public Setor salva(Setor payload) {
 		return setorRepository.save(payload);

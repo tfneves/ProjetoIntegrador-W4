@@ -1,4 +1,4 @@
-package br.com.meliw4.exception;
+package br.com.meliw4.projetointegrador.exception;
 
 public class NotFoundException extends RuntimeException {
 

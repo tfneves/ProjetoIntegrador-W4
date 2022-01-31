@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,28 +42,21 @@ public class Produto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotNull
 	private String nome;
 
-	@NotNull
 	private LocalDate dataVencimento;
 
-	@NotEmpty
 	private Double volume;
 
-	@NotEmpty
 	private int quantidadeInicial;
 
-	@NotEmpty
 	private int quantidadeAtual;
 
-	@NotEmpty
 	private LocalDate dataManufatura;
 
 	// @NotEmpty
 	// private LocalDateTime dataStampManufatura;
 
-	@NotEmpty
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaAtual;
 
@@ -74,12 +68,10 @@ public class Produto {
 	// @ManyToOne // (fetch = FetchType.EAGER)
 	// private ProdutoVendedor produtoVendedor;
 
-	// @OneToMany(mappedBy = "produto")
-	// // @JoinColumn(name = "ProdutoVendedorId", referencedColumnName = "id")
-	// @Transient
-	// private List<ProdutoVendedor> produtoVendedores;
+	@OneToMany(mappedBy = "produto", fetch = FetchType.EAGER)
+	@Transient
+	private List<ProdutoVendedor> produtoVendedores;
 
-	@NotNull
 	@ManyToOne // (fetch = FetchType.EAGER)
 	private Lote lote;
 

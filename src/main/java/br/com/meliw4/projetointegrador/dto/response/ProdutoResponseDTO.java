@@ -12,7 +12,7 @@ import lombok.Data;
 public class ProdutoResponseDTO {
 	private Long id;
 	private final LocalDate dataVencimento;
-	private final Integer volume;
+	private final Double volume;
 	private final ProdutoCategoria produtoCategoria;
 
 	public static ProdutoResponseDTO toDTO(Produto produto) {

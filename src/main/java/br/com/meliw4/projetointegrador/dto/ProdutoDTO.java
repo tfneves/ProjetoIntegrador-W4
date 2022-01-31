@@ -3,6 +3,7 @@ package br.com.meliw4.projetointegrador.dto;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,10 +48,12 @@ public class ProdutoDTO {
 	public static Produto convert(ProdutoDTO produtoDTO, Lote lote,
 			ProdutoCategoria produtoCategoria) {
 		return Produto.builder()
-				.dataManufatura(produtoDTO.getDataManufatura())
+				.nome(produtoDTO.getNome())
 				.dataVencimento(produtoDTO.getDataVencimento())
+				.volume(produtoDTO.getVolume())
 				.quantidadeInicial(produtoDTO.getQuantidadeInicial())
 				.quantidadeAtual(produtoDTO.getQuantidadeAtual())
+				.dataManufatura(produtoDTO.getDataManufatura())
 				// .vendedor(vendedor)
 				.temperaturaAtual(produtoDTO.getTemperaturaAtual())
 				// .temperaturaMinima(produtoDTO.getTemperaturaMinima())
@@ -58,8 +61,6 @@ public class ProdutoDTO {
 				.produtoCategoria(produtoCategoria)
 				.lote(lote)
 				// .preco(produtoDTO.getPreco())
-				.nome(produtoDTO.getNome())
-				.volume(produtoDTO.getVolume())
 				.build();
 	}
 

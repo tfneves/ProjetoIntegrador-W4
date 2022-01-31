@@ -6,12 +6,14 @@ import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.*;
+
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class LoteService {
@@ -23,8 +25,14 @@ public class LoteService {
 	private ProdutoRepository produtoRepository;
 	private LoteRepository loteRepository;
 	private RegistroLoteRepository registroLoteRepository;
+	private ProdutoCategoriaRepository produtoCategoriaRepository;
+	private VendedorProdutoRepository vendedorProdutoRepository;
 
-	public LoteService(ArmazemRepository armazemRepository, VendedorRepository vendedorRepository, SetorRepository setorRepository, RepresentanteRepository representanteRepository, ProdutoRepository produtoRepository, LoteRepository loteRepository, RegistroLoteRepository registroLoteRepository) {
+	public LoteService(ArmazemRepository armazemRepository, VendedorRepository vendedorRepository,
+			SetorRepository setorRepository, RepresentanteRepository representanteRepository,
+			ProdutoRepository produtoRepository, LoteRepository loteRepository,
+			RegistroLoteRepository registroLoteRepository, ProdutoCategoriaRepository produtoCategoriaRepository,
+			VendedorProdutoRepository vendedorProdutoRepository) {
 		this.armazemRepository = armazemRepository;
 		this.vendedorRepository = vendedorRepository;
 		this.setorRepository = setorRepository;
@@ -32,8 +40,9 @@ public class LoteService {
 		this.produtoRepository = produtoRepository;
 		this.loteRepository = loteRepository;
 		this.registroLoteRepository = registroLoteRepository;
+		this.produtoCategoriaRepository = produtoCategoriaRepository;
+		this.vendedorProdutoRepository = vendedorProdutoRepository;
 	}
-
 
 	public void registerLote(LoteDTO loteDTO) {
 		validateArmazem(loteDTO.getArmazemId());
@@ -42,8 +51,8 @@ public class LoteService {
 		Setor setor = validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
 		Lote lote = LoteDTO.convert(loteDTO, setor, representante);
 		saveLote(lote);
-		saveProdutos(lote, vendedor, loteDTO.getProdutosDTO());
 		createRegister(lote, representante, vendedor);
+		saveProdutos(lote, loteDTO.getProdutosDTO(), vendedor);
 	}
 
 	public List<ProdutoDTO> updateLote(LoteUpdateDTO loteUpdateDTO) {
@@ -61,7 +70,8 @@ public class LoteService {
 			Integer quantidadeAtual = produto.getQuantidadeAtual();
 			Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
 			if (quantidadeAtual < quantidadeRetira) {
-				throw new BusinessValidationException("A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+				throw new BusinessValidationException(
+						"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
 			}
 			produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
 			produtos.add(produto);
@@ -120,7 +130,7 @@ public class LoteService {
 		Double totalVolume = 0.0;
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			totalVolume += produtoDTO.getVolume();
-			if (produtoDTO.getTipo() != setor.getCategoria()) {
+			if (produtoDTO.getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
 			}
 		}
@@ -146,20 +156,36 @@ public class LoteService {
 		loteRepository.save(lote);
 	}
 
-	private void saveProdutos(Lote lote, Vendedor vendedor, List<ProdutoDTO> produtosDTO) {
+	private void saveProdutos(Lote lote, List<ProdutoDTO> produtosDTO, Vendedor vendedor) {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
-			Produto produto = ProdutoDTO.convert(produtoDTO, vendedor, lote);
+			// check categoria existente
+			Integer existsCategoria = this.produtoCategoriaRepository
+					.existsByCategoria(produtoDTO.getCategoria().name());
+			if (existsCategoria != 0) {
+				throw new NotFoundException("Categoria não encontrada");
+			}
+			ProdutoCategoria produtoCategoria = this.produtoCategoriaRepository
+					.getByCategoria(produtoDTO.getCategoria().name());
+			Produto produto = ProdutoDTO.convert(produtoDTO, lote, produtoCategoria);
+			BigDecimal preco = produtoDTO.getPreco();
 			produtoRepository.save(produto);
 			produtoDTO.setId(produto.getId());
+			savePreco(produto, vendedor, preco);
 		}
+	}
+
+	private void savePreco(Produto produto, Vendedor vendedor, BigDecimal preco) {
+		ProdutoVendedor produtoVendedor = new ProdutoVendedor(
+				new ProdutoVendedorId(vendedor, produto), preco);
+		vendedorProdutoRepository.save(produtoVendedor);
 	}
 
 	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
 		RegistroLote registroLote = RegistroLote.builder()
-			.lote(lote)
-			.representante(representante)
-			.vendedor(vendedor)
-			.build();
+				.lote(lote)
+				.representante(representante)
+				.vendedor(vendedor)
+				.build();
 		registroLoteRepository.save(registroLote);
 	}
 

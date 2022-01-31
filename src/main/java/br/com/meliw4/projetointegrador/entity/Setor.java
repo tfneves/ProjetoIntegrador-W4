@@ -1,6 +1,6 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
+import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class Setor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Tipo categoria;
+	private Categoria categoria;
 	private Double volume;
 	@ManyToOne
 	private Armazem armazem;
