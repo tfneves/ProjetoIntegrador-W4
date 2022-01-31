@@ -5,7 +5,7 @@ import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
-import exception.ArmazemException;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +13,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Optional;
 
 @Builder
 @Data

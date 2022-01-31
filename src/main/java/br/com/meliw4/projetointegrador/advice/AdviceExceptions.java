@@ -1,6 +1,6 @@
 package br.com.meliw4.projetointegrador.advice;
 
-import exception.ArmazemException;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -47,6 +47,7 @@ public class AdviceExceptions {
     private Map<String, String> jsonFormatterException(HttpMessageNotReadableException e) {
         Map<String, String> errors = new HashMap<>();
         errors.put("error_message", "Json inválido");
+		errors.put("exception_message", e.getMessage());
         return errors;
     }
 
@@ -63,7 +64,7 @@ public class AdviceExceptions {
 		errors.put("error_message", e.getMessage());
 		return errors;
 	}
-  
+
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
