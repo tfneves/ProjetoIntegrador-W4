@@ -25,11 +25,6 @@ public class SetorService {
 		if (possuiEspaco(payload)) {
 			Setor setor = setorRepository.save(payload);
 			return setor;
-			//Double volume = volumeRestante(payload);
-			//String espacoDisponivel = String.format("Espaço Disponível: .2f", volume);
-			//Map<String, String> response = new HashMap<>();
-			//response.put(setor, espacoDisponivel);
-			//return new JSONObject(response);
 		} else
 			throw new IllegalArgumentException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
 	}

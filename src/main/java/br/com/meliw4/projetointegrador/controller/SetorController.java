@@ -30,7 +30,7 @@ public class SetorController {
 	}
 
 	@PostMapping("/cadastrar")
-	public ResponseEntity<?> cadastraSetor(@RequestBody @Valid SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
+	public ResponseEntity<?> cadastraSetor(@RequestBody SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
 		Setor setor = setorDTO.converte(payload);
 		URI uri = uriBuilder.path("/setor").build().toUri();
 		try {

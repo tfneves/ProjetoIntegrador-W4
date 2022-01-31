@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoteRepository extends JpaRepository<Lote, Long> {
 }
+<<<<<<< HEAD
 **/
+

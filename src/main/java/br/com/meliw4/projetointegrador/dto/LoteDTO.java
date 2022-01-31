@@ -1,12 +1,10 @@
 /**
 package br.com.meliw4.projetointegrador.dto;
-
 import br.com.meliw4.projetointegrador.entity.Lote;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 

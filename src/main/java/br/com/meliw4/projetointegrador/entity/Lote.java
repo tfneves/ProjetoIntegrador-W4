@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +14,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+
 public class Lote {
 
     @Id
@@ -29,3 +29,4 @@ public class Lote {
 
 }
 **/
+
