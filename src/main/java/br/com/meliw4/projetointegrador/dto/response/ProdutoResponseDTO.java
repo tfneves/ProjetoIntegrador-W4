@@ -1,6 +1,6 @@
 package br.com.meliw4.projetointegrador.dto.response;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
@@ -12,16 +12,18 @@ import lombok.Data;
 @Data
 public class ProdutoResponseDTO {
 	private Long id;
-	private final LocalDate dataVencimento;
+	private final String nome;
 	private final Double volume;
 	private final ProdutoCategoria produtoCategoria;
+	private final List<ProdutoVendedor> vendedores;
 
-	public static ProdutoResponseDTO toDTO(Produto produto, ProdutoVendedor produtoVendedor) {
+	public static ProdutoResponseDTO toDTO(Produto produto) {
 		return ProdutoResponseDTO.builder()
 				.id(produto.getId())
-				.dataVencimento(produtoVendedor.getDataVencimento())
+				.nome(produto.getNome())
 				.volume(produto.getVolume())
 				.produtoCategoria(produto.getProdutoCategoria())
+				.vendedores(produto.getProdutoVendedores())
 				.build();
 	}
 }

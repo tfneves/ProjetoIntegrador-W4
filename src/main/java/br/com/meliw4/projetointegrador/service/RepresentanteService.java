@@ -25,9 +25,11 @@ public class RepresentanteService {
 			throw new ArmazemException("Armazem não existe");
 		}
 		Armazem armazem = armazemRepository.getById(representanteDTO.getArmazem_id());
-		if (armazem.getRepresentante()!=null) {
+
+		if (armazem.getRepresentante() != null) {
 			throw new ArmazemException("O armazem tem representante cadastrado");
 		}
+
 		Representante representante = RepresentanteDTO.convert(representanteDTO, armazem);
 		representanteRepository.save(representante);
 		return representante;

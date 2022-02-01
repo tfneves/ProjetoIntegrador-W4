@@ -63,6 +63,9 @@ public class PedidoService {
 	}
 
 
+	//public
+
+
 	public PedidoResponse getPedido(Long id) {
 		PedidoResponse pedidoResponse = new PedidoResponse();
 		Carrinho pedido = validatePedido(id);
