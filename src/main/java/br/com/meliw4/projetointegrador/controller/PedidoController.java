@@ -13,6 +13,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -22,13 +24,23 @@ public class PedidoController {
 	@Autowired
 	PedidoService pedidoService;
 
+	/**
+	 *
+	 * Cria pedido
+	 * @param carrinhoDTO
+	 * @param uriComponentsBuilder
+	 * @return
+	 */
 	@PostMapping("/fresh-products/orders/createOrder")
-	public ResponseEntity<?> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
-		if(pedidoService.validaDadosCarrinho(carrinhoDTO)) {
-			// TODO: SALVAR PRODUTOS NA TABELA produto_carrinho
+	public ResponseEntity<Map<String, String>> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
+		Map<String, String> response = new HashMap<>();
+		if(pedidoService.salvarPedido(carrinhoDTO)){
+			URI uri = uriComponentsBuilder.path("").build().toUri();
+			response.put("message", "Carrinho salvo com sucesso");
+			return ResponseEntity.created(uri).body(response);
 		}
-		URI uri = uriComponentsBuilder.path("").build().toUri();
-		return ResponseEntity.created(uri).body("Carrinho salvo com sucesso!");
+		response.put("message", "Falha ao salvar carrinho");
+		return ResponseEntity.internalServerError().body(response);
 	}
 
 
