@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 
 @Repository
-public interface VendedorProdutoRepository extends JpaRepository<ProdutoVendedor, Long> {
+public interface ProdutoVendedorRepository extends JpaRepository<ProdutoVendedor, Long> {
 	// BigDecimal getByProdutoVendedorId(ProdutoVendedorId produtoVendedorId);
 }

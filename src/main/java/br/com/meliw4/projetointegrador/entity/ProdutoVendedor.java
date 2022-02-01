@@ -44,8 +44,6 @@ public class ProdutoVendedor {
 
 	private LocalDate dataManufatura;
 
-	private LocalDateTime dataStampManufatura;
-
 	private int quantidadeInicial;
 
 	private int quantidadeAtual;
