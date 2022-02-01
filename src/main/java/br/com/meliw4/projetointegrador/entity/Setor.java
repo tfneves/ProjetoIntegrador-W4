@@ -19,6 +19,8 @@ public class Setor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "ENUM('FS','RR','FF')", unique = true, length = 2)
 	private Categoria categoria;
 	private Double volume;
 	@ManyToOne
@@ -27,4 +29,3 @@ public class Setor {
 	private List<Lote> lotes;
 
 }
-
