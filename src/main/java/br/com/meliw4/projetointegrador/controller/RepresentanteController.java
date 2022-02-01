@@ -22,6 +22,7 @@ public class RepresentanteController {
 	RepresentanteService representanteService;
 
 	Representante representante;
+
 	/**
 	 * Cadastra novo representante no sistema
 	 *
@@ -32,11 +33,12 @@ public class RepresentanteController {
 	 */
 
 	@PostMapping(path = "/representante")
-	public ResponseEntity<Map<String, String>> cadastrarRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) throws Exception {
+	public ResponseEntity<Map<String, String>> cadastrarRepresentante(
+			@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) throws Exception {
 		Map<String, String> response = new HashMap<>();
 		representanteService.register(representanteDTO);
 		URI uri = uriBuilder.path("").build().toUri();
-		response.put("message","Representante criado !!");
+		response.put("message", "Representante criado !!");
 		return ResponseEntity.created(uri).body(response);
 	}
 }

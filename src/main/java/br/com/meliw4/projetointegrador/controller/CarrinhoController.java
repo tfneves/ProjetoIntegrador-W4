@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.controller;
 
+import br.com.meliw4.projetointegrador.entity.Carrinho;
 import br.com.meliw4.projetointegrador.service.CarrinhoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ public class CarrinhoController {
 	CarrinhoService carrinhoService;
 
 	@PutMapping("fresh-products/orders/")
-	public ResponseEntity<?> atulizarCarrinho(@RequestParam Long idOrder){
-		return ResponseEntity.ok(carrinhoService.atualizaCarrinho(idOrder));
+	public ResponseEntity<Carrinho> atulizarCarrinho(@RequestParam Long idOrder, @RequestBody Carrinho novoCarrinho){
+		return ResponseEntity.ok(carrinhoService.atualizaCarrinho(idOrder, novoCarrinho));
 	}
 }

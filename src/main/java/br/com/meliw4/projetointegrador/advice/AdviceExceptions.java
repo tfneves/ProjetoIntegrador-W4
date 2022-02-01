@@ -3,6 +3,8 @@ package br.com.meliw4.projetointegrador.advice;
 
 import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -36,7 +38,6 @@ public class AdviceExceptions {
 		});
 		return errors;
 	}
-
 
 	/**
 	 * Trata exception de JSON Inválido
@@ -85,5 +86,13 @@ public class AdviceExceptions {
 		return errors;
 	}
 
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	@ExceptionHandler(NotFoundException.class)
+	private Map<String, String> notFoundException(NotFoundException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", "404");
+		return errors;
+	}
 }
-
