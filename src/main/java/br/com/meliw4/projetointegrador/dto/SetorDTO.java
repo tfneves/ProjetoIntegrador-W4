@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.dto;
 
-
 import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Setor;
@@ -59,3 +58,4 @@ public class SetorDTO {
 
 
 }
+

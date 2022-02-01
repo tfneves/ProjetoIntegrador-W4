@@ -1,3 +1,4 @@
+
 package br.com.meliw4.projetointegrador.entity;
 
 import java.io.Serializable;
@@ -47,3 +48,4 @@ public class ProdutoCategoria implements Serializable {
 	@OneToMany(mappedBy = "id")
 	private List<Produto> produtos;
 }
+
