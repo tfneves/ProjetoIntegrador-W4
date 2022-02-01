@@ -25,10 +25,10 @@ public class CarrinhoDTO {
 	private List<ProdutoPedidoDTO> produtos;
 
 
-	public static Carrinho parseToEntity(CarrinhoDTO dto) {
+	public static Carrinho parseToEntity(CarrinhoDTO dto, StatusPedido statusPedido) {
 		return Carrinho.builder()
 				.data(dto.getData())
-				.statusPedido(StatusPedidoDTO.parseToEntity(dto.getStatusPedido()))
+				.statusPedido(statusPedido)
 				.build();
 	}
 }
