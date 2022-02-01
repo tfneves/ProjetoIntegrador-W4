@@ -72,3 +72,4 @@ public class SetorService {
 				.orElse(0.0);
 	}
 }
+

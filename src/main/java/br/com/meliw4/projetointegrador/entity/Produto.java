@@ -49,3 +49,4 @@ public class Produto {
 	@Transient
 	private List<ProdutoVendedor> produtoVendedores;
 }
+

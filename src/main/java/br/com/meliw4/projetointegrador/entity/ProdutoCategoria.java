@@ -1,3 +1,4 @@
+
 package br.com.meliw4.projetointegrador.entity;
 
 import java.io.Serializable;
@@ -40,3 +41,4 @@ public class ProdutoCategoria implements Serializable {
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaMinima;
 }
+

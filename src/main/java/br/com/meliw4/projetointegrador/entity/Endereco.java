@@ -1,3 +1,4 @@
+
 package br.com.meliw4.projetointegrador.entity;
 
 import lombok.AllArgsConstructor;
@@ -12,13 +13,22 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Armazem {
+public class Endereco {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
-	private Double volume;
-	@OneToOne(mappedBy = "armazem")
-	private Representante representante;
+	@Column
+	private String logradouro;
+	@Column
+	private Integer numero;
+	@Column
+	private String bairro;
+	@Column
+	private String cidade;
+	@Column
+	private String estado;
+	@OneToOne(mappedBy = "endereco")
+	private Comprador comprador;
 }
+

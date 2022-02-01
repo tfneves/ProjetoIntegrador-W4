@@ -1,12 +1,10 @@
 package br.com.meliw4.projetointegrador.controller;
 
-import br.com.meliw4.projetointegrador.dto.CompradorDTO;
+import br.com.meliw4.projetointegrador.dto.EnderecoDTO;
 import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
-import br.com.meliw4.projetointegrador.dto.VendedorDTO;
-import br.com.meliw4.projetointegrador.entity.Vendedor;
-import br.com.meliw4.projetointegrador.repository.VendedorRepository;
-import br.com.meliw4.projetointegrador.service.VendedorService;
-
+import br.com.meliw4.projetointegrador.entity.Endereco;
+import br.com.meliw4.projetointegrador.repository.EnderecoRepository;
+import br.com.meliw4.projetointegrador.service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,26 +18,25 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class VendedorController {
+public class EnderecoController {
 
 	@Autowired
-	VendedorService vendedorService;
+	EnderecoService enderecoService;
 
 	/**
-	 * Cadastra novo vendedor no sistema
+	 * Cadastra novo endereco no sistema
 	 *
-	 * @param vendedorDTO
+	 * @param enderecoDTO
 	 * @param uriBuilder
 	 * @return ResponseEntity
+	 * @Author Francisco Alves
 	 */
-
-	@PostMapping(path = "/vendedor")
-	public ResponseEntity<Map<String, String>> cadastrarVendedor(@RequestBody @Valid VendedorDTO vendedorDTO,
-			UriComponentsBuilder uriBuilder) throws Exception {
+	@PostMapping(path = "/endereco")
+	public ResponseEntity<Map<String, String>> cadastrarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO, UriComponentsBuilder uriBuilder) throws Exception {
 		Map<String, String> response = new HashMap<>();
-		vendedorService.register(vendedorDTO);
+		enderecoService.register(enderecoDTO);
 		URI uri = uriBuilder.path("").build().toUri();
-		response.put("message", "Vendedor criado com sucesso !!");
+		response.put("message","Endereco criado com sucesso!!");
 		return ResponseEntity.created(uri).body(response);
 	}
 }

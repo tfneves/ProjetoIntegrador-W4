@@ -2,7 +2,7 @@ package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
 import br.com.meliw4.projetointegrador.entity.Representante;
-import br.com.meliw4.projetointegrador.repository.RepresentanteRepository;
+import br.com.meliw4.projetointegrador.service.RepresentanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,40 +10,35 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
 public class RepresentanteController {
 
 	@Autowired
-	private RepresentanteRepository representanteRepository;
+	RepresentanteService representanteService;
+
+	Representante representante;
 
 	/**
 	 * Cadastra novo representante no sistema
 	 *
-	 * @Author Francisco Alves
 	 * @param representanteDTO
 	 * @param uriBuilder
 	 * @return ResponseEntity
-	 */
-	@PostMapping(path = "/representante")
-	public ResponseEntity<Representante> registerRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO,
-			UriComponentsBuilder uriBuilder) {
-		Representante representante = RepresentanteDTO.convert(representanteDTO);
-		representanteRepository.save(representante);
-		URI uri = uriBuilder.path("/api/v1/getRepresentante").build().toUri();
-		return ResponseEntity.created(uri).body(representante);
-	}
-
-	/**
 	 * @Author Francisco Alves
-	 *         Lista todos os representantes cadastrados
-	 * @return ResponseEntity
 	 */
-	@GetMapping("/getRepresentante")
-	public ResponseEntity<List<Representante>> getAllRepresentantes() {
-		List<Representante> representantes = representanteRepository.findAll();
-		return ResponseEntity.ok().body(representantes);
+
+	@PostMapping(path = "/representante")
+	public ResponseEntity<Map<String, String>> cadastrarRepresentante(
+			@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) throws Exception {
+		Map<String, String> response = new HashMap<>();
+		representanteService.register(representanteDTO);
+		URI uri = uriBuilder.path("").build().toUri();
+		response.put("message", "Representante criado !!");
+		return ResponseEntity.created(uri).body(response);
 	}
 }

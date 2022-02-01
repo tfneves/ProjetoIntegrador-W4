@@ -1,4 +1,8 @@
+
 package br.com.meliw4.projetointegrador.service;
+
+import br.com.meliw4.projetointegrador.entity.Lote;
+
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.LoteUpdateDTO;
@@ -194,3 +198,5 @@ public class LoteService {
 	}
 
 }
+
+
