@@ -1,28 +1,26 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.entity.Carrinho;
-import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCarrinho;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.CarrinhoRepository;
 import br.com.meliw4.projetointegrador.repository.ProdutoCarrinhoRepository;
 import br.com.meliw4.projetointegrador.response.PedidoResponse;
 import br.com.meliw4.projetointegrador.response.ProdutoPedidoResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class PedidoService {
 
-	@Autowired
-	CarrinhoRepository carrinhoRepository;
+	private CarrinhoRepository carrinhoRepository;
+	private ProdutoCarrinhoRepository produtoCarrinhoRepository;
 
-	@Autowired
-	ProdutoCarrinhoRepository produtoCarrinhoRepository;
-
+	public PedidoService(CarrinhoRepository carrinhoRepository, ProdutoCarrinhoRepository produtoCarrinhoRepository) {
+		this.carrinhoRepository = carrinhoRepository;
+		this.produtoCarrinhoRepository = produtoCarrinhoRepository;
+	}
 
 	public PedidoResponse getPedido(Long id) {
 		PedidoResponse pedidoResponse = new PedidoResponse();
@@ -30,12 +28,11 @@ public class PedidoService {
 		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByPedidoId(id);
 		for (ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
 			pedidoResponse.getProdutosPedido()
-				.add(
-					ProdutoPedidoResponse.builder()
-						.id(produtoCarrinho.getId())
-						.quantidade(produtoCarrinho.getQuantidade())
-						.build()
-				);
+					.add(
+							ProdutoPedidoResponse.builder()
+									.id(produtoCarrinho.getId())
+									.quantidade(produtoCarrinho.getQuantidade())
+									.build());
 		}
 		return pedidoResponse;
 	}

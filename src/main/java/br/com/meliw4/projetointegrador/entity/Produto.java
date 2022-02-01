@@ -67,3 +67,4 @@ public class Produto {
 	//@JoinColumn(name = "fk_categoria", referencedColumnName = "tipo")
 	//private ProdutoCategoria produtoCategoria;
 }
+
