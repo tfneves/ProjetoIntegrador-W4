@@ -39,11 +39,4 @@ public class RepresentanteController {
 		response.put("message","Representante criado !!");
 		return ResponseEntity.created(uri).body(response);
 	}
-
-	/**
-	 * @return ResponseEntity
-	 * @Author Francisco Alves
-	 * Lista todos os representantes cadastrados
-	 */
-
 }

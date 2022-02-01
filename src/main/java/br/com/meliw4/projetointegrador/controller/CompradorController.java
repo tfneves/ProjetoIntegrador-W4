@@ -38,7 +38,7 @@ public class CompradorController {
 	 */
 
 	@PostMapping("/comprador")
-	public ResponseEntity<Map<String, String>> cadastrarRepresentante(@RequestBody @Valid CompradorDTO compradorDTO, UriComponentsBuilder uriBuilder) throws Exception {
+	public ResponseEntity<Map<String, String>> cadastrarComprador(@RequestBody @Valid CompradorDTO compradorDTO, UriComponentsBuilder uriBuilder) throws Exception {
 		Map<String, String> response = new HashMap<>();
 		compradorService.register(compradorDTO);
 		URI uri = uriBuilder.path("").build().toUri();
