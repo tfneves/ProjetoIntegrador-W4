@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoteService {
@@ -67,26 +68,28 @@ public class LoteService {
 	private List<ProdutoDTO> updateLoteProdutos(Long loteId, List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		List<ProdutoDTO> produtosDTO = new ArrayList<>();
-		//List<Produto> produtos = new ArrayList<>();
-		//List<ProdutoVendedor> produtosVendedores = loteRepository.getById(loteId).getProdutoVendedores();
-		//for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
-		//	Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
-			//ProdutoVendedor produtoVendedor = produto.getProdutoVendedores();
-			// Integer quantidadeAtual = produto.getQuantidadeAtual();
-			// Integer quantidadeAtual = produtoVendedor.getQuantidadeAtual();
-		//	Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
-			// if (quantidadeAtual < quantidadeRetira) {
-			// throw new BusinessValidationException(
-			// "A quantidade a retirar não deve exceder a quantidade atual de um produto.");
-			// }
-			// produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
-			//produtos.add(produto);
-		//}
-		//for (Produto produto : produtos) {
-		//	produtoRepository.save(produto);
-			// produtosDTO.add(ProdutoDTO.convert(produto, produtoVendedor));
-		//}
-		//return produtosDTO;
+		List<ProdutoVendedor> produtosVendedor = new ArrayList<>();
+		Integer quantidadeAtual = 0;
+		Integer quantidadeRetira = 0;
+		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
+			ProdutoVendedor produtoVendedor = produtoVendedorRepository.findByLoteIdAndProdutoIdAndVendedorId(loteId, produtoUpdateDTO.getId(), produtoUpdateDTO.getVendedorId());
+			if (produtoVendedor == null) {
+				throw new BusinessValidationException(
+					"Produto não cadastrado pelo vendedor no lote solicitado.");
+			}
+			quantidadeAtual = produtoVendedor.getQuantidadeAtual();
+			quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
+			if (quantidadeAtual < quantidadeRetira) {
+				throw new BusinessValidationException(
+					"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+			}
+			produtoVendedor.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
+			produtosVendedor.add(produtoVendedor);
+		}
+		for (ProdutoVendedor produtoVendedor : produtosVendedor) {
+			produtoVendedorRepository.save(produtoVendedor);
+			produtosDTO.add(ProdutoDTO.convert(produtoVendedor));
+		}
 		return produtosDTO;
 	}
 
