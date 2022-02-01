@@ -30,9 +30,9 @@ public class SetorDTO {
 	private Double volume;
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
-	@NotEmpty
+	@NotNull
 	private Double espaco_disponivel;
-	@NotEmpty
+	// @NotNull
 	private List<Lote> lotes;
 
 	@Autowired
@@ -40,22 +40,20 @@ public class SetorDTO {
 
 	public Setor converte(SetorDTO payload) {
 		Armazem armazem = armazemRepository.findById(payload.armazem_id).orElseThrow(
-			() -> new ArmazemException("O armazém informado não está cadastrado no sistema"));
+				() -> new ArmazemException("O armazém informado não está cadastrado no sistema"));
 		return Setor.builder()
-			.categoria(payload.categoria)
-			.volume(payload.volume)
-			.armazem(armazem)
-			.build();
+				.categoria(payload.categoria)
+				.volume(payload.volume)
+				.armazem(armazem)
+				.build();
 	}
 
-	public SetorDTO converte(Setor payload){
+	public SetorDTO converte(Setor payload) {
 		return SetorDTO.builder()
-			.categoria(payload.getCategoria())
-			.volume(payload.getVolume())
-			.armazem_id(payload.getArmazem().getId())
-			.build();
+				.categoria(payload.getCategoria())
+				.volume(payload.getVolume())
+				.armazem_id(payload.getArmazem().getId())
+				.build();
 	}
-
 
 }
-
