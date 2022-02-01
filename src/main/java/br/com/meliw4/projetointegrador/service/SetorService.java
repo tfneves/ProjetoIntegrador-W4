@@ -1,10 +1,8 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
-import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
-import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +69,6 @@ public class SetorService {
 				.filter(s -> s.getArmazem() == setor.getArmazem())
 				.map(s -> s.getVolume())
 				.reduce((n1, n2) -> n1 + n2)
-				.get();
+				.orElse(0.0);
 	}
 }

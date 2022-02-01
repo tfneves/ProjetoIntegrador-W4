@@ -29,9 +29,9 @@ public class SetorDTO {
 	private Double volume;
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
-	@NotEmpty
+	@NotNull
 	private Double espaco_disponivel;
-	@NotEmpty
+	@NotNull
 	private List<Lote> lotes;
 
 	@Autowired

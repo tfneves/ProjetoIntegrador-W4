@@ -3,7 +3,6 @@ package br.com.meliw4.projetointegrador.dto;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
-import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,13 +53,9 @@ public class ProdutoDTO {
 				.quantidadeInicial(produtoDTO.getQuantidadeInicial())
 				.quantidadeAtual(produtoDTO.getQuantidadeAtual())
 				.dataManufatura(produtoDTO.getDataManufatura())
-				// .vendedor(vendedor)
 				.temperaturaAtual(produtoDTO.getTemperaturaAtual())
-				// .temperaturaMinima(produtoDTO.getTemperaturaMinima())
-				// .tipo(produtoDTO.getTipo())
 				.produtoCategoria(produtoCategoria)
 				.lote(lote)
-				// .preco(produtoDTO.getPreco())
 				.build();
 	}
 
@@ -74,10 +69,6 @@ public class ProdutoDTO {
 				.temperaturaAtual(produto.getTemperaturaAtual())
 				.temperaturaMinima(produto.getProdutoCategoria().getTemperaturaMinima())
 				.categoria(produto.getProdutoCategoria().getCategoria())
-				// .temperaturaMinima(produto.getTemperaturaMinima())
-				// .tipo(produto.getTipo())
-				// .preco(produto.getPreco())
-				// .preco(preco)
 				.nome(produto.getNome())
 				.volume(produto.getVolume())
 				.build();

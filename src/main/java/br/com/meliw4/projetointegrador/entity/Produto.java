@@ -25,9 +25,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- //* @author: André Arroxellas
- //* @see Abstract Class EntidadeBase
- //* @see Enum Tipo
+ * //* @author: André Arroxellas
+ * //* @see Abstract Class EntidadeBase
+ * //* @see Enum Tipo
  **/
 
 @Entity
@@ -63,10 +63,6 @@ public class Produto {
 	@ManyToOne(cascade = CascadeType.ALL, optional = false)
 	@JoinColumn(name = "categoria_id", referencedColumnName = "categoria")
 	private ProdutoCategoria produtoCategoria;
-
-	// @NotNull
-	// @ManyToOne // (fetch = FetchType.EAGER)
-	// private ProdutoVendedor produtoVendedor;
 
 	@OneToMany(mappedBy = "produto", fetch = FetchType.EAGER)
 	@Transient

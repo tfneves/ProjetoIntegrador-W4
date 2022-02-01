@@ -158,10 +158,9 @@ public class LoteService {
 
 	private void saveProdutos(Lote lote, List<ProdutoDTO> produtosDTO, Vendedor vendedor) {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
-			// check categoria existente
 			Integer existsCategoria = this.produtoCategoriaRepository
 					.existsByCategoria(produtoDTO.getCategoria().name());
-			if (existsCategoria != 0) {
+			if (existsCategoria == 0) {
 				throw new NotFoundException("Categoria não encontrada");
 			}
 			ProdutoCategoria produtoCategoria = this.produtoCategoriaRepository
@@ -175,6 +174,9 @@ public class LoteService {
 	}
 
 	private void savePreco(Produto produto, Vendedor vendedor, BigDecimal preco) {
+		if (BigDecimal.ZERO.compareTo(preco) >= 0) {
+			throw new BusinessValidationException("Preço deve ser positivo maior que zero");
+		}
 		ProdutoVendedor produtoVendedor = new ProdutoVendedor(
 				new ProdutoVendedorId(vendedor, produto), preco);
 		vendedorProdutoRepository.save(produtoVendedor);
