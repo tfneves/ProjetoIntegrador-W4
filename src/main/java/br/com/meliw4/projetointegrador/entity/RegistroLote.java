@@ -25,3 +25,4 @@ public class RegistroLote {
     private Lote lote;
 
 }
+

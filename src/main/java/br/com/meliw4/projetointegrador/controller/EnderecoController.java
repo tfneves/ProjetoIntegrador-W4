@@ -1,8 +1,10 @@
 package br.com.meliw4.projetointegrador.controller;
 
+import br.com.meliw4.projetointegrador.dto.EnderecoDTO;
 import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
-import br.com.meliw4.projetointegrador.entity.Representante;
-import br.com.meliw4.projetointegrador.service.RepresentanteService;
+import br.com.meliw4.projetointegrador.entity.Endereco;
+import br.com.meliw4.projetointegrador.repository.EnderecoRepository;
+import br.com.meliw4.projetointegrador.service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,27 +18,25 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class RepresentanteController {
+public class EnderecoController {
 
 	@Autowired
-	RepresentanteService representanteService;
+	EnderecoService enderecoService;
 
-	Representante representante;
 	/**
-	 * Cadastra novo representante no sistema
+	 * Cadastra novo endereco no sistema
 	 *
-	 * @param representanteDTO
+	 * @param enderecoDTO
 	 * @param uriBuilder
 	 * @return ResponseEntity
 	 * @Author Francisco Alves
 	 */
-
-	@PostMapping(path = "/representante")
-	public ResponseEntity<Map<String, String>> cadastrarRepresentante(@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) throws Exception {
+	@PostMapping(path = "/endereco")
+	public ResponseEntity<Map<String, String>> cadastrarEndereco(@RequestBody @Valid EnderecoDTO enderecoDTO, UriComponentsBuilder uriBuilder) throws Exception {
 		Map<String, String> response = new HashMap<>();
-		representanteService.register(representanteDTO);
+		enderecoService.register(enderecoDTO);
 		URI uri = uriBuilder.path("").build().toUri();
-		response.put("message","Representante criado !!");
+		response.put("message","Endereco criado com sucesso!!");
 		return ResponseEntity.created(uri).body(response);
 	}
 }
