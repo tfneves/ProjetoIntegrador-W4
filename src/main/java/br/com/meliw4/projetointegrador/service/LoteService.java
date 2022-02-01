@@ -58,52 +58,39 @@ public class LoteService {
 		saveProdutos(lote, loteDTO.getProdutosDTO(), vendedor);
 	}
 
-	private List<Produto> validateProdutosDTO(List<ProdutoDTO> produtosDTO) {
-		List<Produto> produtos = new ArrayList<>();
-		// TODO Usar stream
-		for (ProdutoDTO produtoDTO : produtosDTO) {
-			if (!produtoRepository.existsById(produtoDTO.getId())) {
-				Produto produto = ProdutoDTO.convert(produtoDTO);
-				produtoRepository.save(produto);
-				produtos.add(produto);
-				produtoDTO.setId(produto.getId());
-			} else {
-				produtos.add(produtoRepository.getById(produtoDTO.getId()));
-			}
-		}
-		return produtos;
-	}
-
 	public List<ProdutoDTO> updateLote(LoteUpdateDTO loteUpdateDTO) {
 		validateLote(loteUpdateDTO.getLoteId());
-		validateProdutos(loteUpdateDTO.getProdutosUpdateDTO());
-		return updateLoteProdutos(loteUpdateDTO.getProdutosUpdateDTO());
+		validateProdutosUpdate(loteUpdateDTO.getProdutosUpdateDTO());
+		return updateLoteProdutos(loteUpdateDTO.getLoteId(), loteUpdateDTO.getProdutosUpdateDTO());
 	}
 
-	private List<ProdutoDTO> updateLoteProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+	private List<ProdutoDTO> updateLoteProdutos(Long loteId, List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		List<ProdutoDTO> produtosDTO = new ArrayList<>();
-		List<Produto> produtos = new ArrayList<>();
-		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
-			Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
+		//List<Produto> produtos = new ArrayList<>();
+		//List<ProdutoVendedor> produtosVendedores = loteRepository.getById(loteId).getProdutoVendedores();
+		//for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
+		//	Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
+			//ProdutoVendedor produtoVendedor = produto.getProdutoVendedores();
 			// Integer quantidadeAtual = produto.getQuantidadeAtual();
 			// Integer quantidadeAtual = produtoVendedor.getQuantidadeAtual();
-			Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
+		//	Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
 			// if (quantidadeAtual < quantidadeRetira) {
 			// throw new BusinessValidationException(
 			// "A quantidade a retirar não deve exceder a quantidade atual de um produto.");
 			// }
 			// produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
-			produtos.add(produto);
-		}
-		for (Produto produto : produtos) {
-			produtoRepository.save(produto);
+			//produtos.add(produto);
+		//}
+		//for (Produto produto : produtos) {
+		//	produtoRepository.save(produto);
 			// produtosDTO.add(ProdutoDTO.convert(produto, produtoVendedor));
-		}
+		//}
+		//return produtosDTO;
 		return produtosDTO;
 	}
 
-	private void validateProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+	private void validateProdutosUpdate(List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
 			if (!produtoRepository.existsById(produtoUpdateDTO.getId())) {
@@ -142,6 +129,22 @@ public class LoteService {
 		return representante;
 	}
 
+	private List<Produto> validateProdutosDTO(List<ProdutoDTO> produtosDTO) {
+		List<Produto> produtos = new ArrayList<>();
+		// TODO Usar stream
+		for (ProdutoDTO produtoDTO : produtosDTO) {
+			if (!produtoRepository.existsById(produtoDTO.getId())) {
+				Produto produto = ProdutoDTO.convert(produtoDTO);
+				produtoRepository.save(produto);
+				produtos.add(produto);
+				produtoDTO.setId(produto.getId());
+			} else {
+				produtos.add(produtoRepository.getById(produtoDTO.getId()));
+			}
+		}
+		return produtos;
+	}
+
 	private Setor validateSetor(Long setorId, List<ProdutoDTO> produtosDTO) {
 		if (!setorRepository.existsById(setorId)) {
 			throw new BusinessValidationException("O setor não existe.");
@@ -149,13 +152,13 @@ public class LoteService {
 		Setor setor = setorRepository.getById(setorId);
 		Double totalVolume = 0.0;
 		for (ProdutoDTO produtoDTO : produtosDTO) {
-			totalVolume += produtoDTO.getVolume();
+			totalVolume += produtoDTO.getVolume() * produtoDTO.getQuantidadeAtual();
 			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
 			}
 		}
 		if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
-			throw new BusinessValidationException("O volume restante do setor não comporta o volume lote.");
+			throw new BusinessValidationException("O volume restante do setor não comporta o volume do lote.");
 		}
 		return setor;
 	}

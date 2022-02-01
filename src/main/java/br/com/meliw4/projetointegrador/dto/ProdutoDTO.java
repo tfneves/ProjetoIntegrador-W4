@@ -1,8 +1,6 @@
-
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.*;
-import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,8 +37,6 @@ public class ProdutoDTO {
 	private ProdutoCategoria produtoCategoria;
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaAtual;
-	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
-	private Float temperaturaMinima;
 	@NotNull(message = "Preço inválido")
 	private BigDecimal preco;
 
@@ -52,7 +48,7 @@ public class ProdutoDTO {
 			.build();
 	}
 
-	public static ProdutoVendedor convert(ProdutoDTO produtoDTO, Vendedor vendedor, Produto produto, Lote lote {
+	public static ProdutoVendedor convert(ProdutoDTO produtoDTO, Vendedor vendedor, Produto produto, Lote lote) {
 		return ProdutoVendedor.builder()
 			.vendedor(vendedor)
 			.produto(produto)

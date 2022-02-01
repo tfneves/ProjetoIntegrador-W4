@@ -13,10 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @see Enum Categoria
@@ -24,7 +21,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "produtos")
@@ -38,7 +36,7 @@ public class Produto {
 
 	private Double volume;
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "categoria_id", referencedColumnName = "categoria")
 	private ProdutoCategoria produtoCategoria;
 
