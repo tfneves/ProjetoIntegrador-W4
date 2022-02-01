@@ -27,7 +27,9 @@ public class ProdutoController {
 	 *
 	 * Listagem de todos produtos
 	 *
-	 * @return List ProdutoResponseDTO
+	 * @see ProdutoResponseDTO
+	 *
+	 * @return ResponseEntity List<ProdutoResponseDTO>
 	 */
 	@GetMapping
 	@ResponseBody
@@ -36,12 +38,14 @@ public class ProdutoController {
 	}
 
 	/**
-	 * Rota para pesquisa em query de produtos
+	 * Rota para pesquisa em query de produtos por categoria
 	 *
 	 * @param categoria Filtro de categorias ENUM
 	 *                  [{'FS': 'FRESCO','RR': 'REFRIGERADO','FF': 'CONGELADO'}],
 	 *                  default param categoria 'FS'
-	 * @return ResponseEntity
+	 * @see ProdutoResponseDTO
+	 *
+	 * @return ResponseEntity List<ProdutoResponseDTO>
 	 */
 	@GetMapping(path = "/list")
 	@ResponseBody
