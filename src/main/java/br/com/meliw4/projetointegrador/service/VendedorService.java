@@ -14,7 +14,7 @@ public class VendedorService {
 	@Autowired
 	VendedorRepository vendedorRepository;
 
-	public Vendedor register(VendedorDTO vendedorDTO){
+	public Vendedor register(VendedorDTO vendedorDTO) {
 		Vendedor vendedor = vendedorDTO.convert(vendedorDTO);
 		vendedorRepository.save(vendedor);
 		return vendedor;

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class PedidoService {
 
@@ -37,6 +36,10 @@ public class PedidoService {
 		return true;
 	}
 
+	public PedidoService(CarrinhoRepository carrinhoRepository, ProdutoCarrinhoRepository produtoCarrinhoRepository) {
+		this.carrinhoRepository = carrinhoRepository;
+		this.produtoCarrinhoRepository = produtoCarrinhoRepository;
+	}
 
 	public PedidoResponse getPedido(Long id) {
 		PedidoResponse pedidoResponse = new PedidoResponse();
@@ -44,12 +47,11 @@ public class PedidoService {
 		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByPedidoId(id);
 		for (ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
 			pedidoResponse.getProdutosPedido()
-				.add(
-					ProdutoPedidoResponse.builder()
-						.id(produtoCarrinho.getId())
-						.quantidade(produtoCarrinho.getQuantidade())
-						.build()
-				);
+					.add(
+							ProdutoPedidoResponse.builder()
+									.id(produtoCarrinho.getId())
+									.quantidade(produtoCarrinho.getQuantidade())
+									.build());
 		}
 		return pedidoResponse;
 	}

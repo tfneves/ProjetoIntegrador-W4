@@ -1,10 +1,8 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
-import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
-import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +42,14 @@ public class SetorService {
 	public List<SetorResponse> retonraSetores() {
 		List<Setor> setores = setorRepository.findAll();
 		List<SetorResponse> response = new ArrayList<>();
-		for (Setor setor : setores ) {
+		for (Setor setor : setores) {
 			response.add(SetorResponse.builder()
-				.id(setor.getId())
-				.categoria(setor.getCategoria())
-				.armazem_id(setor.getArmazem().getId())
-				.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
-				.volume(setor.getVolume())
-				.build());
+					.id(setor.getId())
+					.categoria(setor.getCategoria())
+					.armazem_id(setor.getArmazem().getId())
+					.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
+					.volume(setor.getVolume())
+					.build());
 		}
 		return response;
 	}
@@ -68,11 +66,11 @@ public class SetorService {
 
 	private Double volumeTotalDosSetores(Setor setor) {
 		return setorRepository.findAll()
-			.stream()
-			.filter(s -> s.getArmazem() == setor.getArmazem())
-			.map(s -> s.getVolume())
-			.reduce((n1, n2) -> n1 + n2)
-			.get();
+				.stream()
+				.filter(s -> s.getArmazem() == setor.getArmazem())
+				.map(s -> s.getVolume())
+				.reduce((n1, n2) -> n1 + n2)
+				.orElse(0.0);
 	}
 }
 
