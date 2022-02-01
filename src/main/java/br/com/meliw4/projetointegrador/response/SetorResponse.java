@@ -2,7 +2,7 @@ package br.com.meliw4.projetointegrador.response;
 
 import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Lote;
-import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
+import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 public class SetorResponse {
 	private Long id;
-	private Tipo categoria;
+	private Categoria categoria;
 	private Double volume;
 	private Long armazem_id;
 	private List<Long> lote_id;
