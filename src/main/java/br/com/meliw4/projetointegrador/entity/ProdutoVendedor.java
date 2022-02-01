@@ -1,10 +1,16 @@
 package br.com.meliw4.projetointegrador.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.Digits;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +19,38 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdutoVendedor {
-	@EmbeddedId
-	private ProdutoVendedorId produtoVendedorId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	@Getter
+	@ManyToOne
+	@JoinColumn(name = "vendedor_id")
+	private Vendedor vendedor;
+
+	@ManyToOne
+	@JoinColumn(name = "produto_id")
+	private Produto produto;
+
 	private BigDecimal preco;
+
+	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
+	private Float temperaturaAtual;
+
+	private LocalDate dataVencimento;
+
+	private LocalDate dataManufatura;
+
+	private LocalDateTime dataStampManufatura;
+
+	private int quantidadeInicial;
+
+	private int quantidadeAtual;
+
+	@ManyToOne // (fetch = FetchType.EAGER)
+	private Lote lote;
+
 }

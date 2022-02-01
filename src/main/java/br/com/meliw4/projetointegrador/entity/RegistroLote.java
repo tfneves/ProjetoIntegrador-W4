@@ -14,14 +14,17 @@ import javax.persistence.*;
 @Entity
 public class RegistroLote {
 
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@ManyToOne
-    private Representante representante;
-    @ManyToOne
-    private Vendedor vendedor;
+	private Representante representante;
+
 	@ManyToOne
-    private Lote lote;
+	private Vendedor vendedor;
+
+	@ManyToOne
+	private Lote lote;
 
 }

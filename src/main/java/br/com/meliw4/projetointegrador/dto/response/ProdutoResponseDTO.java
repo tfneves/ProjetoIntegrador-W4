@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,10 +16,10 @@ public class ProdutoResponseDTO {
 	private final Double volume;
 	private final ProdutoCategoria produtoCategoria;
 
-	public static ProdutoResponseDTO toDTO(Produto produto) {
+	public static ProdutoResponseDTO toDTO(Produto produto, ProdutoVendedor produtoVendedor) {
 		return ProdutoResponseDTO.builder()
 				.id(produto.getId())
-				.dataVencimento(produto.getDataVencimento())
+				.dataVencimento(produtoVendedor.getDataVencimento())
 				.volume(produto.getVolume())
 				.produtoCategoria(produto.getProdutoCategoria())
 				.build();

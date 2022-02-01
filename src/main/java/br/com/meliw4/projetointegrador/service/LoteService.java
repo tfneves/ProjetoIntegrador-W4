@@ -67,18 +67,19 @@ public class LoteService {
 		List<Produto> produtos = new ArrayList<>();
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
 			Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
-			Integer quantidadeAtual = produto.getQuantidadeAtual();
+			// Integer quantidadeAtual = produto.getQuantidadeAtual();
+			// Integer quantidadeAtual = produtoVendedor.getQuantidadeAtual();
 			Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
-			if (quantidadeAtual < quantidadeRetira) {
-				throw new BusinessValidationException(
-						"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
-			}
-			produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
+			// if (quantidadeAtual < quantidadeRetira) {
+			// throw new BusinessValidationException(
+			// "A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+			// }
+			// produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
 			produtos.add(produto);
 		}
 		for (Produto produto : produtos) {
 			produtoRepository.save(produto);
-			produtosDTO.add(ProdutoDTO.convert(produto));
+			// produtosDTO.add(ProdutoDTO.convert(produto, produtoVendedor));
 		}
 		return produtosDTO;
 	}
@@ -134,23 +135,24 @@ public class LoteService {
 				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
 			}
 		}
-		if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
-			throw new BusinessValidationException("O volume restante do setor não comporta o volume lote.");
-		}
+		// if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
+		// throw new BusinessValidationException("O volume restante do setor não
+		// comporta o volume lote.");
+		// }
 		return setor;
 	}
 
-	private Double calculateRemainingSetorArea(Setor setor) {
-		Double totalVolume = 0.0;
-		// TODO Usar stream
-		List<Lote> lotes = setor.getLotes();
-		for (Lote lote : lotes) {
-			for (Produto produto : lote.getProdutos()) {
-				totalVolume += produto.getVolume() * produto.getQuantidadeAtual();
-			}
-		}
-		return setor.getVolume() - totalVolume;
-	}
+	// private Double calculateRemainingSetorArea(Setor setor) {
+	// Double totalVolume = 0.0;
+	// // TODO Usar stream
+	// List<Lote> lotes = setor.getLotes();
+	// for (Lote lote : lotes) {
+	// for (Produto produto : lote.getProdutos()) {
+	// // totalVolume += produto.getVolume() * produto.getQuantidadeAtual();
+	// }
+	// }
+	// return setor.getVolume() - totalVolume;
+	// }
 
 	private void saveLote(Lote lote) {
 		loteRepository.save(lote);
@@ -165,11 +167,11 @@ public class LoteService {
 			}
 			ProdutoCategoria produtoCategoria = this.produtoCategoriaRepository
 					.getByCategoria(produtoDTO.getCategoria().name());
-			Produto produto = ProdutoDTO.convert(produtoDTO, lote, produtoCategoria);
+			// Produto produto = ProdutoDTO.convert(produtoDTO, lote, produtoCategoria);
 			BigDecimal preco = produtoDTO.getPreco();
-			produtoRepository.save(produto);
-			produtoDTO.setId(produto.getId());
-			savePreco(produto, vendedor, preco);
+			// produtoRepository.save(produto);
+			// produtoDTO.setId(produto.getId());
+			// savePreco(produto, vendedor, preco);
 		}
 	}
 
@@ -177,9 +179,9 @@ public class LoteService {
 		if (BigDecimal.ZERO.compareTo(preco) >= 0) {
 			throw new BusinessValidationException("Preço deve ser positivo maior que zero");
 		}
-		ProdutoVendedor produtoVendedor = new ProdutoVendedor(
-				new ProdutoVendedorId(vendedor, produto), preco);
-		vendedorProdutoRepository.save(produtoVendedor);
+		// ProdutoVendedor produtoVendedor = new ProdutoVendedor(
+		// new ProdutoVendedorId(vendedor, produto), preco);
+		// vendedorProdutoRepository.save(produtoVendedor);
 	}
 
 	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {

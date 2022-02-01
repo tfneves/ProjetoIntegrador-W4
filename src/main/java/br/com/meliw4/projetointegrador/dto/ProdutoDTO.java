@@ -1,8 +1,8 @@
 package br.com.meliw4.projetointegrador.dto;
 
-import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,29 +44,29 @@ public class ProdutoDTO {
 	@NotNull(message = "Preço inválido")
 	private BigDecimal preco;
 
-	public static Produto convert(ProdutoDTO produtoDTO, Lote lote,
+	public static Produto convert(ProdutoDTO produtoDTO,
 			ProdutoCategoria produtoCategoria) {
 		return Produto.builder()
 				.nome(produtoDTO.getNome())
-				.dataVencimento(produtoDTO.getDataVencimento())
+				// .dataVencimento(produtoDTO.getDataVencimento())
 				.volume(produtoDTO.getVolume())
-				.quantidadeInicial(produtoDTO.getQuantidadeInicial())
-				.quantidadeAtual(produtoDTO.getQuantidadeAtual())
-				.dataManufatura(produtoDTO.getDataManufatura())
-				.temperaturaAtual(produtoDTO.getTemperaturaAtual())
+				// .quantidadeInicial(produtoDTO.getQuantidadeInicial())
+				// .quantidadeAtual(produtoDTO.getQuantidadeAtual())
+				// .dataManufatura(produtoDTO.getDataManufatura())
+				// .temperaturaAtual(produtoDTO.getTemperaturaAtual())
 				.produtoCategoria(produtoCategoria)
-				.lote(lote)
+				// .lote(lote)
 				.build();
 	}
 
-	public static ProdutoDTO convert(Produto produto) {
+	public static ProdutoDTO convert(Produto produto, ProdutoVendedor produtoVendedor) {
 		return ProdutoDTO.builder()
 				.id(produto.getId())
-				.dataManufatura(produto.getDataManufatura())
-				.dataVencimento(produto.getDataVencimento())
-				.quantidadeInicial(produto.getQuantidadeInicial())
-				.quantidadeAtual(produto.getQuantidadeAtual())
-				.temperaturaAtual(produto.getTemperaturaAtual())
+				.dataManufatura(produtoVendedor.getDataManufatura())
+				.dataVencimento(produtoVendedor.getDataVencimento())
+				.quantidadeInicial(produtoVendedor.getQuantidadeInicial())
+				.quantidadeAtual(produtoVendedor.getQuantidadeAtual())
+				.temperaturaAtual(produtoVendedor.getTemperaturaAtual())
 				.temperaturaMinima(produto.getProdutoCategoria().getTemperaturaMinima())
 				.categoria(produto.getProdutoCategoria().getCategoria())
 				.nome(produto.getNome())
