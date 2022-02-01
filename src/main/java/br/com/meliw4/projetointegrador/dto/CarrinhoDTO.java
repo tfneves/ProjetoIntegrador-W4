@@ -1,4 +1,3 @@
-/*
 package br.com.meliw4.projetointegrador.dto;
 
 import lombok.AllArgsConstructor;
@@ -12,4 +11,3 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CarrinhoDTO {
 }
-*/
