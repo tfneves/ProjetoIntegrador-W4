@@ -14,7 +14,6 @@ import br.com.meliw4.projetointegrador.entity.Produto;
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
 	@Query(value = "SELECT p.* FROM produtos p " +
-	// "LEFT JOIN produto_categorias pc on pc.categoria = p.categoria_id " +
 			"WHERE p.categoria_id = :categoriaId", nativeQuery = true)
 	List<Produto> findProdutoPorCategoria(@Param("categoriaId") String categoriaId);
 }

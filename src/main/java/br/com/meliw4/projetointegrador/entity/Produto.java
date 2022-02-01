@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,9 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * //* @author: André Arroxellas
- * //* @see Abstract Class EntidadeBase
- * //* @see Enum Tipo
+ * @see Enum Categoria
  **/
 
 @Entity
@@ -45,8 +42,7 @@ public class Produto {
 	@JoinColumn(name = "categoria_id", referencedColumnName = "categoria")
 	private ProdutoCategoria produtoCategoria;
 
-	@OneToMany(mappedBy = "produto") // , fetch = FetchType.EAGER)
 	@Transient
+	@OneToMany(mappedBy = "produto") // , fetch = FetchType.EAGER)
 	private List<ProdutoVendedor> produtoVendedores;
 }
-
