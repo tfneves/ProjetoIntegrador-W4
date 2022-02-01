@@ -3,6 +3,7 @@ package br.com.meliw4.projetointegrador.service;
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
@@ -30,17 +31,16 @@ public class SetorService {
 
 	public Setor salva(Setor payload) {
 		if (possuiEspaco(payload)) {
-			Setor setor = setorRepository.save(payload);
-			return setor;
+			return setorRepository.save(payload);
 		} else
-			throw new IllegalArgumentException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
+			throw new ArmazemException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
 		return this.setorRepository.findAll();
 	}
 
-	public List<SetorResponse> retonraSetores() {
+	public List<SetorResponse > retonraSetores() {
 		List<Setor> setores = setorRepository.findAll();
 		List<SetorResponse> response = new ArrayList<>();
 		for (Setor setor : setores ) {
@@ -49,7 +49,7 @@ public class SetorService {
 				.categoria(setor.getCategoria())
 				.armazem_id(setor.getArmazem().getId())
 				.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
-				.volume(setor.getVolume())
+				.volume(setor.getVolume() )
 				.build());
 		}
 		return response;

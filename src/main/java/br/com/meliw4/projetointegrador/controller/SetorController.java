@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.List;
 
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
 import br.com.meliw4.projetointegrador.service.SetorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class SetorController {
 	}
 
 	@PostMapping("/setor")
-	public ResponseEntity<?> cadastraSetor(@RequestBody @Valid SetorDTO payload, UriComponentsBuilder uriBuilder) throws Exception {
+	public ResponseEntity<?> cadastraSetor(@RequestBody @Valid SetorDTO payload, UriComponentsBuilder uriBuilder) throws ArmazemException {
 		Setor setor = setorDTO.converte(payload);
 		URI uri = uriBuilder.path("/setor").build().toUri();
 		try {
