@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Carrinho;
+import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.StatusPedido;
 import lombok.AllArgsConstructor;
@@ -19,15 +20,14 @@ import java.util.List;
 @Builder
 public class CarrinhoDTO {
 
-	private LocalDate data;
 	private Long idComprador;
-	private StatusPedidoDTO statusPedido;
 	private List<ProdutoPedidoDTO> produtos;
 
 
-	public static Carrinho parseToEntity(CarrinhoDTO dto, StatusPedido statusPedido) {
+	public static Carrinho parseToEntity(CarrinhoDTO dto, StatusPedido statusPedido, Comprador comprador) {
 		return Carrinho.builder()
-				.data(dto.getData())
+				.data(LocalDate.now())
+				.comprador(comprador)
 				.statusPedido(statusPedido)
 				.build();
 	}

@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.CarrinhoDTO;
 import br.com.meliw4.projetointegrador.entity.Carrinho;
+import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.ProdutoCarrinho;
 import br.com.meliw4.projetointegrador.entity.StatusPedido;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
@@ -24,21 +25,20 @@ public class PedidoService {
 	ProdutoCarrinhoRepository produtoCarrinhoRepository;
 	@Autowired
 	StatusPedidoService statusPedidoService;
+	@Autowired
+	CompradorService compradorService;
 
 
-	public boolean salvaCarrinho(CarrinhoDTO dto) {
-		StatusPedido statusPedido = statusPedidoService.findStatusCodeWithName(dto.getStatusPedido().getStatusCode());
-		if(statusPedido == null){
-			throw new BusinessValidationException("O statusCode informado não existe");
-		}
-
-		Carrinho carrinho = CarrinhoDTO.parseToEntity(dto, statusPedido);
+	public boolean validaDadosCarrinho(CarrinhoDTO dto) {
+		StatusPedido statusPedido = statusPedidoService.findStatusCodeWithName("CHECKOUT");
+		Comprador comprador = compradorService.findCompradorById(dto.getIdComprador());
+		Carrinho carrinho = CarrinhoDTO.parseToEntity(dto, statusPedido, comprador);
 		carrinhoRepository.save(carrinho);
 		return true;
 	}
 
 
-	/*public PedidoResponse getPedido(Long id) {
+	public PedidoResponse getPedido(Long id) {
 		PedidoResponse pedidoResponse = new PedidoResponse();
 		Carrinho pedido = validatePedido(id);
 		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByPedidoId(id);
@@ -63,5 +63,5 @@ public class PedidoService {
 			throw new BusinessValidationException("O pedido não foi finalizado.");
 		}
 		return pedido;
-	}*/
+	}
 }

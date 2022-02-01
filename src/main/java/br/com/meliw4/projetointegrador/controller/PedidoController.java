@@ -3,6 +3,7 @@ package br.com.meliw4.projetointegrador.controller;
 import br.com.meliw4.projetointegrador.dto.CarrinhoDTO;
 import br.com.meliw4.projetointegrador.entity.Carrinho;
 import br.com.meliw4.projetointegrador.repository.CarrinhoRepository;
+import br.com.meliw4.projetointegrador.response.PedidoResponse;
 import br.com.meliw4.projetointegrador.service.PedidoService;
 import br.com.meliw4.projetointegrador.service.StatusPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PedidoController {
 
 	@PostMapping("/fresh-products/orders/createOrder")
 	public ResponseEntity<?> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
-		if(pedidoService.salvaCarrinho(carrinhoDTO)) {
+		if(pedidoService.validaDadosCarrinho(carrinhoDTO)) {
 			// TODO: SALVAR PRODUTOS NA TABELA produto_carrinho
 		}
 		URI uri = uriComponentsBuilder.path("").build().toUri();
@@ -31,8 +32,8 @@ public class PedidoController {
 	}
 
 
-	/*@GetMapping("/fresh-products/orders/{id}")
+	@GetMapping("/fresh-products/orders/{id}")
 	public ResponseEntity<PedidoResponse> getPedidoById(@PathVariable Long id) {
 		return ResponseEntity.ok(pedidoService.getPedido(id));
-	}*/
+	}
 }

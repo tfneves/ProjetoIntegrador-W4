@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ProdutoCarrinhoRepository extends JpaRepository<ProdutoCarrinho, Long> {
-	/*@Query(value = "SELECT * FROM produto_carrinho WHERE carrinh0_id = :id")
-	List<ProdutoCarrinho> findByPedidoId(@Param("id") Long id);*/
+	@Query(value = "SELECT * FROM produto_carrinho WHERE carrinh0_id = :id", nativeQuery = true)
+	List<ProdutoCarrinho> findByPedidoId(@Param("id") Long id);
 
 }

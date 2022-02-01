@@ -23,6 +23,9 @@ public class Carrinho {
 	private Long id;
 	private LocalDate data;
 	@OneToOne
+	@JoinColumn(name = "comprador_id", referencedColumnName = "id")
+	private Comprador comprador;
+	@OneToOne
 	@JoinColumn(name = "status_pedido_id", referencedColumnName = "id")
 	private StatusPedido statusPedido;
 }

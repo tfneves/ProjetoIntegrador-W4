@@ -6,10 +6,13 @@ import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Endereco;
 import br.com.meliw4.projetointegrador.entity.Representante;
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.CompradorRepository;
 import br.com.meliw4.projetointegrador.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CompradorService {
@@ -20,6 +23,19 @@ public class CompradorService {
 	EnderecoService enderecoService;
 	@Autowired
 	EnderecoRepository enderecoRepository;
+
+
+	/**
+	 *
+	 * Busca Comprador por Id
+	 * @param id
+	 * @return
+	 */
+	public Comprador findCompradorById(Long id) {
+		return compradorRepository.findById(id).
+			orElseThrow(() -> new BusinessValidationException("O comprador informado não existe no sistema"));
+	}
+
 
 	public Comprador register(CompradorDTO compradorDTO){
 		Endereco endereco = enderecoRepository.getById(compradorDTO.getEndereco_id());
