@@ -1,4 +1,3 @@
-
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.entity.Lote;
@@ -10,7 +9,6 @@ import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
-import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.*;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoteService {
@@ -30,13 +29,13 @@ public class LoteService {
 	private LoteRepository loteRepository;
 	private RegistroLoteRepository registroLoteRepository;
 	private ProdutoCategoriaRepository produtoCategoriaRepository;
-	private VendedorProdutoRepository vendedorProdutoRepository;
+	private ProdutoVendedorRepository produtoVendedorRepository;
 
 	public LoteService(ArmazemRepository armazemRepository, VendedorRepository vendedorRepository,
-			SetorRepository setorRepository, RepresentanteRepository representanteRepository,
-			ProdutoRepository produtoRepository, LoteRepository loteRepository,
-			RegistroLoteRepository registroLoteRepository, ProdutoCategoriaRepository produtoCategoriaRepository,
-			VendedorProdutoRepository vendedorProdutoRepository) {
+					   SetorRepository setorRepository, RepresentanteRepository representanteRepository,
+					   ProdutoRepository produtoRepository, LoteRepository loteRepository,
+					   RegistroLoteRepository registroLoteRepository, ProdutoCategoriaRepository produtoCategoriaRepository,
+					   ProdutoVendedorRepository produtoVendedorRepository) {
 		this.armazemRepository = armazemRepository;
 		this.vendedorRepository = vendedorRepository;
 		this.setorRepository = setorRepository;
@@ -45,13 +44,14 @@ public class LoteService {
 		this.loteRepository = loteRepository;
 		this.registroLoteRepository = registroLoteRepository;
 		this.produtoCategoriaRepository = produtoCategoriaRepository;
-		this.vendedorProdutoRepository = vendedorProdutoRepository;
+		this.produtoVendedorRepository = produtoVendedorRepository;
 	}
 
 	public void registerLote(LoteDTO loteDTO) {
 		validateArmazem(loteDTO.getArmazemId());
 		Vendedor vendedor = validateVendedor(loteDTO.getVendedorId());
 		Representante representante = validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
+		validateProdutosDTO(loteDTO.getProdutosDTO());
 		Setor setor = validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
 		Lote lote = LoteDTO.convert(loteDTO, setor, representante);
 		saveLote(lote);
@@ -61,34 +61,39 @@ public class LoteService {
 
 	public List<ProdutoDTO> updateLote(LoteUpdateDTO loteUpdateDTO) {
 		validateLote(loteUpdateDTO.getLoteId());
-		validateProdutos(loteUpdateDTO.getProdutosUpdateDTO());
-		return updateLoteProdutos(loteUpdateDTO.getProdutosUpdateDTO());
+		validateProdutosUpdate(loteUpdateDTO.getProdutosUpdateDTO());
+		return updateLoteProdutos(loteUpdateDTO.getLoteId(), loteUpdateDTO.getProdutosUpdateDTO());
 	}
 
-	private List<ProdutoDTO> updateLoteProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+	private List<ProdutoDTO> updateLoteProdutos(Long loteId, List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		List<ProdutoDTO> produtosDTO = new ArrayList<>();
-		List<Produto> produtos = new ArrayList<>();
+		List<ProdutoVendedor> produtosVendedor = new ArrayList<>();
+		Integer quantidadeAtual = 0;
+		Integer quantidadeRetira = 0;
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
-			Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
-			// Integer quantidadeAtual = produto.getQuantidadeAtual();
-			// Integer quantidadeAtual = produtoVendedor.getQuantidadeAtual();
-			Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
-			// if (quantidadeAtual < quantidadeRetira) {
-			// throw new BusinessValidationException(
-			// "A quantidade a retirar não deve exceder a quantidade atual de um produto.");
-			// }
-			// produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
-			produtos.add(produto);
+			ProdutoVendedor produtoVendedor = produtoVendedorRepository.findByLoteIdAndProdutoIdAndVendedorId(loteId, produtoUpdateDTO.getId(), produtoUpdateDTO.getVendedorId());
+			if (produtoVendedor == null) {
+				throw new BusinessValidationException(
+					"Produto não cadastrado pelo vendedor no lote solicitado.");
+			}
+			quantidadeAtual = produtoVendedor.getQuantidadeAtual();
+			quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
+			if (quantidadeAtual < quantidadeRetira) {
+				throw new BusinessValidationException(
+					"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+			}
+			produtoVendedor.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
+			produtosVendedor.add(produtoVendedor);
 		}
-		for (Produto produto : produtos) {
-			produtoRepository.save(produto);
-			// produtosDTO.add(ProdutoDTO.convert(produto, produtoVendedor));
+		for (ProdutoVendedor produtoVendedor : produtosVendedor) {
+			produtoVendedorRepository.save(produtoVendedor);
+			produtosDTO.add(ProdutoDTO.convert(produtoVendedor));
 		}
 		return produtosDTO;
 	}
 
-	private void validateProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+	private void validateProdutosUpdate(List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
 			if (!produtoRepository.existsById(produtoUpdateDTO.getId())) {
@@ -127,6 +132,22 @@ public class LoteService {
 		return representante;
 	}
 
+	private List<Produto> validateProdutosDTO(List<ProdutoDTO> produtosDTO) {
+		List<Produto> produtos = new ArrayList<>();
+		// TODO Usar stream
+		for (ProdutoDTO produtoDTO : produtosDTO) {
+			if (!produtoRepository.existsById(produtoDTO.getId())) {
+				Produto produto = ProdutoDTO.convert(produtoDTO);
+				produtoRepository.save(produto);
+				produtos.add(produto);
+				produtoDTO.setId(produto.getId());
+			} else {
+				produtos.add(produtoRepository.getById(produtoDTO.getId()));
+			}
+		}
+		return produtos;
+	}
+
 	private Setor validateSetor(Long setorId, List<ProdutoDTO> produtosDTO) {
 		if (!setorRepository.existsById(setorId)) {
 			throw new BusinessValidationException("O setor não existe.");
@@ -134,29 +155,28 @@ public class LoteService {
 		Setor setor = setorRepository.getById(setorId);
 		Double totalVolume = 0.0;
 		for (ProdutoDTO produtoDTO : produtosDTO) {
-			totalVolume += produtoDTO.getVolume();
-			if (produtoDTO.getCategoria() != setor.getCategoria()) {
+			totalVolume += produtoDTO.getVolume() * produtoDTO.getQuantidadeAtual();
+			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
 			}
 		}
-		// if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
-		// throw new BusinessValidationException("O volume restante do setor não
-		// comporta o volume lote.");
-		// }
+		if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
+			throw new BusinessValidationException("O volume restante do setor não comporta o volume do lote.");
+		}
 		return setor;
 	}
 
-	// private Double calculateRemainingSetorArea(Setor setor) {
-	// Double totalVolume = 0.0;
-	// // TODO Usar stream
-	// List<Lote> lotes = setor.getLotes();
-	// for (Lote lote : lotes) {
-	// for (Produto produto : lote.getProdutos()) {
-	// // totalVolume += produto.getVolume() * produto.getQuantidadeAtual();
-	// }
-	// }
-	// return setor.getVolume() - totalVolume;
-	// }
+	private Double calculateRemainingSetorArea(Setor setor) {
+		Double totalVolume = 0.0;
+		// TODO Usar stream
+		List<Lote> lotes = setor.getLotes();
+		for (Lote lote : lotes) {
+			for (ProdutoVendedor produtoVendedor : lote.getProdutoVendedores()) {
+				totalVolume += produtoVendedor.getProduto().getVolume() * produtoVendedor.getQuantidadeAtual();
+			}
+		}
+		return setor.getVolume() - totalVolume;
+	}
 
 	private void saveLote(Lote lote) {
 		loteRepository.save(lote);
@@ -164,36 +184,25 @@ public class LoteService {
 
 	private void saveProdutos(Lote lote, List<ProdutoDTO> produtosDTO, Vendedor vendedor) {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
-			Integer existsCategoria = this.produtoCategoriaRepository
-					.existsByCategoria(produtoDTO.getCategoria().name());
-			if (existsCategoria == 0) {
-				throw new NotFoundException("Categoria não encontrada");
-			}
-			ProdutoCategoria produtoCategoria = this.produtoCategoriaRepository
-					.getByCategoria(produtoDTO.getCategoria().name());
-			// Produto produto = ProdutoDTO.convert(produtoDTO, lote, produtoCategoria);
-			BigDecimal preco = produtoDTO.getPreco();
-			// produtoRepository.save(produto);
-			// produtoDTO.setId(produto.getId());
-			// savePreco(produto, vendedor, preco);
+			validatePreco(produtoDTO.getPreco());
+			ProdutoVendedor produtoVendedor = ProdutoDTO
+				.convert(produtoDTO, vendedor, produtoRepository.getById(produtoDTO.getId()), lote);
+			produtoVendedorRepository.save(produtoVendedor);
 		}
 	}
 
-	private void savePreco(Produto produto, Vendedor vendedor, BigDecimal preco) {
+	private void validatePreco(BigDecimal preco) {
 		if (BigDecimal.ZERO.compareTo(preco) >= 0) {
-			throw new BusinessValidationException("Preço deve ser positivo maior que zero");
+			throw new BusinessValidationException("Preço deve ser positivo.");
 		}
-		// ProdutoVendedor produtoVendedor = new ProdutoVendedor(
-		// new ProdutoVendedorId(vendedor, produto), preco);
-		// vendedorProdutoRepository.save(produtoVendedor);
 	}
 
 	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
 		RegistroLote registroLote = RegistroLote.builder()
-				.lote(lote)
-				.representante(representante)
-				.vendedor(vendedor)
-				.build();
+			.lote(lote)
+			.representante(representante)
+			.vendedor(vendedor)
+			.build();
 		registroLoteRepository.save(registroLote);
 	}
 

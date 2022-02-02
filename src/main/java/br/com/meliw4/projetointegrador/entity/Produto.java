@@ -2,21 +2,9 @@ package br.com.meliw4.projetointegrador.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @see Enum Categoria
@@ -24,7 +12,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "produtos")
@@ -38,8 +27,9 @@ public class Produto {
 
 	private Double volume;
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "categoria_id", referencedColumnName = "categoria")
+	@Enumerated(EnumType.STRING)
 	private ProdutoCategoria produtoCategoria;
 
 	@Transient
