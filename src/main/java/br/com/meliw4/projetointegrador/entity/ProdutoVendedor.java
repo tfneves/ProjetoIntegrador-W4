@@ -12,14 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdutoVendedor {
@@ -43,8 +41,6 @@ public class ProdutoVendedor {
 	private LocalDate dataVencimento;
 
 	private LocalDate dataManufatura;
-
-	private LocalDateTime dataStampManufatura;
 
 	private int quantidadeInicial;
 
