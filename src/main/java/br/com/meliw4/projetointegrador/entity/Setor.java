@@ -2,17 +2,14 @@
 package br.com.meliw4.projetointegrador.entity;
 
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class ProdutoCategoria implements Serializable {
 	@Column(columnDefinition = "ENUM('FS','RR','FF')", unique = true, length = 2)
 	private Categoria categoria;
 
-	@NotEmpty
+	@NotNull
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaMinima;
 }

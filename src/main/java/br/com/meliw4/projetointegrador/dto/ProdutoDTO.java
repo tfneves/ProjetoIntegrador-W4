@@ -1,10 +1,6 @@
-
 package br.com.meliw4.projetointegrador.dto;
 
-import br.com.meliw4.projetointegrador.entity.Produto;
-import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
-import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
-import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
+import br.com.meliw4.projetointegrador.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +18,8 @@ import java.time.LocalDate;
 @Data
 public class ProdutoDTO {
 
-	private Long id; // produtoId
+	@NotNull(message = "Id do produto inválido")
+	private Long id;
 	@NotEmpty(message = "Nome do produto inválido")
 	private String nome;
 	@NotNull(message = "Data de vencimento inválida")
@@ -37,42 +34,47 @@ public class ProdutoDTO {
 	@NotNull(message = "Data de manufatura inválida")
 	private LocalDate dataManufatura;
 	@NotNull(message = "Tipo inválido")
-	private Categoria categoria;
+	private ProdutoCategoria produtoCategoria;
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaAtual;
-	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
-	private Float temperaturaMinima;
 	@NotNull(message = "Preço inválido")
 	private BigDecimal preco;
 
-	public static Produto convert(ProdutoDTO produtoDTO,
-			ProdutoCategoria produtoCategoria) {
+	public static Produto convert(ProdutoDTO produtoDTO) {
 		return Produto.builder()
-				.nome(produtoDTO.getNome())
-				// .dataVencimento(produtoDTO.getDataVencimento())
-				.volume(produtoDTO.getVolume())
-				// .quantidadeInicial(produtoDTO.getQuantidadeInicial())
-				// .quantidadeAtual(produtoDTO.getQuantidadeAtual())
-				// .dataManufatura(produtoDTO.getDataManufatura())
-				// .temperaturaAtual(produtoDTO.getTemperaturaAtual())
-				.produtoCategoria(produtoCategoria)
-				// .lote(lote)
-				.build();
+			.nome(produtoDTO.getNome())
+			.volume(produtoDTO.getVolume())
+			.produtoCategoria(produtoDTO.getProdutoCategoria())
+			.build();
 	}
 
-	public static ProdutoDTO convert(Produto produto, ProdutoVendedor produtoVendedor) {
+	public static ProdutoVendedor convert(ProdutoDTO produtoDTO, Vendedor vendedor, Produto produto, Lote lote) {
+		return ProdutoVendedor.builder()
+			.vendedor(vendedor)
+			.produto(produto)
+			.preco(produtoDTO.getPreco())
+			.temperaturaAtual(produtoDTO.getTemperaturaAtual())
+			.dataVencimento(produtoDTO.getDataVencimento())
+			.dataManufatura(produtoDTO.getDataManufatura())
+			.quantidadeInicial(produtoDTO.getQuantidadeInicial())
+			.quantidadeAtual(produtoDTO.getQuantidadeAtual())
+			.lote(lote)
+			.build();
+	}
+
+	public static ProdutoDTO convert(ProdutoVendedor produtoVendedor){
 		return ProdutoDTO.builder()
-				.id(produto.getId())
-				.dataManufatura(produtoVendedor.getDataManufatura())
-				.dataVencimento(produtoVendedor.getDataVencimento())
-				.quantidadeInicial(produtoVendedor.getQuantidadeInicial())
-				.quantidadeAtual(produtoVendedor.getQuantidadeAtual())
-				.temperaturaAtual(produtoVendedor.getTemperaturaAtual())
-				.temperaturaMinima(produto.getProdutoCategoria().getTemperaturaMinima())
-				.categoria(produto.getProdutoCategoria().getCategoria())
-				.nome(produto.getNome())
-				.volume(produto.getVolume())
-				.build();
+			.id(produtoVendedor.getId())
+			.nome(produtoVendedor.getProduto().getNome())
+			.dataVencimento(produtoVendedor.getDataVencimento())
+			.volume(produtoVendedor.getProduto().getVolume())
+			.quantidadeInicial(produtoVendedor.getQuantidadeInicial())
+			.quantidadeAtual(produtoVendedor.getQuantidadeAtual())
+			.dataManufatura(produtoVendedor.getDataManufatura())
+			.produtoCategoria(produtoVendedor.getProduto().getProdutoCategoria())
+			.temperaturaAtual(produtoVendedor.getTemperaturaAtual())
+			.preco(produtoVendedor.getPreco())
+			.build();
 	}
 
 }
