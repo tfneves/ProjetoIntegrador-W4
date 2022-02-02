@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProdutoPedidoResponse {
 
-	private Long id;
+	private Long produtoCarrinhoId;
+	private Long anuncioId;
+	private Long produtoId;
+	private Long vendedorId;
 	private Integer quantidade;
 }

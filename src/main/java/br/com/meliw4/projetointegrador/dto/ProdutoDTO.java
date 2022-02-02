@@ -64,7 +64,7 @@ public class ProdutoDTO {
 
 	public static ProdutoDTO convert(ProdutoVendedor produtoVendedor){
 		return ProdutoDTO.builder()
-			.id(produtoVendedor.getId())
+			.id(produtoVendedor.getProduto().getId())
 			.nome(produtoVendedor.getProduto().getNome())
 			.dataVencimento(produtoVendedor.getDataVencimento())
 			.volume(produtoVendedor.getProduto().getVolume())

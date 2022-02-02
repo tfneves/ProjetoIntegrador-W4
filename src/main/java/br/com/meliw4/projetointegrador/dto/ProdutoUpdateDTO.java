@@ -20,7 +20,7 @@ public class ProdutoUpdateDTO {
 	@NotNull(message = "Id do vendedor inválido")
 	private Long vendedorId;
 	@NotNull(message = "Quantidade inválida.")
-	@Min(value = 0, message = "Quantidade a retirar deve ser positiva.")
+	@Min(value = 1, message = "Quantidade a retirar deve ser positiva.")
 	private Integer quantidadeRetira;
 
 }
