@@ -12,8 +12,11 @@ import br.com.meliw4.projetointegrador.response.ProdutoPedidoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -28,6 +31,8 @@ public class PedidoService {
 	CompradorService compradorService;
 	@Autowired
 	ProdutoServiceOrder produtoServiceOrder;
+	@Autowired
+	ProdutoVendedorService produtoVendedorService;
 
 
 	public PedidoService(CarrinhoRepository carrinhoRepository, ProdutoCarrinhoRepository produtoCarrinhoRepository) {
@@ -43,6 +48,8 @@ public class PedidoService {
 	 * @return
 	 */
 	public boolean salvarPedido(CarrinhoDTO dto) {
+
+		//calculaValorTotalCarrinho(5L);
 		List<ProdutoCarrinho> produtosCarrinho = new ArrayList<>();
 
 		StatusPedido statusPedido = statusPedidoService.findStatusCodeWithName("CHECKOUT");
@@ -63,13 +70,27 @@ public class PedidoService {
 	}
 
 
-	//public
+	/**
+	 *
+	 * Calcula valor total do carrinho
+	 * @param idCarrinho
+	 * @return
+	 */
+	public BigDecimal calculaValorTotalCarrinho(Long idCarrinho) {
+		BigDecimal valorTotal = new BigDecimal("0.0");
+		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByCarrinho_Id(idCarrinho);
+		for(ProdutoCarrinho produtoCarrinho : produtosCarrinho){
+			ProdutoVendedor produto = produtoVendedorService.getProdutoById(produtoCarrinho.getProduto().getId());
+			valorTotal.add(produto.getPreco().multiply(new BigDecimal(produtoCarrinho.getQuantidade())));
+		}
+		return valorTotal;
+	}
 
 
 	public PedidoResponse getPedido(Long id) {
 		PedidoResponse pedidoResponse = new PedidoResponse();
 		Carrinho pedido = validatePedido(id);
-		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByPedidoId(id);
+		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByCarrinho_Id(id);
 		for (ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
 			pedidoResponse.getProdutosPedido()
 					.add(

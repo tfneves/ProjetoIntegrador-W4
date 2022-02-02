@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CarrinhoDTO {
 
