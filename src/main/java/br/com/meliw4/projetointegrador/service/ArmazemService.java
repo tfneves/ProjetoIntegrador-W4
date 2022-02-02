@@ -15,20 +15,9 @@ public class ArmazemService {
 		this.armazemRepository = armazemRepository;
 	}
 
-
-	/**
-	 * Verifica se o armazem correspondente existe no banco de dados
-	 *
-	 * @param id
-	 * @return boolean
-	 */
-	public void validateArmazemExists(Long id) {
-		if (!armazemRepository.existsById(id)) {
-			throw new BusinessValidationException("O armazém com id " + id + " não existe.");
-		}
-	}
-
-	public Armazem getArmazemById(Long id) {
-		return armazemRepository.getById(id);
+	public Armazem findArmazemById(Long id) {
+		return armazemRepository
+			.findById(id)
+			.orElseThrow(() -> new BusinessValidationException("O armazém com id " + id + " não existe."));
 	}
 }

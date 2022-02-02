@@ -28,11 +28,14 @@ public class PedidoService {
 		List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoRepository.findByPedidoId(id);
 		for (ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
 			pedidoResponse.getProdutosPedido()
-					.add(
-							ProdutoPedidoResponse.builder()
-									.id(produtoCarrinho.getId())
-									.quantidade(produtoCarrinho.getQuantidade())
-									.build());
+				.add(
+					ProdutoPedidoResponse.builder()
+						.produtoCarrinhoId(produtoCarrinho.getId())
+						.anuncioId(produtoCarrinho.getProdutoVendedor().getId())
+						.produtoId(produtoCarrinho.getProdutoVendedor().getProduto().getId())
+						.vendedorId(produtoCarrinho.getProdutoVendedor().getVendedor().getId())
+						.quantidade(produtoCarrinho.getQuantidade())
+						.build());
 		}
 		return pedidoResponse;
 	}
@@ -41,8 +44,8 @@ public class PedidoService {
 		if (!carrinhoRepository.existsById(id)) {
 			throw new BusinessValidationException("O pedido näo existe.");
 		}
-		Carrinho pedido = carrinhoRepository.getById(id);
-		if (pedido.getStatusPedido().getNome() != "Finzalizado") {
+		Carrinho pedido = carrinhoRepository.findById(id).orElse(new Carrinho());
+		if (!pedido.getStatusPedido().getStatusCode().equalsIgnoreCase("FINALIZADO")) {
 			throw new BusinessValidationException("O pedido não foi finalizado.");
 		}
 		return pedido;

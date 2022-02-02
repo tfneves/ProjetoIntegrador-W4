@@ -22,13 +22,9 @@ public class VendedorService {
 		return vendedor;
 	}
 
-	public void validateVendedorExists(Long id) {
-		if (!vendedorRepository.existsById(id)) {
-			throw new BusinessValidationException("O vendedor com id " + id + " não existe.");
-		}
-	}
-
-	public Vendedor getVendedorById(Long id) {
-		return vendedorRepository.getById(id);
+	public Vendedor findVendedorById(Long id) {
+		return vendedorRepository
+			.findById(id)
+			.orElseThrow(() -> new BusinessValidationException("O vendedor com id " + id + " não existe."));
 	}
 }

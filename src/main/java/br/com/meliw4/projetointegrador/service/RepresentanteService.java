@@ -20,8 +20,7 @@ public class RepresentanteService {
 	}
 
 	public Representante register(RepresentanteDTO representanteDTO) {
-		armazemService.validateArmazemExists(representanteDTO.getArmazem_id());
-		Armazem armazem = armazemService.getArmazemById(representanteDTO.getArmazem_id());
+		Armazem armazem = armazemService.findArmazemById(representanteDTO.getArmazem_id());
 		if (armazem.getRepresentante() != null) {
 			throw new ArmazemException("O armazem tem representante cadastrado");
 		}
@@ -30,19 +29,15 @@ public class RepresentanteService {
 		return representante;
 	}
 
-	public void validateRepresentanteExists(Long id) {
-		if (!representanteRepository.existsById(id)) {
-			throw new BusinessValidationException("O representante com id " + id + " não existe.");
-		}
-	}
-
 	public void validateRepresentanteArmazem(Representante representante, Long armazemId) {
 		if (representante.getArmazem().getId() != armazemId) {
 			throw new BusinessValidationException("O representante não está associado a esse armazém.");
 		}
 	}
 
-	public Representante getRepresentanteById(Long id) {
-		return representanteRepository.getById(id);
+	public Representante findRepresentanteById(Long id) {
+		return representanteRepository
+			.findById(id)
+			.orElseThrow(() -> new BusinessValidationException("O representante com id " + id + " não existe."));
 	}
 }

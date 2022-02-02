@@ -88,14 +88,10 @@ public class SetorService {
 		return setor.getVolume() - totalVolume;
 	}
 
-	public void validateSetorExists(Long id) {
-		if (!setorRepository.existsById(id)) {
-			throw new BusinessValidationException("O setor com id " + id + " não existe.");
-		}
-	}
-
-	public Setor getSetorById(Long id) {
-		return setorRepository.getById(id);
+	public Setor findSetorById(Long id) {
+		return setorRepository
+			.findById(id)
+			.orElseThrow(() -> new BusinessValidationException("O setor com id " + id + " não existe."));
 	}
 
 	public void validateEnoughRemainingVolume(Double setorRemainingVolume, Double produtosTotalVolume) {

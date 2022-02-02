@@ -40,14 +40,11 @@ public class LoteService {
 	}
 
 	public void registerLote(LoteDTO loteDTO) {
-		armazemService.validateArmazemExists(loteDTO.getArmazemId());
-		vendedorService.validateVendedorExists(loteDTO.getVendedorId());
-		Vendedor vendedor = vendedorService.getVendedorById(loteDTO.getVendedorId());
-		representanteService.validateRepresentanteExists(loteDTO.getRepresentanteId());
-		Representante representante = representanteService.getRepresentanteById(loteDTO.getRepresentanteId());
+		Armazem armazem = armazemService.findArmazemById(loteDTO.getArmazemId());
+		Vendedor vendedor = vendedorService.findVendedorById(loteDTO.getVendedorId());
+		Representante representante = representanteService.findRepresentanteById(loteDTO.getRepresentanteId());
 		representanteService.validateRepresentanteArmazem(representante, loteDTO.getArmazemId());
-		setorService.validateSetorExists(loteDTO.getSetorId());
-		Setor setor = setorService.getSetorById(loteDTO.getSetorId());
+		Setor setor = setorService.findSetorById(loteDTO.getSetorId());
 		setorService.validateSetorArmzem(setor, loteDTO.getArmazemId());
 		validateProdutosDTOCategoria(setor, loteDTO.getProdutosDTO());
 		Double setorRemainingVolume = setorService.calculateRemainingSetorArea(setor);
