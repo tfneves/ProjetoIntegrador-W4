@@ -11,7 +11,6 @@ public class CarrinhoService {
 
 	private CarrinhoRepository carrinhoRepository;
 
-	@Autowired
 	public CarrinhoService(CarrinhoRepository carrinhoRepository) {
 		this.carrinhoRepository = carrinhoRepository;
 	}
