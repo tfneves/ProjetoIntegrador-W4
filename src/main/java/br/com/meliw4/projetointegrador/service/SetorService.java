@@ -6,6 +6,7 @@ import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
@@ -32,10 +33,9 @@ public class SetorService {
 
 	public Setor salva(Setor payload) {
 		if (possuiEspaco(payload)) {
-			Setor setor = setorRepository.save(payload);
-			return setor;
+			return setorRepository.save(payload);
 		} else
-			throw new IllegalArgumentException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
+			throw new ArmazemException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
