@@ -1,7 +1,11 @@
 package br.com.meliw4.projetointegrador.service;
 
+import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
+import br.com.meliw4.projetointegrador.entity.Lote;
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
@@ -43,12 +47,12 @@ public class SetorService {
 		List<SetorResponse> response = new ArrayList<>();
 		for (Setor setor : setores) {
 			response.add(SetorResponse.builder()
-					.id(setor.getId())
-					.categoria(setor.getCategoria())
-					.armazem_id(setor.getArmazem().getId())
-					.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
-					.volume(setor.getVolume())
-					.build());
+				.id(setor.getId())
+				.categoria(setor.getCategoria())
+				.armazem_id(setor.getArmazem().getId())
+				.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
+				.volume(setor.getVolume())
+				.build());
 		}
 		return response;
 	}
@@ -65,11 +69,45 @@ public class SetorService {
 
 	private Double volumeTotalDosSetores(Setor setor) {
 		return setorRepository.findAll()
-				.stream()
-				.filter(s -> s.getArmazem() == setor.getArmazem())
-				.map(s -> s.getVolume())
-				.reduce((n1, n2) -> n1 + n2)
-				.orElse(0.0);
+			.stream()
+			.filter(s -> s.getArmazem() == setor.getArmazem())
+			.map(s -> s.getVolume())
+			.reduce((n1, n2) -> n1 + n2)
+			.orElse(0.0);
+	}
+
+	public Double calculateRemainingSetorArea(Setor setor) {
+		Double totalVolume = 0.0;
+		// TODO Usar stream
+		List<Lote> lotes = setor.getLotes();
+		for (Lote lote : lotes) {
+			for (ProdutoVendedor produtoVendedor : lote.getProdutoVendedores()) {
+				totalVolume += produtoVendedor.getProduto().getVolume() * produtoVendedor.getQuantidadeAtual();
+			}
+		}
+		return setor.getVolume() - totalVolume;
+	}
+
+	public void validateSetorExists(Long id) {
+		if (!setorRepository.existsById(id)) {
+			throw new BusinessValidationException("O setor com id " + id + " não existe.");
+		}
+	}
+
+	public Setor getSetorById(Long id) {
+		return setorRepository.getById(id);
+	}
+
+	public void validateEnoughRemainingVolume(Double setorRemainingVolume, Double produtosTotalVolume) {
+		if (setorRemainingVolume < produtosTotalVolume) {
+			throw new BusinessValidationException("O volume restante do setor não comporta o volume do lote.");
+		}
+	}
+
+	public void validateSetorArmzem(Setor setor, Long armazemId) {
+		if (!setor.getArmazem().getId().equals(armazemId)) {
+			throw new BusinessValidationException("O setor não pertence a esse armazém.");
+		}
 	}
 }
 

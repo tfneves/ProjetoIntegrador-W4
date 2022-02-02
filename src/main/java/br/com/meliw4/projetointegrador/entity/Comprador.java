@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
+@Table(name = "comprador_teste")
 public class Comprador {
 
 	@Id

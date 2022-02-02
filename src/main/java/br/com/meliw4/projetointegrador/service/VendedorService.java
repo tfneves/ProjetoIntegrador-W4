@@ -1,22 +1,34 @@
 package br.com.meliw4.projetointegrador.service;
 
-import br.com.meliw4.projetointegrador.dto.EnderecoDTO;
 import br.com.meliw4.projetointegrador.dto.VendedorDTO;
-import br.com.meliw4.projetointegrador.entity.Endereco;
 import br.com.meliw4.projetointegrador.entity.Vendedor;
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.VendedorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VendedorService {
 
-	@Autowired
-	VendedorRepository vendedorRepository;
+
+	private VendedorRepository vendedorRepository;
+
+	public VendedorService(VendedorRepository vendedorRepository) {
+		this.vendedorRepository = vendedorRepository;
+	}
 
 	public Vendedor register(VendedorDTO vendedorDTO) {
 		Vendedor vendedor = vendedorDTO.convert(vendedorDTO);
 		vendedorRepository.save(vendedor);
 		return vendedor;
+	}
+
+	public void validateVendedorExists(Long id) {
+		if (!vendedorRepository.existsById(id)) {
+			throw new BusinessValidationException("O vendedor com id " + id + " não existe.");
+		}
+	}
+
+	public Vendedor getVendedorById(Long id) {
+		return vendedorRepository.getById(id);
 	}
 }
