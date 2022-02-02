@@ -3,6 +3,7 @@ package br.com.meliw4.projetointegrador.advice;
 
 import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.InternalServerErrorException;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
 
 import org.springframework.http.HttpStatus;
@@ -93,6 +94,17 @@ public class AdviceExceptions {
 		Map<String, String> errors = new HashMap<>();
 		errors.put("error_message", e.getMessage());
 		errors.put("statusCode", "404");
+		return errors;
+	}
+
+
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	@ExceptionHandler(InternalServerErrorException.class)
+	private Map<String, String> internalServerError(InternalServerErrorException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", "500");
 		return errors;
 	}
 }

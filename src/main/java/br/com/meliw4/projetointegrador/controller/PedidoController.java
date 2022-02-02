@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,20 +26,23 @@ public class PedidoController {
 	PedidoService pedidoService;
 
 	/**
-	 *
 	 * Cria pedido
+	 * @author Thomaz Ferreira
 	 * @param carrinhoDTO
 	 * @param uriComponentsBuilder
 	 * @return
 	 */
 	@PostMapping("/fresh-products/orders/createOrder")
-	public ResponseEntity<Map<String, String>> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
-		Map<String, String> response = new HashMap<>();
-		if(pedidoService.salvarPedido(carrinhoDTO)){
+	public ResponseEntity<?> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
+		Long carrinhoId = pedidoService.salvarPedido(carrinhoDTO);
+		if(carrinhoId != null){
+			BigDecimal valorTotalCarrinho = pedidoService.calculaValorTotalCarrinho(carrinhoId);
+			Map<String, BigDecimal> response = new HashMap<>();
+			response.put("totalPrice", valorTotalCarrinho);
 			URI uri = uriComponentsBuilder.path("").build().toUri();
-			response.put("message", "Carrinho salvo com sucesso");
 			return ResponseEntity.created(uri).body(response);
 		}
+		Map<String, String> response = new HashMap<>();
 		response.put("message", "Falha ao salvar carrinho");
 		return ResponseEntity.internalServerError().body(response);
 	}

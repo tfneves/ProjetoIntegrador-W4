@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProdutoCarrinhoDTO {
 
-	private Long produtoId;
+	private Long anuncioId;
 	private Integer quantidade;
 }

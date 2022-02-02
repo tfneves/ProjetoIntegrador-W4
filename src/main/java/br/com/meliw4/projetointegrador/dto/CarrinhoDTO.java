@@ -36,9 +36,9 @@ public class CarrinhoDTO {
 	 * @param carrinho
 	 * @return ProdutoCarrinho
 	 */
-	public static ProdutoCarrinho parseToEntityProdutoCarrinho(ProdutoCarrinhoDTO produtoCarrinhoDTO, Produto produto, Carrinho carrinho) {
+	public static ProdutoCarrinho parseToEntityProdutoCarrinho(ProdutoCarrinhoDTO produtoCarrinhoDTO, ProdutoVendedor produtoVendedor, Carrinho carrinho) {
 		return ProdutoCarrinho.builder()
-			.produto(produto)
+			.produto(produtoVendedor)
 			.carrinho(carrinho)
 			.quantidade(produtoCarrinhoDTO.getQuantidade())
 			.build();
