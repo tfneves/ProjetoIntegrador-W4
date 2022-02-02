@@ -5,13 +5,14 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,7 +21,7 @@ public class Setor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "ENUM('FS','RR','FF')", unique = true, length = 2)
+	@Column(columnDefinition = "ENUM('FS','RR','FF')", length = 2)
 	private Categoria categoria;
 	private Double volume;
 	@ManyToOne
