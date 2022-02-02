@@ -38,7 +38,7 @@ public class PedidoController {
 		if(carrinhoId != null){
 			BigDecimal valorTotalCarrinho = pedidoService.calculaValorTotalCarrinho(carrinhoId);
 			Map<String, BigDecimal> response = new HashMap<>();
-			response.put("totalPrice", valorTotalCarrinho);
+			response.put("PrecoTotal", valorTotalCarrinho);
 			URI uri = uriComponentsBuilder.path("").build().toUri();
 			return ResponseEntity.created(uri).body(response);
 		}

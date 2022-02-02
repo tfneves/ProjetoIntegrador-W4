@@ -16,8 +16,8 @@ public class ProdutoVendedorService {
 	private ProdutoVendedorRepository produtoVendedorRepository;
 
 	/**
-	 *
 	 * Busca ProdutoVendedor pelo id e retorna o obejto
+	 * @author Thomaz Ferreira
 	 * @param id
 	 * @return ProdutoVendedor
 	 */
@@ -29,15 +29,13 @@ public class ProdutoVendedorService {
 
 
 	/**
-	 *
 	 * Atualiza (decrementa) quantidade do produto no estoque (tabela produto_vendedor)
-	 * @param id
-	 * @param quantidadeSolicitada
-	 * @return boolean
+	 * @author Thomaz Ferreira
+	 * @param produtoVendedor
+	 * @return void
 	 */
-	public boolean updateEstoqueProduto(ProdutoVendedor produtoVendedor) {
+	public void updateEstoqueProduto(ProdutoVendedor produtoVendedor) {
 		produtoVendedorRepository.save(produtoVendedor);
-		return true;
 	}
 
 }

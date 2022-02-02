@@ -20,4 +20,13 @@ public class CarrinhoService {
 		novoCarrinho.setId(id);
 		return carrinhoRepository.save(novoCarrinho);
 	}
+
+	/**
+	 * Faz persistencia do carrinho
+	 * @author Thomaz Ferreira
+	 * @param carrinho
+	 */
+	public void salvaCarrinho(Carrinho carrinho) {
+		this.carrinhoRepository.save(carrinho);
+	}
 }
