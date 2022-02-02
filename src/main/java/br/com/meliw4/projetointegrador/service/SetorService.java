@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
@@ -28,10 +29,9 @@ public class SetorService {
 
 	public Setor salva(Setor payload) {
 		if (possuiEspaco(payload)) {
-			Setor setor = setorRepository.save(payload);
-			return setor;
+			return setorRepository.save(payload);
 		} else
-			throw new IllegalArgumentException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
+			throw new ArmazemException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
@@ -43,12 +43,12 @@ public class SetorService {
 		List<SetorResponse> response = new ArrayList<>();
 		for (Setor setor : setores) {
 			response.add(SetorResponse.builder()
-					.id(setor.getId())
-					.categoria(setor.getCategoria())
-					.armazem_id(setor.getArmazem().getId())
-					.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
-					.volume(setor.getVolume())
-					.build());
+				.id(setor.getId())
+				.categoria(setor.getCategoria())
+				.armazem_id(setor.getArmazem().getId())
+				.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
+				.volume(setor.getVolume())
+				.build());
 		}
 		return response;
 	}
@@ -65,11 +65,11 @@ public class SetorService {
 
 	private Double volumeTotalDosSetores(Setor setor) {
 		return setorRepository.findAll()
-				.stream()
-				.filter(s -> s.getArmazem() == setor.getArmazem())
-				.map(s -> s.getVolume())
-				.reduce((n1, n2) -> n1 + n2)
-				.orElse(0.0);
+			.stream()
+			.filter(s -> s.getArmazem() == setor.getArmazem())
+			.map(s -> s.getVolume())
+			.reduce((n1, n2) -> n1 + n2)
+			.orElse(0.0);
 	}
 }
 
