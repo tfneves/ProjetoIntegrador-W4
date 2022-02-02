@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProdutoVendedorRepository extends JpaRepository<ProdutoVendedor, Long> {
 	@Query(value = "SELECT * FROM produto_vendedor pv WHERE lote_id = :loteId AND produto_id = :produtoId AND vendedor_id = :vendedorId LIMIT 1", nativeQuery = true)
-	ProdutoVendedor findByLoteIdAndProdutoIdAndVendedorId(@Param("loteId") Long loteId,
+	Optional<ProdutoVendedor> findByLoteIdAndProdutoIdAndVendedorId(@Param("loteId") Long loteId,
 			@Param("produtoId") Long produtoId, @Param("vendedorId") Long vendedorId);
 
 	@Query(value = "SELECT * FROM produto_vendedor WHERE produto_id = :produtoId", nativeQuery = true)
-	List<ProdutoVendedor> findByProdutoId(@Param("produtoId") Long produtoId);
+	Optional<List<ProdutoVendedor>> findByProdutoId(@Param("produtoId") Long produtoId);
 }

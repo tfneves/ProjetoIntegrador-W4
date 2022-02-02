@@ -46,26 +46,18 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	@Override
 	public List<ProdutoResponseDTO> findProdutoPorCategoria(Categoria categoria) {
-		List<ProdutoResponseDTO> produtoResponseDTO = produtoRepository.findProdutoPorCategoria(categoria.name())
+		return List<ProdutoResponseDTO> produtoResponseDTO = produtoRepository.findProdutoPorCategoria(categoria.name())
+				.orElseThrow(() -> NOT_FOUND_EXCEPTION)
 				.stream()
 				.map(ProdutoResponseDTO::toDTO)
 				.collect(Collectors.toList());
-
-		if (produtoResponseDTO.isEmpty()) {
-			throw NOT_FOUND_EXCEPTION;
-		}
-
-		return produtoResponseDTO;
 
 	}
 
 	@Override
 	public ArmazemProdutoResponseDTO findArmazemPorProduto(Long produtoId) {
-		List<ProdutoVendedor> produtoVendedores = produtoVendedorRepository.findByProdutoId(produtoId);
-
-		if (produtoVendedores.isEmpty()) {
-			throw NOT_FOUND_EXCEPTION;
-		}
+		List<ProdutoVendedor> produtoVendedores = produtoVendedorRepository.findByProdutoId(produtoId)
+				.orElseThrow(() -> NOT_FOUND_EXCEPTION);
 
 		TreeMap<Long, Integer> mapper = produtoVendedores.stream()
 				.collect(Collectors.toMap(
