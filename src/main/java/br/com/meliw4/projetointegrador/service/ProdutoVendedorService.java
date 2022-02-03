@@ -17,7 +17,7 @@ public class ProdutoVendedorService {
 		produtoVendedorRepository.save(produtoVendedor);
 	}
 
-	public ProdutoVendedor findByLoteIdAndProdutoIdAndVendedorId(Long loteId, Long produtoId, Long vendedorId) {
-		return produtoVendedorRepository.findByLoteIdAndProdutoIdAndVendedorId(loteId, produtoId, vendedorId);
+	public ProdutoVendedor findByLoteIdAndProdutoId(Long loteId, Long produtoId) {
+		return produtoVendedorRepository.findByLoteIdAndProdutoId(loteId, produtoId);
 	}
 }

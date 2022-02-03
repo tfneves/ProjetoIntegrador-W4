@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ProdutoVendedorRepository extends JpaRepository<ProdutoVendedor, Long> {
-	@Query(value = "SELECT * FROM produto_vendedor pv WHERE lote_id = :loteId AND produto_id = :produtoId AND vendedor_id = :vendedorId LIMIT 1", nativeQuery = true)
-	ProdutoVendedor findByLoteIdAndProdutoIdAndVendedorId(@Param("loteId") Long loteId, @Param("produtoId") Long produtoId, @Param("vendedorId") Long vendedorId);
+	@Query(value = "SELECT * FROM produto_vendedor pv WHERE lote_id = :loteId AND produto_id = :produtoId LIMIT 1",
+		nativeQuery = true)
+	ProdutoVendedor findByLoteIdAndProdutoId(@Param("loteId") Long loteId, @Param("produtoId") Long produtoId);
 }
