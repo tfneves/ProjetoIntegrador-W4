@@ -73,7 +73,7 @@ public class LoteService {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException(
-					"A categoria do setor não é adequada para todos os produtos do" + " " + "lote."
+					"A categoria do setor não é adequada para todos os produtos do lote."
 				);
 			}
 		}
@@ -132,8 +132,9 @@ public class LoteService {
 		Integer quantidadeAtual = 0;
 		Integer quantidadeRetira = 0;
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
-			ProdutoVendedor produtoVendedor = produtoVendedorService.findByLoteIdAndProdutoIdAndVendedorId(loteId,
-				produtoUpdateDTO.getId(), produtoUpdateDTO.getVendedorId());
+			ProdutoVendedor produtoVendedor = produtoVendedorService.findByLoteIdAndProdutoId(
+				loteId, produtoUpdateDTO.getId()
+			);
 			if (produtoVendedor == null) {
 				throw new BusinessValidationException(
 					"Produto não cadastrado pelo vendedor no lote solicitado.");

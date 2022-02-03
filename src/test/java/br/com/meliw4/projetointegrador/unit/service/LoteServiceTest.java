@@ -25,6 +25,7 @@ public class LoteServiceTest {
 	private static LoteService loteService;
 	private static LoteRepository loteRepository = Mockito.mock(LoteRepository.class);
 	private static ProdutoService produtoService = Mockito.mock(ProdutoService.class);
+	private static ProdutoVendedorService produtoVendedorService = Mockito.mock(ProdutoVendedorService.class);
 	private static List<ProdutoDTO> produtosDTO;
 	private static List<ProdutoUpdateDTO> produtosUpdateDTO;
 
@@ -38,7 +39,7 @@ public class LoteServiceTest {
 			Mockito.mock(RepresentanteService.class),
 			produtoService,
 			Mockito.mock(RegistroLoteService.class),
-			Mockito.mock(ProdutoVendedorService.class)
+			produtoVendedorService
 		);
 		produtosDTO = makeProdutosDTOList();
 		produtosUpdateDTO = makeProdutosUpdateDTOList();
@@ -83,8 +84,17 @@ public class LoteServiceTest {
 
 	private static List<ProdutoUpdateDTO> makeProdutosUpdateDTOList() {
 		List<ProdutoUpdateDTO> produtos = new ArrayList<>();
-		produtos.add(ProdutoUpdateDTO.builder().build());
-		produtos.add(ProdutoUpdateDTO.builder().build());
+		produtos.add(
+			ProdutoUpdateDTO.builder()
+				.id(1l)
+				.quantidadeRetira(1)
+				.build()
+		);
+		produtos.add(
+			ProdutoUpdateDTO.builder()
+				.id(2l)
+				.quantidadeRetira(1)
+				.build());
 		return produtos;
 	}
 
@@ -139,7 +149,7 @@ public class LoteServiceTest {
 	}
 
 	@Test
-	public void shouldNotThrowInvalidPreco() {
+	public void shouldNotThrowInvalidPrecoException() {
 		assertDoesNotThrow(
 			() -> loteService.validatePreco(BigDecimal.valueOf(1))
 		);
@@ -158,7 +168,7 @@ public class LoteServiceTest {
 	}
 
 	@Test
-	public void shouldNotThrowInvalidCategoriaSetor() {
+	public void shouldNotThrowInvalidCategoriaSetorException() {
 		Setor setor = Setor.builder().categoria(Categoria.FS).build();
 		produtosDTO.get(0).setProdutoCategoria(
 			ProdutoCategoria.builder().categoria(Categoria.FS).temperaturaMinima(20f).build()
@@ -200,5 +210,91 @@ public class LoteServiceTest {
 		assertDoesNotThrow(
 			() -> loteService.saveAnuncios(Lote.builder().build(), produtosDTO, Vendedor.builder().build())
 		);
+	}
+
+	@Test
+	public void shouldThrowInvalidProdutoUpdateException() {
+		assertThrows(
+			BusinessValidationException.class,
+			() -> loteService.validateProdutosUpdate(produtosUpdateDTO)
+		);
+	}
+
+	@Test
+	public void shouldNotThrowInvalidProdutoUpdateException() {
+		Mockito.when(produtoService.validateProdutoExists(1l)).thenReturn(true);
+		Mockito.when(produtoService.validateProdutoExists(2l)).thenReturn(true);
+		assertDoesNotThrow(
+			() -> loteService.validateProdutosUpdate(produtosUpdateDTO)
+		);
+	}
+
+	@Test
+	void shouldThrowInvalidProdutoVendedorUpdateException() {
+		assertThrows(
+			BusinessValidationException.class,
+			() -> loteService.updateLoteProdutos(1l, produtosUpdateDTO)
+		);
+	}
+
+	@Test
+	void shouldThrowInvalidProdutoQuantityUpdateException() {
+		Mockito.when(
+			produtoVendedorService.findByLoteIdAndProdutoId(1l, 1l)
+		).thenReturn(ProdutoVendedor.builder().quantidadeAtual(0).build());
+		Mockito.when(
+			produtoVendedorService.findByLoteIdAndProdutoId(1l, 2l)
+		).thenReturn(ProdutoVendedor.builder().quantidadeAtual(0).build());
+		assertThrows(
+			BusinessValidationException.class,
+			() -> loteService.updateLoteProdutos(1l, produtosUpdateDTO)
+		);
+	}
+
+	@Test
+	void shouldReturnUpdatedProdutosDTOList() {
+		Mockito.when(
+			produtoVendedorService.findByLoteIdAndProdutoId(1l, 1l)
+		).thenReturn(
+			ProdutoVendedor.builder()
+				.quantidadeAtual(1)
+				.produto(
+					Produto.builder()
+						.id(1l)
+						.nome("naranja")
+						.volume(1.0)
+						.produtoCategoria(
+							ProdutoCategoria.builder()
+								.categoria(Categoria.FS)
+								.temperaturaMinima(18f)
+								.build()
+						)
+						.build()
+				)
+				.build()
+		);
+		Mockito.when(
+			produtoVendedorService.findByLoteIdAndProdutoId(1l, 2l)
+		).thenReturn(
+			ProdutoVendedor.builder()
+				.quantidadeAtual(1)
+				.produto(
+					Produto.builder()
+						.id(2l)
+						.nome("manzana")
+						.volume(1.0)
+						.produtoCategoria(
+							ProdutoCategoria.builder()
+								.categoria(Categoria.FS)
+								.temperaturaMinima(18f)
+								.build()
+						)
+						.build()
+				)
+				.build()
+		);
+		List<ProdutoDTO> produtos = loteService.updateLoteProdutos(1l, produtosUpdateDTO);
+		assertEquals(produtos.get(0).getQuantidadeAtual(), 0);
+		assertEquals(produtos.get(1).getQuantidadeAtual(), 0);
 	}
 }
