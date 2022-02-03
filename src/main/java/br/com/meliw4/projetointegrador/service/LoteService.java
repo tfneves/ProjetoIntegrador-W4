@@ -63,13 +63,13 @@ public class LoteService {
 		return updateLoteProdutos(loteUpdateDTO.getLoteId(), loteUpdateDTO.getProdutosUpdateDTO());
 	}
 
-	private void validateLoteExists(Long id) {
+	public void validateLoteExists(Long id) {
 		if (!loteRepository.existsById(id)) {
 			throw new BusinessValidationException("O lote com id " + id + " não existe.");
 		}
 	}
 
-	private void validateProdutosDTOCategoria(Setor setor, List<ProdutoDTO> produtosDTO) {
+	public void validateProdutosDTOCategoria(Setor setor, List<ProdutoDTO> produtosDTO) {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException(
@@ -79,7 +79,7 @@ public class LoteService {
 		}
 	}
 
-	private List<Produto> checkProdutosDTO(List<ProdutoDTO> produtosDTO) {
+	public List<Produto> checkProdutosDTO(List<ProdutoDTO> produtosDTO) {
 		List<Produto> produtos = new ArrayList<>();
 		// TODO Usar stream
 		for (ProdutoDTO produtoDTO : produtosDTO) {
@@ -95,7 +95,7 @@ public class LoteService {
 		return produtos;
 	}
 
-	private Double calculateProdutosDTOTotalVolume(List<ProdutoDTO> produtosDTO) {
+	public Double calculateProdutosDTOTotalVolume(List<ProdutoDTO> produtosDTO) {
 		Double totalVolume = 0.0;
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			totalVolume += produtoDTO.getVolume() * produtoDTO.getQuantidadeAtual();
@@ -103,11 +103,11 @@ public class LoteService {
 		return totalVolume;
 	}
 
-	private void save(Lote lote) {
+	public void save(Lote lote) {
 		loteRepository.save(lote);
 	}
 
-	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
+	public void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
 		RegistroLote registroLote = RegistroLote.builder()
 			.lote(lote)
 			.representante(representante)
@@ -116,7 +116,7 @@ public class LoteService {
 		registroLoteService.save(registroLote);
 	}
 
-	private void saveAnuncios(Lote lote, List<ProdutoDTO> produtosDTO, Vendedor vendedor) {
+	public void saveAnuncios(Lote lote, List<ProdutoDTO> produtosDTO, Vendedor vendedor) {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			validatePreco(produtoDTO.getPreco());
 			ProdutoVendedor produtoVendedor = ProdutoDTO
@@ -125,7 +125,7 @@ public class LoteService {
 		}
 	}
 
-	private List<ProdutoDTO> updateLoteProdutos(Long loteId, List<ProdutoUpdateDTO> produtosUpdateDTO) {
+	public List<ProdutoDTO> updateLoteProdutos(Long loteId, List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		List<ProdutoDTO> produtosDTO = new ArrayList<>();
 		List<ProdutoVendedor> produtosVendedor = new ArrayList<>();
@@ -154,7 +154,7 @@ public class LoteService {
 		return produtosDTO;
 	}
 
-	private void validateProdutosUpdate(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+	public void validateProdutosUpdate(List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
 			if (!produtoService.validateProdutoExists(produtoUpdateDTO.getId())) {
@@ -163,7 +163,7 @@ public class LoteService {
 		}
 	}
 
-	private void validatePreco(BigDecimal preco) {
+	public void validatePreco(BigDecimal preco) {
 		if (BigDecimal.ZERO.compareTo(preco) >= 0) {
 			throw new BusinessValidationException("Preço deve ser positivo.");
 		}
