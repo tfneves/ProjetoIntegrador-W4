@@ -51,7 +51,7 @@ public class PedidoService {
 	 * @param dto
 	 * @return boolean
 	 */
-	public Long salvarPedido(CarrinhoDTO dto) {
+	public Long salvaPedido(CarrinhoDTO dto) {
 		List<ProdutoCarrinho> produtosCarrinho = new ArrayList<>();
 		StatusPedido statusPedido = statusPedidoService.findStatusCodeWithName("CHECKOUT");
 		Comprador comprador = compradorService.findCompradorById(dto.getIdComprador());

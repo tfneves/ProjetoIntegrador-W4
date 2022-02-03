@@ -30,11 +30,11 @@ public class PedidoController {
 	 * @author Thomaz Ferreira
 	 * @param carrinhoDTO
 	 * @param uriComponentsBuilder
-	 * @return
+	 * @return ResponseEntity
 	 */
 	@PostMapping("/fresh-products/orders/createOrder")
 	public ResponseEntity<?> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
-		Long carrinhoId = pedidoService.salvarPedido(carrinhoDTO);
+		Long carrinhoId = pedidoService.salvaPedido(carrinhoDTO);
 		if(carrinhoId != null){
 			BigDecimal valorTotalCarrinho = pedidoService.calculaValorTotalCarrinho(carrinhoId);
 			Map<String, BigDecimal> response = new HashMap<>();

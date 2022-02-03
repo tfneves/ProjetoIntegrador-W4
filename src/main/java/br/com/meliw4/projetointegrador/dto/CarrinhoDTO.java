@@ -29,10 +29,10 @@ public class CarrinhoDTO {
 
 
 	/**
-	 *
 	 * Converte Lista de ProdutoCarrinhoDTO para ProdutoCarrinho
+	 * @author Thomaz Ferreira
 	 * @param produtoCarrinhoDTO
-	 * @param produto
+	 * @param produtoVendedor
 	 * @param carrinho
 	 * @return ProdutoCarrinho
 	 */
