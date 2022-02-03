@@ -24,6 +24,7 @@ public class RepresentanteService {
 		if (armazem.getRepresentante() != null) {
 			throw new ArmazemException("O armazem tem representante cadastrado");
 		}
+
 		Representante representante = RepresentanteDTO.convert(representanteDTO, armazem);
 		representanteRepository.save(representante);
 		return representante;

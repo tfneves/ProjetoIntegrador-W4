@@ -1,11 +1,15 @@
 
 package br.com.meliw4.projetointegrador.advice;
 
-import br.com.meliw4.projetointegrador.exception.ArmazemException;
-import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
-import br.com.meliw4.projetointegrador.exception.NotFoundException;
+import br.com.meliw4.projetointegrador.dto.ProdutoCarrinhoDTO;
+import br.com.meliw4.projetointegrador.exception.*;
 
+import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
+import br.com.meliw4.projetointegrador.service.PedidoService;
+import br.com.meliw4.projetointegrador.service.ProdutoVendedorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,10 +19,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
 public class AdviceExceptions {
+
+	@Autowired
+	ProdutoVendedorService produtoVendedorRepository;
 
 	/**
 	 * Trata exception de argumento inválido
@@ -94,5 +102,30 @@ public class AdviceExceptions {
 		errors.put("error_message", e.getMessage());
 		errors.put("statusCode", "404");
 		return errors;
+	}
+
+
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	@ExceptionHandler(InternalServerErrorException.class)
+	private Map<String, String> internalServerError(InternalServerErrorException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", "500");
+		return errors;
+	}
+
+
+	@ResponseBody
+	@ExceptionHandler(OrderCheckoutException.class)
+	private ResponseEntity<Map<String, String>> orderCheckoutError(OrderCheckoutException e) {
+		Map<String, String> response = new HashMap<>();
+		response.put("error_message", e.getMessage());
+		response.put("statusCode", Integer.toString(e.getHttpStatusCode()));
+		produtoVendedorRepository.devolveProdutoEstoque(PedidoService.previousStateProdutoVendedor);
+		PedidoService.clearQueueProdutoVendedor();
+		if(e.getHttpStatusCode() == 400)
+			return ResponseEntity.badRequest().body(response);
+		return ResponseEntity.internalServerError().body(response);
 	}
 }
