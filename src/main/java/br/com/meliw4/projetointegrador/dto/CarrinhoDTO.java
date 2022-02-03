@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,8 +18,9 @@ import java.util.List;
 @Builder
 public class CarrinhoDTO {
 
+	@NotNull(message = "O campo idComprador não pode ser vazio")
 	private Long idComprador;
-	private List<ProdutoCarrinhoDTO> produtos;
+	private List<@Valid ProdutoCarrinhoDTO> produtos;
 
 
 	public static Carrinho parseToEntityCarrinho(StatusPedido statusPedido, Comprador comprador) {
