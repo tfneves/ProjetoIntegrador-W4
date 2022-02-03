@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.entity.ProdutoCarrinho;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.ProdutoCarrinhoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,11 @@ public class ProdutoCarrinhoService {
 	 * @return ProdutoCarrinho
 	 */
 	public ProdutoCarrinho salvaProdutoCarrinho(ProdutoCarrinho produtoCarrinho) {
-		return produtoCarrinhoRepository.save(produtoCarrinho);
+		try{
+			return produtoCarrinhoRepository.save(produtoCarrinho);
+		}catch (RuntimeException e){
+			throw new OrderCheckoutException("Erro ao salvar produtos do carrinho - " + e.getMessage(), 500);
+		}
 	}
 
 
