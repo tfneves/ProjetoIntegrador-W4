@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.controller;
 
 import java.util.List;
 
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.response.ProdutoVendedorResponse;
 import br.com.meliw4.projetointegrador.service.impl.ProdutoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class ProdutoController {
 	}
 
 	@GetMapping("/list/product")
-	public ResponseEntity<List<ProdutoVendedorResponse>> listaTodosOsLotesOrdenadoPOrParametro(@RequestParam Long idProduto, @RequestParam String type){
-		return ResponseEntity.ok(produtoServiceimpl.listaTodosOsLotes(idProduto, type));
+	public ResponseEntity<?> listaTodosOsLotesOrdenadoPOrParametro(@RequestParam Long idProduto, @RequestParam String type){
+		return ResponseEntity.ok(produtoServiceimpl.listaTodosOsLotes(idProduto));
 	}
 }
