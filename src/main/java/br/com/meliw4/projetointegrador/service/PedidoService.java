@@ -68,6 +68,7 @@ public class PedidoService {
 		for(ProdutoCarrinho p : produtosCarrinho){
 			produtoCarrinhoService.salvaProdutoCarrinho(p);
 		}
+		clearQueueProdutoVendedor();
 		return carrinho.getId();
 	}
 
@@ -156,6 +157,15 @@ public class PedidoService {
 			valorTotal = valorTotal.add(precoUnitario.multiply(qtdCarrinho));
 		}
 		return valorTotal;
+	}
+
+
+	/**
+	 * Limpa fila de produtos
+	 * @author Thomaz Ferreira
+	 */
+	public static void clearQueueProdutoVendedor() {
+		previousStateProdutoVendedor.clear();
 	}
 
 

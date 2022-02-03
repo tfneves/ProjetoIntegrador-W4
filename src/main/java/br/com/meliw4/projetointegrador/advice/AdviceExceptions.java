@@ -123,6 +123,7 @@ public class AdviceExceptions {
 		response.put("error_message", e.getMessage());
 		response.put("statusCode", Integer.toString(e.getHttpStatusCode()));
 		produtoVendedorRepository.devolveProdutoEstoque(PedidoService.previousStateProdutoVendedor);
+		PedidoService.clearQueueProdutoVendedor();
 		if(e.getHttpStatusCode() == 400)
 			return ResponseEntity.badRequest().body(response);
 		return ResponseEntity.internalServerError().body(response);
