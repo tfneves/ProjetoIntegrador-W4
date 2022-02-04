@@ -47,12 +47,12 @@ public class SetorService {
 		List<SetorResponse> response = new ArrayList<>();
 		for (Setor setor : setores) {
 			response.add(SetorResponse.builder()
-				.id(setor.getId())
-				.categoria(setor.getCategoria())
-				.armazem_id(setor.getArmazem().getId())
-				.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
-				.volume(setor.getVolume())
-				.build());
+					.id(setor.getId())
+					.categoria(setor.getCategoria())
+					.armazem_id(setor.getArmazem().getId())
+					.lote_id(setor.getLotes().stream().map(a -> a.getId()).collect(Collectors.toList()))
+					.volume(setor.getVolume())
+					.build());
 		}
 		return response;
 	}
@@ -106,4 +106,3 @@ public class SetorService {
 		}
 	}
 }
-

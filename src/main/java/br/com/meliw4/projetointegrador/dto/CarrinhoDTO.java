@@ -13,8 +13,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+// @NoArgsConstructor
+// @AllArgsConstructor
 @Builder
 public class CarrinhoDTO {
 
