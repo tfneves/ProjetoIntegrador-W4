@@ -50,7 +50,7 @@ public class ProdutoController {
 	@GetMapping(path = "/list")
 	@ResponseBody
 	public ResponseEntity<List<ProdutoResponseDTO>> findProdutoPorCategoria(
-			@RequestParam(required = true, defaultValue = "FS") Categoria categoria) {
+			@RequestParam() Categoria categoria) {
 		return ResponseEntity.ok(this.produtoService.findProdutoPorCategoria(categoria));
 	}
 }
