@@ -16,7 +16,6 @@ public class ProdutoResponseDTO {
 	private final String nome;
 	private final Double volume;
 	private final ProdutoCategoria produtoCategoria;
-	// private final List<ProdutoVendedor> vendedores;
 	private final List<Long> vendedoresId;
 
 	public static ProdutoResponseDTO toDTO(Produto produto) {
@@ -25,7 +24,6 @@ public class ProdutoResponseDTO {
 				.nome(produto.getNome())
 				.volume(produto.getVolume())
 				.produtoCategoria(produto.getProdutoCategoria())
-				// .vendedores(produto.getProdutoVendedores().get)
 				.vendedoresId(produto.getProdutoVendedores().stream().map(ProdutoVendedor::getId)
 						.collect(Collectors.toList()))
 				.build();
