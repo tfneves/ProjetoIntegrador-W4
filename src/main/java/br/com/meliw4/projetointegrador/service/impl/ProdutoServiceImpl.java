@@ -77,19 +77,36 @@ public class ProdutoServiceImpl implements ProdutoService {
 		return produtoRepository.findById(id).orElse(null);
 	}
 
-	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id) {
-		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id));
+	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id, String type) {
+		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id), type);
 		return response;
 	}
 
-	private Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> sanetizaORetorno(List<ProdutoVendedor> produtoVendedor) {
+	private Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> sanetizaORetorno(List<ProdutoVendedor> produtoVendedor, String type) {
 		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = new LinkedHashMap<>();
 		for (ProdutoVendedor pv : produtoVendedor) {
 			response.put(ProdutoSetorResponse.retornaOSetor(pv),
-				ProdutoVendedorResponse.converte(produtoVendedor
+				ordenaLista(ProdutoVendedorResponse.converte(produtoVendedor
 					.stream()
-					.filter(p -> p.getLote().getSetor().getId() == pv.getLote().getSetor().getId()).collect(Collectors.toList())));
+					.filter(p -> p.getLote().getSetor().getId()	== pv.getLote().getSetor().getId())
+					.collect(Collectors.toList())),
+					type));
+
 		}
 		return response;
 	}
+
+	private List<ProdutoVendedorResponse> ordenaLista(List<ProdutoVendedorResponse> pv, String type) {
+		switch(type) {
+			case "L":
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getLote_id)).collect(Collectors.toList());
+			case "C":
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getQuantidadeAtual)).collect(Collectors.toList());
+			case "F":
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getDataVencimento)).collect(Collectors.toList());
+			default:
+				return pv;
+		}
+	}
+
 }

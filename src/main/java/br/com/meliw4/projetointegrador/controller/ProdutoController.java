@@ -59,6 +59,6 @@ public class ProdutoController {
 
 	@GetMapping("/list/product")
 	public ResponseEntity<?> listaTodosOsLotesOrdenadoPOrParametro(@RequestParam Long idProduto, @RequestParam String type){
-		return ResponseEntity.ok(produtoServiceimpl.listaTodosOsLotes(idProduto));
+		return ResponseEntity.ok(produtoServiceimpl.listaTodosOsLotes(idProduto, type));
 	}
 }
