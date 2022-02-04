@@ -2,12 +2,12 @@ package br.com.meliw4.projetointegrador.controller;
 
 import java.util.List;
 
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
+import br.com.meliw4.projetointegrador.response.ProdutoVendedorResponse;
+import br.com.meliw4.projetointegrador.service.impl.ProdutoServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.meliw4.projetointegrador.dto.response.ProdutoResponseDTO;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
@@ -16,6 +16,9 @@ import br.com.meliw4.projetointegrador.service.ProdutoService;
 @RestController
 @RequestMapping("/api/v1/fresh-products")
 public class ProdutoController {
+
+	@Autowired
+	ProdutoServiceImpl produtoServiceimpl;
 
 	private final ProdutoService produtoService;
 
@@ -52,5 +55,10 @@ public class ProdutoController {
 	public ResponseEntity<List<ProdutoResponseDTO>> findProdutoPorCategoria(
 			@RequestParam(required = true, defaultValue = "FS") Categoria categoria) {
 		return ResponseEntity.ok(this.produtoService.findProdutoPorCategoria(categoria));
+	}
+
+	@GetMapping("/list/product")
+	public ResponseEntity<?> listaTodosOsLotesOrdenadoPOrParametro(@RequestParam Long idProduto, @RequestParam(required = false,defaultValue = "L") String type){
+		return ResponseEntity.ok(produtoServiceimpl.listaTodosOsLotes(idProduto, type));
 	}
 }

@@ -1,8 +1,12 @@
 package br.com.meliw4.projetointegrador.service.impl;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
+import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
+import br.com.meliw4.projetointegrador.response.ProdutoSetorResponse;
+import br.com.meliw4.projetointegrador.response.ProdutoVendedorResponse;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +20,11 @@ import br.com.meliw4.projetointegrador.service.ProdutoService;
 public class ProdutoServiceImpl implements ProdutoService {
 
 	private ProdutoRepository produtoRepository;
+	private ProdutoVendedorRepository produtoVendedorRepository;
 
-	ProdutoServiceImpl(ProdutoRepository produtoRepository) {
+	ProdutoServiceImpl(ProdutoRepository produtoRepository, ProdutoVendedorRepository produtoVendedorRepository) {
 		this.produtoRepository = produtoRepository;
+		this.produtoVendedorRepository = produtoVendedorRepository;
 	}
 
 	@Override
@@ -46,7 +52,6 @@ public class ProdutoServiceImpl implements ProdutoService {
 		}
 
 		return produtoResponseDTO;
-
 	}
 
 	@Override
@@ -65,5 +70,41 @@ public class ProdutoServiceImpl implements ProdutoService {
 	@Override
 	public Produto getProdutoById(Long id) {
 		return produtoRepository.findById(id).orElse(null);
+	}
+
+	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id, String type) {
+		List<ProdutoVendedor> pv = this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id);
+		if(pv.size() == 0)
+			throw new NotFoundException(String.format("O Id %d nào foi localziado", id));
+		type = type.toUpperCase(Locale.ROOT);
+		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(pv, type);
+		return response;
+	}
+
+	private Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> sanetizaORetorno(List<ProdutoVendedor> produtoVendedor, String type) {
+		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = new LinkedHashMap<>();
+		for (ProdutoVendedor pv : produtoVendedor) {
+			response.put(ProdutoSetorResponse.retornaOSetor(pv),
+				ordenaLista(ProdutoVendedorResponse.converte(produtoVendedor
+					.stream()
+					.filter(p -> p.getLote().getSetor().getId()	== pv.getLote().getSetor().getId())
+					.collect(Collectors.toList())),
+					type));
+
+		}
+		return response;
+	}
+
+	private List<ProdutoVendedorResponse> ordenaLista(List<ProdutoVendedorResponse> pv, String type) {
+		switch(type) {
+			case "L":
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getLote_id).reversed()).collect(Collectors.toList());
+			case "C":
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getQuantidadeAtual).reversed()).collect(Collectors.toList());
+			case "F":
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getDataVencimento).reversed()).collect(Collectors.toList());
+			default:
+				return pv;
+		}
 	}
 }
