@@ -1,24 +1,23 @@
 package br.com.meliw4.projetointegrador.service;
 
+import br.com.meliw4.projetointegrador.entity.Armazem;
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class ArmazemService {
 
-    @Autowired
-    ArmazemRepository armazemRepository;
 
-    /**
-     * Verifica se o armazem correspondente existe no banco de dados
-     * @param id
-     * @return boolean
-     */
-    public boolean existWareHouse(Long id) {
-        return armazemRepository.existsById(id);
-    }
+	private ArmazemRepository armazemRepository;
+
+	public ArmazemService(ArmazemRepository armazemRepository) {
+		this.armazemRepository = armazemRepository;
+	}
+
+	public Armazem findArmazemById(Long id) {
+		return armazemRepository
+			.findById(id)
+			.orElseThrow(() -> new BusinessValidationException("O armazém com id " + id + " não existe."));
+	}
 }

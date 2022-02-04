@@ -1,28 +1,29 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 public class RegistroLote {
 
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@ManyToOne
-    private Representante representante;
-    @ManyToOne
-    private Vendedor vendedor;
+	private Representante representante;
+
 	@ManyToOne
-    private Lote lote;
+	private Vendedor vendedor;
+
+	@ManyToOne
+	private Lote lote;
 
 }
 

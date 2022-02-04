@@ -1,10 +1,7 @@
 
 package br.com.meliw4.projetointegrador.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,20 +10,23 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 public class Lote {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @ManyToOne
-    private Setor setor;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+
+	@ManyToOne
+	private Setor setor;
+
 	@ManyToOne
 	private Representante representante;
+
 	@OneToMany(mappedBy = "lote", fetch = FetchType.LAZY)
-	private List<Produto> produtos;
-    private final LocalDate dataAquisicao = LocalDate.now();
+	private List<ProdutoVendedor> produtoVendedores;
 
+	private final LocalDate dataAquisicao = LocalDate.now();
 }
-

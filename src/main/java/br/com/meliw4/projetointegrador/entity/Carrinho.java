@@ -1,15 +1,12 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,7 +17,10 @@ public class Carrinho {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDate data;
-	//private Comprador
 	@OneToOne
+	@JoinColumn(name = "comprador_id", referencedColumnName = "id")
+	private Comprador comprador;
+	@OneToOne
+	@JoinColumn(name = "status_pedido_id", referencedColumnName = "id")
 	private StatusPedido statusPedido;
 }

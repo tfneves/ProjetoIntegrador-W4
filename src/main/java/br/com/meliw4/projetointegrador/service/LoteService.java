@@ -1,8 +1,4 @@
-
 package br.com.meliw4.projetointegrador.service;
-
-import br.com.meliw4.projetointegrador.entity.Lote;
-
 
 import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.LoteUpdateDTO;
@@ -10,162 +6,168 @@ import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
-import br.com.meliw4.projetointegrador.repository.*;
-
+import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class LoteService {
 
-	private ArmazemRepository armazemRepository;
-	private VendedorRepository vendedorRepository;
-	private SetorRepository setorRepository;
-	private RepresentanteRepository representanteRepository;
-	private ProdutoRepository produtoRepository;
 	private LoteRepository loteRepository;
-	private RegistroLoteRepository registroLoteRepository;
+	private ArmazemService armazemService;
+	private VendedorService vendedorService;
+	private SetorService setorService;
+	private RepresentanteService representanteService;
+	private ProdutoService produtoService;
+	private RegistroLoteService registroLoteService;
+	private ProdutoVendedorService produtoVendedorService;
 
-	public LoteService(ArmazemRepository armazemRepository, VendedorRepository vendedorRepository, SetorRepository setorRepository, RepresentanteRepository representanteRepository, ProdutoRepository produtoRepository, LoteRepository loteRepository, RegistroLoteRepository registroLoteRepository) {
-		this.armazemRepository = armazemRepository;
-		this.vendedorRepository = vendedorRepository;
-		this.setorRepository = setorRepository;
-		this.representanteRepository = representanteRepository;
-		this.produtoRepository = produtoRepository;
+	public LoteService(LoteRepository loteRepository, ArmazemService armazemService, VendedorService vendedorService,
+					   SetorService setorService, RepresentanteService representanteService,
+					   ProdutoService produtoService, RegistroLoteService registroLoteService,
+					   ProdutoVendedorService produtoVendedorService) {
 		this.loteRepository = loteRepository;
-		this.registroLoteRepository = registroLoteRepository;
+		this.armazemService = armazemService;
+		this.vendedorService = vendedorService;
+		this.setorService = setorService;
+		this.representanteService = representanteService;
+		this.produtoService = produtoService;
+		this.registroLoteService = registroLoteService;
+		this.produtoVendedorService = produtoVendedorService;
 	}
 
-
 	public void registerLote(LoteDTO loteDTO) {
-		validateArmazem(loteDTO.getArmazemId());
-		Vendedor vendedor = validateVendedor(loteDTO.getVendedorId());
-		Representante representante = validateRepresentante(loteDTO.getRepresentanteId(), loteDTO.getArmazemId());
-		Setor setor = validateSetor(loteDTO.getSetorId(), loteDTO.getProdutosDTO());
+		Armazem armazem = armazemService.findArmazemById(loteDTO.getArmazemId());
+		Vendedor vendedor = vendedorService.findVendedorById(loteDTO.getVendedorId());
+		Representante representante = representanteService.findRepresentanteById(loteDTO.getRepresentanteId());
+		representanteService.validateRepresentanteArmazem(representante, loteDTO.getArmazemId());
+		Setor setor = setorService.findSetorById(loteDTO.getSetorId());
+		setorService.validateSetorArmzem(setor, loteDTO.getArmazemId());
+		validateProdutosDTOCategoria(setor, loteDTO.getProdutosDTO());
+		Double setorRemainingVolume = setorService.calculateRemainingSetorArea(setor);
+		Double produtosDTOTotalVolume = calculateProdutosDTOTotalVolume(loteDTO.getProdutosDTO());
+		setorService.validateEnoughRemainingVolume(setorRemainingVolume, produtosDTOTotalVolume);
+		checkProdutosDTO(loteDTO.getProdutosDTO());
 		Lote lote = LoteDTO.convert(loteDTO, setor, representante);
-		saveLote(lote);
-		saveProdutos(lote, vendedor, loteDTO.getProdutosDTO());
+		save(lote);
 		createRegister(lote, representante, vendedor);
+		saveAnuncios(lote, loteDTO.getProdutosDTO(), vendedor);
 	}
 
 	public List<ProdutoDTO> updateLote(LoteUpdateDTO loteUpdateDTO) {
-		validateLote(loteUpdateDTO.getLoteId());
-		validateProdutos(loteUpdateDTO.getProdutosUpdateDTO());
-		return updateLoteProdutos(loteUpdateDTO.getProdutosUpdateDTO());
+		validateLoteExists(loteUpdateDTO.getLoteId());
+		validateProdutosUpdate(loteUpdateDTO.getProdutosUpdateDTO());
+		return updateLoteProdutos(loteUpdateDTO.getLoteId(), loteUpdateDTO.getProdutosUpdateDTO());
 	}
 
-	private List<ProdutoDTO> updateLoteProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
-		// TODO Usar stream
-		List<ProdutoDTO> produtosDTO = new ArrayList<>();
+	public void validateLoteExists(Long id) {
+		if (!loteRepository.existsById(id)) {
+			throw new BusinessValidationException("O lote com id " + id + " não existe.");
+		}
+	}
+
+	public void validateProdutosDTOCategoria(Setor setor, List<ProdutoDTO> produtosDTO) {
+		for (ProdutoDTO produtoDTO : produtosDTO) {
+			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
+				throw new BusinessValidationException(
+					"A categoria do setor não é adequada para todos os produtos do lote."
+				);
+			}
+		}
+	}
+
+	public List<Produto> checkProdutosDTO(List<ProdutoDTO> produtosDTO) {
 		List<Produto> produtos = new ArrayList<>();
-		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
-			Produto produto = produtoRepository.getById(produtoUpdateDTO.getId());
-			Integer quantidadeAtual = produto.getQuantidadeAtual();
-			Integer quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
-			if (quantidadeAtual < quantidadeRetira) {
-				throw new BusinessValidationException("A quantidade a retirar não deve exceder a quantidade atual de um produto.");
-			}
-			produto.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
-			produtos.add(produto);
-		}
-		for (Produto produto : produtos) {
-			produtoRepository.save(produto);
-			produtosDTO.add(ProdutoDTO.convert(produto));
-		}
-		return produtosDTO;
-	}
-
-	private void validateProdutos(List<ProdutoUpdateDTO> produtosUpdateDTO) {
 		// TODO Usar stream
-		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
-			if (!produtoRepository.existsById(produtoUpdateDTO.getId())) {
-				throw new BusinessValidationException("O produto de id " + produtoUpdateDTO.getId() + " não existe.");
+		for (ProdutoDTO produtoDTO : produtosDTO) {
+			if (!produtoService.validateProdutoExists(produtoDTO.getId())) {
+				Produto produto = ProdutoDTO.convert(produtoDTO);
+				produtoService.save(produto);
+				produtos.add(produto);
+				produtoDTO.setId(produto.getId());
+			} else {
+				produtos.add(produtoService.getProdutoById(produtoDTO.getId()));
 			}
 		}
+		return produtos;
 	}
 
-	private void validateLote(Long loteId) {
-		if (!loteRepository.existsById(loteId)) {
-			throw new BusinessValidationException("O lote não existe.");
-		}
-	}
-
-	private void validateArmazem(Long armazemId) {
-		if (!armazemRepository.existsById(armazemId)) {
-			throw new BusinessValidationException("O armazém não existe.");
-		}
-	}
-
-	private Vendedor validateVendedor(Long id) {
-		if (!vendedorRepository.existsById(id)) {
-			throw new BusinessValidationException("O vendedor não existe.");
-		}
-		return vendedorRepository.getById(id);
-	}
-
-	private Representante validateRepresentante(Long representanteId, Long armazemId) {
-		if (!representanteRepository.existsById(representanteId)) {
-			throw new BusinessValidationException("O representante não existe.");
-		}
-		Representante representante = representanteRepository.getById(representanteId);
-		if (representante.getArmazem().getId() != armazemId) {
-			throw new BusinessValidationException("O representante não está associado a esse armazém.");
-		}
-		return representante;
-	}
-
-	private Setor validateSetor(Long setorId, List<ProdutoDTO> produtosDTO) {
-		if (!setorRepository.existsById(setorId)) {
-			throw new BusinessValidationException("O setor não existe.");
-		}
-		Setor setor = setorRepository.getById(setorId);
+	public Double calculateProdutosDTOTotalVolume(List<ProdutoDTO> produtosDTO) {
 		Double totalVolume = 0.0;
 		for (ProdutoDTO produtoDTO : produtosDTO) {
-			totalVolume += produtoDTO.getVolume();
-			if (produtoDTO.getTipo() != setor.getCategoria()) {
-				throw new BusinessValidationException("O setor não é adequado para o tipo de produto do lote.");
-			}
+			totalVolume += produtoDTO.getVolume() * produtoDTO.getQuantidadeAtual();
 		}
-		if (totalVolume >= this.calculateRemainingSetorArea(setor)) {
-			throw new BusinessValidationException("O volume restante do setor não comporta o volume lote.");
-		}
-		return setor;
+		return totalVolume;
 	}
 
-	private Double calculateRemainingSetorArea(Setor setor) {
-		Double totalVolume = 0.0;
-		// TODO Usar stream
-		List<Lote> lotes = setor.getLotes();
-		for (Lote lote : lotes) {
-			for (Produto produto : lote.getProdutos()) {
-				totalVolume += produto.getVolume() * produto.getQuantidadeAtual();
-			}
-		}
-		return setor.getVolume() - totalVolume;
-	}
-
-	private void saveLote(Lote lote) {
+	public void save(Lote lote) {
 		loteRepository.save(lote);
 	}
 
-	private void saveProdutos(Lote lote, Vendedor vendedor, List<ProdutoDTO> produtosDTO) {
-		for (ProdutoDTO produtoDTO : produtosDTO) {
-			Produto produto = ProdutoDTO.convert(produtoDTO, vendedor, lote);
-			produtoRepository.save(produto);
-			produtoDTO.setId(produto.getId());
-		}
-	}
-
-	private void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
+	public void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
 		RegistroLote registroLote = RegistroLote.builder()
 			.lote(lote)
 			.representante(representante)
 			.vendedor(vendedor)
 			.build();
-		registroLoteRepository.save(registroLote);
+		registroLoteService.save(registroLote);
+	}
+
+	public void saveAnuncios(Lote lote, List<ProdutoDTO> produtosDTO, Vendedor vendedor) {
+		for (ProdutoDTO produtoDTO : produtosDTO) {
+			validatePreco(produtoDTO.getPreco());
+			ProdutoVendedor produtoVendedor = ProdutoDTO
+				.convert(produtoDTO, vendedor, produtoService.getProdutoById(produtoDTO.getId()), lote);
+			produtoVendedorService.save(produtoVendedor);
+		}
+	}
+
+	public List<ProdutoDTO> updateLoteProdutos(Long loteId, List<ProdutoUpdateDTO> produtosUpdateDTO) {
+		// TODO Usar stream
+		List<ProdutoDTO> produtosDTO = new ArrayList<>();
+		List<ProdutoVendedor> produtosVendedor = new ArrayList<>();
+		Integer quantidadeAtual = 0;
+		Integer quantidadeRetira = 0;
+		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
+			ProdutoVendedor produtoVendedor = produtoVendedorService.findByLoteIdAndProdutoId(
+				loteId, produtoUpdateDTO.getId()
+			);
+			if (produtoVendedor == null) {
+				throw new BusinessValidationException(
+					"Produto não cadastrado pelo vendedor no lote solicitado.");
+			}
+			quantidadeAtual = produtoVendedor.getQuantidadeAtual();
+			quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
+			if (quantidadeAtual < quantidadeRetira) {
+				throw new BusinessValidationException(
+					"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+			}
+			produtoVendedor.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
+			produtosVendedor.add(produtoVendedor);
+		}
+		for (ProdutoVendedor produtoVendedor : produtosVendedor) {
+			produtoVendedorService.save(produtoVendedor);
+			produtosDTO.add(ProdutoDTO.convert(produtoVendedor));
+		}
+		return produtosDTO;
+	}
+
+	public void validateProdutosUpdate(List<ProdutoUpdateDTO> produtosUpdateDTO) {
+		// TODO Usar stream
+		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
+			if (!produtoService.validateProdutoExists(produtoUpdateDTO.getId())) {
+				throw new BusinessValidationException("O produto de id " + produtoUpdateDTO.getId() + " não existe.");
+			}
+		}
+	}
+
+	public void validatePreco(BigDecimal preco) {
+		if (BigDecimal.ZERO.compareTo(preco) >= 0) {
+			throw new BusinessValidationException("Preço deve ser positivo.");
+		}
 	}
 
 }

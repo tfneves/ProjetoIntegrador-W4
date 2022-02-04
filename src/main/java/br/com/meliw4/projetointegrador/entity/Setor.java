@@ -1,17 +1,15 @@
 
 package br.com.meliw4.projetointegrador.entity;
 
-import br.com.meliw4.projetointegrador.entity.enumeration.Tipo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -19,7 +17,9 @@ public class Setor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Tipo categoria;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "ENUM('FS','RR','FF')", length = 2)
+	private Categoria categoria;
 	private Double volume;
 	@ManyToOne
 	private Armazem armazem;
@@ -27,4 +27,3 @@ public class Setor {
 	private List<Lote> lotes;
 
 }
-

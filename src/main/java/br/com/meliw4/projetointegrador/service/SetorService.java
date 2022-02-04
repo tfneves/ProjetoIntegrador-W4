@@ -2,9 +2,11 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 import br.com.meliw4.projetointegrador.entity.Lote;
+import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.Setor;
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
-import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +32,13 @@ public class SetorService {
 
 	public Setor salva(Setor payload) {
 		if (possuiEspaco(payload)) {
-			Setor setor = setorRepository.save(payload);
-			return setor;
+			return setorRepository.save(payload);
 		} else
-			throw new IllegalArgumentException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
+			throw new ArmazemException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
+		List<Setor> setores = this.setorRepository.findAll();
 		return this.setorRepository.findAll();
 	}
 
@@ -67,10 +69,40 @@ public class SetorService {
 
 	private Double volumeTotalDosSetores(Setor setor) {
 		return setorRepository.findAll()
-				.stream()
-				.filter(s -> s.getArmazem() == setor.getArmazem())
-				.map(s -> s.getVolume())
-				.reduce((n1, n2) -> n1 + n2)
-				.orElse(0.0);
+			.stream()
+			.filter(s -> s.getArmazem() == setor.getArmazem())
+			.map(s -> s.getVolume())
+			.reduce((n1, n2) -> n1 + n2)
+			.orElse(0.0);
+	}
+
+	public Double calculateRemainingSetorArea(Setor setor) {
+		Double totalVolume = 0.0;
+		// TODO Usar stream
+		List<Lote> lotes = setor.getLotes();
+		for (Lote lote : lotes) {
+			for (ProdutoVendedor produtoVendedor : lote.getProdutoVendedores()) {
+				totalVolume += produtoVendedor.getProduto().getVolume() * produtoVendedor.getQuantidadeAtual();
+			}
+		}
+		return setor.getVolume() - totalVolume;
+	}
+
+	public Setor findSetorById(Long id) {
+		return setorRepository
+			.findById(id)
+			.orElseThrow(() -> new BusinessValidationException("O setor com id " + id + " não existe."));
+	}
+
+	public void validateEnoughRemainingVolume(Double setorRemainingVolume, Double produtosTotalVolume) {
+		if (setorRemainingVolume < produtosTotalVolume) {
+			throw new BusinessValidationException("O volume restante do setor não comporta o volume do lote.");
+		}
+	}
+
+	public void validateSetorArmzem(Setor setor, Long armazemId) {
+		if (!setor.getArmazem().getId().equals(armazemId)) {
+			throw new BusinessValidationException("O setor não pertence a esse armazém.");
+		}
 	}
 }

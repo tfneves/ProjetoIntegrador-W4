@@ -1,13 +1,11 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class ProdutoCarrinho {
 	@JoinColumn(name = "carrinho_id")
 	private Carrinho carrinho;
 	@ManyToOne
-	@JoinColumn(name = "produto_id")
-	private Produto produto;
+	@JoinColumn(name = "produto_vendedor_id")
+	private ProdutoVendedor produto;
 	private Integer quantidade;
 }

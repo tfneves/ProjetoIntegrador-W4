@@ -1,13 +1,22 @@
 package br.com.meliw4.projetointegrador.controller;
 
+import br.com.meliw4.projetointegrador.dto.CarrinhoDTO;
+import br.com.meliw4.projetointegrador.entity.Carrinho;
+import br.com.meliw4.projetointegrador.repository.CarrinhoRepository;
 import br.com.meliw4.projetointegrador.response.PedidoResponse;
 import br.com.meliw4.projetointegrador.service.PedidoService;
+import br.com.meliw4.projetointegrador.service.StatusPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -15,6 +24,29 @@ public class PedidoController {
 
 	@Autowired
 	PedidoService pedidoService;
+
+	/**
+	 * Cria pedido
+	 * @author Thomaz Ferreira
+	 * @param carrinhoDTO
+	 * @param uriComponentsBuilder
+	 * @return ResponseEntity
+	 */
+	@PostMapping("/fresh-products/orders/createOrder")
+	public ResponseEntity<?> criarPedido(@Valid @RequestBody CarrinhoDTO carrinhoDTO, UriComponentsBuilder uriComponentsBuilder) {
+		Long carrinhoId = pedidoService.salvaPedido(carrinhoDTO);
+		if(carrinhoId != null){
+			BigDecimal valorTotalCarrinho = pedidoService.calculaValorTotalCarrinho(carrinhoId);
+			Map<String, BigDecimal> response = new HashMap<>();
+			response.put("PrecoTotal", valorTotalCarrinho);
+			URI uri = uriComponentsBuilder.path("").build().toUri();
+			return ResponseEntity.created(uri).body(response);
+		}
+		Map<String, String> response = new HashMap<>();
+		response.put("message", "Falha ao salvar carrinho");
+		return ResponseEntity.internalServerError().body(response);
+	}
+
 
 	@GetMapping("/fresh-products/orders/{id}")
 	public ResponseEntity<PedidoResponse> getPedidoById(@PathVariable Long id) {
