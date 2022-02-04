@@ -73,7 +73,11 @@ public class ProdutoServiceImpl implements ProdutoService {
 	}
 
 	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id, String type) {
-		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id), type);
+		List<ProdutoVendedor> pv = this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id);
+		if(pv.size() == 0)
+			throw new NotFoundException(String.format("O Id %d nào foi localziado", id));
+		type = type.toUpperCase(Locale.ROOT);
+		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(pv, type);
 		return response;
 	}
 
@@ -94,11 +98,11 @@ public class ProdutoServiceImpl implements ProdutoService {
 	private List<ProdutoVendedorResponse> ordenaLista(List<ProdutoVendedorResponse> pv, String type) {
 		switch(type) {
 			case "L":
-				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getLote_id)).collect(Collectors.toList());
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getLote_id).reversed()).collect(Collectors.toList());
 			case "C":
-				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getQuantidadeAtual)).collect(Collectors.toList());
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getQuantidadeAtual).reversed()).collect(Collectors.toList());
 			case "F":
-				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getDataVencimento)).collect(Collectors.toList());
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getDataVencimento).reversed()).collect(Collectors.toList());
 			default:
 				return pv;
 		}
