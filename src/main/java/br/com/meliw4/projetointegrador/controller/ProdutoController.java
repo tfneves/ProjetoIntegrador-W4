@@ -77,4 +77,20 @@ public class ProdutoController {
 			@RequestParam() final Long produtoId) {
 		return ResponseEntity.ok(this.produtoService.findArmazemPorProduto(produtoId));
 	}
+
+	/**
+	 *
+	 * @param categoria Filtro de categorias ENUM
+	 *                  [{'FS': 'FRESCO','RR': 'REFRIGERADO','FF': 'CONGELADO'}],
+	 *                  default param categoria 'FS'
+	 *
+	 * @return ResponseEntity List<LoteResponseDTO>
+	 */
+	@GetMapping(path = "/due-date/list")
+	public ResponseEntity<List<LoteResponseDTO>> findLoteFiltroVencimento(
+			@RequestParam() @Valid final Integer validadeDias,
+			@RequestParam(required = false) @Valid final Categoria categoria,
+			@RequestParam(required = false, defaultValue = "desc") @Valid final Ordenamento order) {
+		return ResponseEntity.ok(this.produtoService.findLoteFiltroVencimento(validadeDias, categoria, order));
+	}
 }
