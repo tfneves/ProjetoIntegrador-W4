@@ -1,17 +1,12 @@
 package br.com.meliw4.projetointegrador.service.impl;
 
-import java.security.Signer;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
-import br.com.meliw4.projetointegrador.entity.Setor;
-import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
 import br.com.meliw4.projetointegrador.response.ProdutoSetorResponse;
 import br.com.meliw4.projetointegrador.response.ProdutoVendedorResponse;
-import br.com.meliw4.projetointegrador.response.SetorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import org.springframework.stereotype.Service;
 
@@ -108,5 +103,4 @@ public class ProdutoServiceImpl implements ProdutoService {
 				return pv;
 		}
 	}
-
 }
