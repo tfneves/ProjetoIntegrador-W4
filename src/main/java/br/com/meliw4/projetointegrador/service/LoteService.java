@@ -4,25 +4,25 @@ import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.LoteUpdateDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
-import br.com.meliw4.projetointegrador.dto.response.LoteResponseDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
-import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.LoteRepository;
+import br.com.meliw4.projetointegrador.response.LoteProdutosVencimentoResponse;
+import br.com.meliw4.projetointegrador.response.LotesSetorVencimentoResponse;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class LoteService {
@@ -72,6 +72,107 @@ public class LoteService {
 		validateLoteExists(loteUpdateDTO.getLoteId());
 		validateProdutosUpdate(loteUpdateDTO.getProdutosUpdateDTO());
 		return updateLoteProdutos(loteUpdateDTO.getLoteId(), loteUpdateDTO.getProdutosUpdateDTO());
+	}
+
+	public LotesSetorVencimentoResponse getLotesBySetorFilterProdutosByDays(Long setorId, Integer days) {
+		Setor setor = setorService.findSetorById(setorId);
+		List<Lote> lotes = setor.getLotes();
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		LocalDate today = LocalDate.now();
+		LocalDate limitDate = today.plusDays(days);
+		for (Lote lote : lotes) {
+			getFilteredProdutosByLote(lote, today, limitDate, responseList);
+		}
+		responseList.sort(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento));
+		return LotesSetorVencimentoResponse.builder()
+				.estoque(responseList)
+				.build();
+	}
+
+	private void getFilteredProdutosByLote(Lote lote, LocalDate today, LocalDate limitDate,
+			List<LoteProdutosVencimentoResponse> responseList) {
+		List<ProdutoVendedor> anuncios = lote.getProdutoVendedores();
+		LocalDate dueDate;
+		for (ProdutoVendedor anuncio : anuncios) {
+			dueDate = anuncio.getDataVencimento();
+			if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) || dueDate.isEqual(today)
+					|| dueDate.isEqual(limitDate))
+				responseList.add(
+						LoteProdutosVencimentoResponse.builder()
+								.loteId(lote.getId())
+								.anuncioId(anuncio.getId())
+								.produtoId(anuncio.getProduto().getId())
+								.categoriaProduto(anuncio.getProduto().getProdutoCategoria().getCategoria())
+								.dataVencimento(dueDate)
+								.quantidade(anuncio.getQuantidadeAtual())
+								.build());
+		}
+	}
+
+	public List<LoteProdutosVencimentoResponse> getProdutosInSetorsOrderedAndFilteredByDueDate(
+			Categoria categoria, Ordenamento ordenamento, Integer days) {
+		LocalDate today = LocalDate.now();
+		LocalDate limitDate = today.plusDays(days);
+		LocalDate dueDate;
+
+		List<ProdutoVendedor> produtoVendedores = produtoVendedorService.findAll();
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+
+		for (ProdutoVendedor pv : produtoVendedores) {
+			dueDate = pv.getDataVencimento();
+			if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) || dueDate.isEqual(today)
+					|| dueDate.isEqual(limitDate)) {
+				if (categoria == null) {
+					categoria = pv.getProduto().getProdutoCategoria().getCategoria();
+				}
+
+				responseList.add(
+						LoteProdutosVencimentoResponse.builder()
+								.setorId(pv.getLote().getSetor().getId())
+								.loteId(pv.getLote().getId())
+								.produtoId(pv.getProduto().getId())
+								.anuncioId(pv.getId())
+								.categoriaProduto(categoria)
+								.dataVencimento(pv.getDataVencimento())
+								.quantidade(pv.getQuantidadeAtual())
+								.build());
+			}
+		}
+		// TODO: Mudar para passagem por referência ?
+		responseList = filterDueDateUntilDate(responseList, days);
+
+		if (ordenamento != null) {
+			responseList = orderByDate(responseList, ordenamento);
+		}
+
+		return responseList;
+	}
+
+	private List<LoteProdutosVencimentoResponse> orderByDate(List<LoteProdutosVencimentoResponse> responseList,
+			Ordenamento ordenador) {
+		switch (ordenador) {
+			// Ordenado ascendente
+			case asc:
+				return responseList.stream()
+						.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento))
+						.collect(Collectors.toList());
+			// Ordenado decrescente
+			case desc:
+				return responseList.stream()
+						.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento).reversed())
+						.collect(Collectors.toList());
+			default:
+				return responseList;
+		}
+	}
+
+	private List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
+			List<LoteProdutosVencimentoResponse> loteResponseDTOs, Integer days) {
+		LocalDate today = LocalDate.now();
+		LocalDate limitDate = today.plusDays(days);
+		return loteResponseDTOs.stream()
+				.filter(l -> ChronoUnit.DAYS.between(today, limitDate) <= days)
+				.collect(Collectors.toList());
 	}
 
 	public void validateLoteExists(Long id) {
