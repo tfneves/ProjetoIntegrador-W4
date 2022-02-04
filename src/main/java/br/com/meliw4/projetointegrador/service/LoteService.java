@@ -7,10 +7,14 @@ import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.LoteRepository;
+import br.com.meliw4.projetointegrador.response.LoteProdutosVencimentoResponse;
+import br.com.meliw4.projetointegrador.response.LotesSetorVencimentoResponse;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -61,6 +65,41 @@ public class LoteService {
 		validateLoteExists(loteUpdateDTO.getLoteId());
 		validateProdutosUpdate(loteUpdateDTO.getProdutosUpdateDTO());
 		return updateLoteProdutos(loteUpdateDTO.getLoteId(), loteUpdateDTO.getProdutosUpdateDTO());
+	}
+
+	public LotesSetorVencimentoResponse getLotesBySetorFilterProdutosByDays(Long setorId, Integer days) {
+		Setor setor = setorService.findSetorById(setorId);
+		List<Lote> lotes = setor.getLotes();
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		LocalDate today = LocalDate.now();
+		LocalDate limitDate = today.plusDays(days);
+		for (Lote lote : lotes) {
+			getFilteredProdutosByLote(lote, today, limitDate, responseList);
+		}
+		responseList.sort(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento));
+		return LotesSetorVencimentoResponse.builder()
+			.estoque(responseList)
+			.build();
+	}
+
+	private void getFilteredProdutosByLote(Lote lote, LocalDate today, LocalDate limitDate,
+										   List<LoteProdutosVencimentoResponse> responseList) {
+		List<ProdutoVendedor> anuncios = lote.getProdutoVendedores();
+		LocalDate dueDate;
+		for (ProdutoVendedor anuncio : anuncios) {
+			dueDate = anuncio.getDataVencimento();
+			if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) || dueDate.isEqual(today) || dueDate.isEqual(limitDate))
+				responseList.add(
+					LoteProdutosVencimentoResponse.builder()
+						.loteId(lote.getId())
+						.anuncioId(anuncio.getId())
+						.produtoId(anuncio.getProduto().getId())
+						.categoriaProduto(anuncio.getProduto().getProdutoCategoria().getCategoria())
+						.dataVencimento(dueDate)
+						.quantidade(anuncio.getQuantidadeAtual())
+						.build()
+				);
+		}
 	}
 
 	public void validateLoteExists(Long id) {
@@ -169,7 +208,6 @@ public class LoteService {
 			throw new BusinessValidationException("Preço deve ser positivo.");
 		}
 	}
-
 }
 
 
