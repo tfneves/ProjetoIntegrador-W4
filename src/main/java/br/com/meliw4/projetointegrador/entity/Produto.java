@@ -32,7 +32,6 @@ public class Produto {
 	@Enumerated(EnumType.STRING)
 	private ProdutoCategoria produtoCategoria;
 
-	@Transient
 	@OneToMany(mappedBy = "produto") // , fetch = FetchType.EAGER)
 	private List<ProdutoVendedor> produtoVendedores;
 }

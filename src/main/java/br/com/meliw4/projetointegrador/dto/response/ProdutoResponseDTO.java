@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.dto.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
@@ -15,7 +16,7 @@ public class ProdutoResponseDTO {
 	private final String nome;
 	private final Double volume;
 	private final ProdutoCategoria produtoCategoria;
-	private final List<ProdutoVendedor> vendedores;
+	private final List<Long> vendedoresId;
 
 	public static ProdutoResponseDTO toDTO(Produto produto) {
 		return ProdutoResponseDTO.builder()
@@ -23,7 +24,8 @@ public class ProdutoResponseDTO {
 				.nome(produto.getNome())
 				.volume(produto.getVolume())
 				.produtoCategoria(produto.getProdutoCategoria())
-				.vendedores(produto.getProdutoVendedores())
+				.vendedoresId(produto.getProdutoVendedores().stream().map(ProdutoVendedor::getId)
+						.collect(Collectors.toList()))
 				.build();
 	}
 }

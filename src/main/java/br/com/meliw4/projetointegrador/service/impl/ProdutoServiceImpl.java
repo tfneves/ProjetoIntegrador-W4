@@ -30,8 +30,8 @@ public class ProdutoServiceImpl implements ProdutoService {
 	@Override
 	public List<ProdutoResponseDTO> findAllProdutos() {
 		List<ProdutoResponseDTO> produtoResponseDTO = produtoRepository.findAll().stream()
-			.map(ProdutoResponseDTO::toDTO)
-			.collect(Collectors.toList());
+				.map(ProdutoResponseDTO::toDTO)
+				.collect(Collectors.toList());
 
 		if (produtoResponseDTO.isEmpty()) {
 			throw new NotFoundException("Não há produtos para a seleção");
@@ -43,9 +43,9 @@ public class ProdutoServiceImpl implements ProdutoService {
 	@Override
 	public List<ProdutoResponseDTO> findProdutoPorCategoria(Categoria categoria) {
 		List<ProdutoResponseDTO> produtoResponseDTO = produtoRepository.findProdutoPorCategoria(categoria.name())
-			.stream()
-			.map(ProdutoResponseDTO::toDTO)
-			.collect(Collectors.toList());
+				.stream()
+				.map(ProdutoResponseDTO::toDTO)
+				.collect(Collectors.toList());
 
 		if (produtoResponseDTO.isEmpty()) {
 			throw new NotFoundException("Não há produtos para a seleção");
