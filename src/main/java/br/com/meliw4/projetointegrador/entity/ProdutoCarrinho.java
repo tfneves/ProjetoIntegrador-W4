@@ -20,6 +20,6 @@ public class ProdutoCarrinho {
 	private Carrinho carrinho;
 	@ManyToOne
 	@JoinColumn(name = "produto_vendedor_id")
-	private ProdutoVendedor produtoVendedor;
+	private ProdutoVendedor produto;
 	private Integer quantidade;
 }

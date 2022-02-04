@@ -9,12 +9,12 @@ import lombok.*;
 @Builder
 public class ProdutoSetorResponse {
 
-	private Long lote_id;
+	private Long setor_id;
 	private Long armazem_id;
 
 	public static ProdutoSetorResponse retornaOSetor(ProdutoVendedor produtoVendedor){
 		return ProdutoSetorResponse.builder()
-			.lote_id(produtoVendedor.getLote().getSetor().getId())
+			.setor_id(produtoVendedor.getLote().getSetor().getId())
 			.armazem_id(produtoVendedor.getLote().getSetor().getArmazem().getId())
 			.build();
 	}

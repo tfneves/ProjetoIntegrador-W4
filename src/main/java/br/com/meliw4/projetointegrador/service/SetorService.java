@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.service;
 
-import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
@@ -39,6 +38,7 @@ public class SetorService {
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
+		List<Setor> setores = this.setorRepository.findAll();
 		return this.setorRepository.findAll();
 	}
 

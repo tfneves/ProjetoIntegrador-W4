@@ -77,30 +77,18 @@ public class ProdutoServiceImpl implements ProdutoService {
 		return produtoRepository.findById(id).orElse(null);
 	}
 
-	public Map<ProdutoSetorResponse, ProdutoVendedorResponse> listaTodosOsLotes(Long id) {
-		//List<ProdutoVendedor> produtoVendedors = this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id);
-		//List<ProdutoSetorResponse> response = new ArrayList<ProdutoSetorResponse>();
-		//List<ProdutoVendedorResponse> response = sanetizaORetorno(this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id));
-		Map<ProdutoSetorResponse, ProdutoVendedorResponse> response = sanetizaORetorno(this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id));
+	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id) {
+		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id));
 		return response;
 	}
 
-	private Map<ProdutoSetorResponse, ProdutoVendedorResponse> sanetizaORetorno(List<ProdutoVendedor> produtoVendedor) {
-		//List<ProdutoVendedorResponse> response = new ArrayList<>();
-		Map<ProdutoSetorResponse, ProdutoVendedorResponse> response = new LinkedHashMap<>();
+	private Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> sanetizaORetorno(List<ProdutoVendedor> produtoVendedor) {
+		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = new LinkedHashMap<>();
 		for (ProdutoVendedor pv : produtoVendedor) {
-			response.put(ProdutoSetorResponse.builder()
-					.armazem_id(pv.getLote().getSetor().getArmazem().getId())
-					.lote_id(pv.getLote().getSetor().getId())
-					.build(),
-				ProdutoVendedorResponse.builder()
-					//.setorResponse(ProdutoSetorResponse.retornaOSetor(pv))
-					.produto_id(pv.getProduto().getId())
-					.produto_nome(pv.getProduto().getNome())
-					.dataVencimento(pv.getDataVencimento())
-					.quantidadeAtual(pv.getQuantidadeAtual())
-					.nome_vendedor(pv.getVendedor().getNome())
-					.build());
+			response.put(ProdutoSetorResponse.retornaOSetor(pv),
+				ProdutoVendedorResponse.converte(produtoVendedor
+					.stream()
+					.filter(p -> p.getLote().getSetor().getId() == pv.getLote().getSetor().getId()).collect(Collectors.toList())));
 		}
 		return response;
 	}
