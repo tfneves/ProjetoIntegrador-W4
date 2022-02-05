@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.controller;
 
-import br.com.meliw4.projetointegrador.entity.Carrinho;
 import br.com.meliw4.projetointegrador.entity.StatusPedido;
 import br.com.meliw4.projetointegrador.response.CarrinhoResponse;
 import br.com.meliw4.projetointegrador.service.CarrinhoService;

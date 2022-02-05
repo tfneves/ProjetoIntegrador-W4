@@ -29,16 +29,14 @@ public class RepresentanteController {
 	 * @param representanteDTO
 	 * @param uriBuilder
 	 * @return ResponseEntity
-	 * @Author Francisco Alves
+	 * @Author Thiago Henrique, Francisco Alves
 	 */
 
 	@PostMapping(path = "/representante")
-	public ResponseEntity<Map<String, String>> cadastrarRepresentante(
-			@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) throws Exception {
-		Map<String, String> response = new HashMap<>();
+	public ResponseEntity<String> cadastrarRepresentante(
+			@RequestBody @Valid RepresentanteDTO representanteDTO, UriComponentsBuilder uriBuilder) {
 		representanteService.register(representanteDTO);
-		URI uri = uriBuilder.path("").build().toUri();
-		response.put("message", "Representante criado !!");
-		return ResponseEntity.created(uri).body(response);
+		URI uri = uriBuilder.path("/representante").build().toUri();
+		return ResponseEntity.created(uri).body("Representante criado");
 	}
 }

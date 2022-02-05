@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -18,6 +19,8 @@ public class Representante{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    private String email;
+    private String senha;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "armazem_id")

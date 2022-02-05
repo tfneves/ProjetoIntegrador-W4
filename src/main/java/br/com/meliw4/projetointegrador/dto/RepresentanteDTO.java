@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
@@ -26,11 +28,23 @@ public class RepresentanteDTO {
 	private String nome;
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
+	@NotNull(message = "Senha não pode ser nula")
+	private String senha;
+	@NotNull(message = "Email não pode ser nulo")
+	private String email;
 
-	public static Representante convert(RepresentanteDTO representanteDTO ,Armazem armazem) {
+	static BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+
+	public static Representante convert(RepresentanteDTO representanteDTO, Armazem armazem) {
+		enconde(representanteDTO);
 		return Representante.builder()
 			.nome(representanteDTO.getNome())
 			.armazem(armazem)
+			.senha(representanteDTO.getSenha())
 			.build();
+	}
+
+	private static void enconde(RepresentanteDTO dto) {
+		dto.setSenha(bc.encode(dto.getSenha()));
 	}
 }

@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,6 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		"/api/v1/**"
 	};
 
+	public static final String[] PUBLIC_MATCHES_GET = {
+		"/api/v1/**"
+	};
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		if (Arrays.asList(env.getActiveProfiles()).contains("teste"))
@@ -33,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.cors().and().csrf().disable();
 		http.authorizeHttpRequests()
-			.antMatchers(PUBLIC_MATCHES)
-			.permitAll()
+			.antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET).permitAll()
+			.antMatchers(PUBLIC_MATCHES).permitAll()
 			.anyRequest()
 			.authenticated();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -46,6 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/",
 			new CorsConfiguration().applyPermitDefaultValues());
 		return source;
+	}
+
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder(){
+		return new BCryptPasswordEncoder();
 	}
 
 }
