@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Armazem;
+import br.com.meliw4.projetointegrador.entity.Perfil;
 import br.com.meliw4.projetointegrador.entity.Representante;
  import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +32,8 @@ public class RepresentanteDTO {
 	private String senha;
 	@NotNull(message = "Email não pode ser nulo")
 	private String email;
+	@NotNull(message = "Perfil não pode ser nulo")
+	private List<Perfil> perfil;
 
 	static BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
 
@@ -38,6 +43,7 @@ public class RepresentanteDTO {
 			.nome(representanteDTO.getNome())
 			.armazem(armazem)
 			.senha(representanteDTO.getSenha())
+			.perfis(representanteDTO.getPerfil())
 			.build();
 	}
 
