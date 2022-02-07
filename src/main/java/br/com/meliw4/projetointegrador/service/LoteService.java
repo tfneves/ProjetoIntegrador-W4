@@ -165,9 +165,8 @@ public class LoteService {
 	private List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
 			List<LoteProdutosVencimentoResponse> loteProdutosVencimentoResponses, Integer days) {
 		LocalDate today = LocalDate.now();
-		LocalDate limitDate = today.plusDays(days);
 		return loteProdutosVencimentoResponses.stream()
-				.filter(l -> ChronoUnit.DAYS.between(today, limitDate) <= days)
+				.filter(l -> ChronoUnit.DAYS.between(today, l.getDataVencimento()) <= days)
 				.collect(Collectors.toList());
 	}
 
@@ -196,7 +195,7 @@ public class LoteService {
 				produtos.add(produto);
 				produtoDTO.setId(produto.getId());
 			} else {
-				produtos.add(produtoService.getProdutoById(produtoDTO.getId()));
+				produtos.add(produtoService.findById(produtoDTO.getId()));
 			}
 		}
 		return produtos;
@@ -227,7 +226,7 @@ public class LoteService {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			validatePreco(produtoDTO.getPreco());
 			ProdutoVendedor produtoVendedor = ProdutoDTO
-					.convert(produtoDTO, vendedor, produtoService.getProdutoById(produtoDTO.getId()), lote);
+					.convert(produtoDTO, vendedor, produtoService.findById(produtoDTO.getId()), lote);
 			produtoVendedorService.save(produtoVendedor);
 		}
 	}

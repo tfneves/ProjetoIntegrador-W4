@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
-import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
 import br.com.meliw4.projetointegrador.response.ProdutoSetorResponse;
 import br.com.meliw4.projetointegrador.response.ProdutoVendedorResponse;
 import br.com.meliw4.projetointegrador.entity.Produto;
@@ -20,6 +19,7 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.ProdutoRepository;
 import br.com.meliw4.projetointegrador.service.ProdutoService;
+import br.com.meliw4.projetointegrador.service.ProdutoVendedorService;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -27,14 +27,26 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class ProdutoServiceImpl implements ProdutoService {
 
 	private ProdutoRepository produtoRepository;
-	private ProdutoVendedorRepository produtoVendedorRepository;
+	private ProdutoVendedorService produtoVendedorService;
+
 	private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException(
 			"Não há produtos para a seleção");
 
 	ProdutoServiceImpl(
-			ProdutoRepository produtoRepository, ProdutoVendedorRepository produtoVendedorRepository) {
+			ProdutoRepository produtoRepository, ProdutoVendedorService produtoVendedorService) {
 		this.produtoRepository = produtoRepository;
-		this.produtoVendedorRepository = produtoVendedorRepository;
+		this.produtoVendedorService = produtoVendedorService;
+	}
+
+	@Override
+	public Produto findById(Long produtoId) {
+		return produtoRepository.findById(produtoId)
+				.orElseThrow(() -> NOT_FOUND_EXCEPTION);
+	}
+
+	@Override
+	public void save(Produto produto) {
+		produtoRepository.save(produto);
 	}
 
 	@Override
@@ -44,7 +56,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 				.collect(Collectors.toList());
 
 		if (produtoResponseDTO.isEmpty()) {
-			throw new NotFoundException("Não há produtos para a seleção");
+			throw NOT_FOUND_EXCEPTION;
 		}
 
 		return produtoResponseDTO;
@@ -52,16 +64,11 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	@Override
 	public List<ProdutoResponseDTO> findProdutoPorCategoria(Categoria categoria) {
-		List<ProdutoResponseDTO> produtoResponseDTO = produtoRepository.findProdutoPorCategoria(categoria.name())
+		return produtoRepository.findProdutoPorCategoria(categoria.name())
+				.orElseThrow(() -> NOT_FOUND_EXCEPTION)
 				.stream()
 				.map(ProdutoResponseDTO::toDTO)
 				.collect(Collectors.toList());
-
-		if (produtoResponseDTO.isEmpty()) {
-			throw new NotFoundException("Não há produtos para a seleção");
-		}
-
-		return produtoResponseDTO;
 	}
 
 	@Override
@@ -72,20 +79,10 @@ public class ProdutoServiceImpl implements ProdutoService {
 		return true;
 	}
 
-	@Override
-	public void save(Produto produto) {
-		produtoRepository.save(produto);
-	}
-
-	@Override
-	public Produto getProdutoById(Long id) {
-		return produtoRepository.findById(id).orElse(null);
-	}
-
 	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id, String type) {
-		List<ProdutoVendedor> pv = this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id);
+		List<ProdutoVendedor> pv = this.produtoVendedorService.findProdutoVendedorByProduto_Id(id);
 		if (pv.size() == 0)
-			throw new NotFoundException(String.format("O Id %d nào foi localziado", id));
+			throw new NotFoundException(String.format("O Id %d não foi localziado", id));
 		type = type.toUpperCase(Locale.ROOT);
 		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(pv, type);
 		return response;
@@ -124,8 +121,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	@Override
 	public ArmazemProdutoResponseDTO findArmazemPorProduto(Long produtoId) {
-		List<ProdutoVendedor> produtoVendedores = produtoVendedorRepository.findByProduto_Id(produtoId)
-				.orElseThrow(() -> NOT_FOUND_EXCEPTION);
+		List<ProdutoVendedor> produtoVendedores = produtoVendedorService.findProdutoVendedorByProduto_Id(produtoId);
 
 		Map<Long, Integer> mapper = produtoVendedores.stream()
 				.collect(Collectors.toMap(
@@ -154,7 +150,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 	public List<LoteResponseDTO> findLoteFiltroVencimento(Integer validadeDias, Categoria categoria,
 			Ordenamento ordenamento) {
 
-		List<ProdutoVendedor> produtoVendedores = this.produtoVendedorRepository.findAll();
+		List<ProdutoVendedor> produtoVendedores = this.produtoVendedorService.findAll();
 
 		List<LoteResponseDTO> loteResponseDTOs = new ArrayList<>();
 		for (ProdutoVendedor pv : produtoVendedores) {

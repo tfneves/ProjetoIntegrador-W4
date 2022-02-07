@@ -10,17 +10,17 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 
 public interface ProdutoService {
+	void save(Produto produto);
+
+	Produto findById(Long id);
+
 	List<ProdutoResponseDTO> findAllProdutos();
 
 	List<ProdutoResponseDTO> findProdutoPorCategoria(Categoria categoria);
 
 	List<LoteResponseDTO> findLoteFiltroVencimento(Integer validadeDias, Categoria categoria, Ordenamento order);
 
-	boolean validateProdutoExists(Long id);
-
-	void save(Produto produto);
-
-	Produto getProdutoById(Long id);
-
 	ArmazemProdutoResponseDTO findArmazemPorProduto(Long produtoId);
+
+	boolean validateProdutoExists(Long id);
 }
