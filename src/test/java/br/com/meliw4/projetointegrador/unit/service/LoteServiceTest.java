@@ -4,8 +4,10 @@ import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
+import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.LoteRepository;
+import br.com.meliw4.projetointegrador.response.LoteProdutosVencimentoResponse;
 import br.com.meliw4.projetointegrador.service.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -231,10 +234,11 @@ public class LoteServiceTest {
 
 	@Test
 	void shouldThrowInvalidProdutoVendedorUpdateException() {
-		assertThrows(
+		BusinessValidationException ex = assertThrows(
 			BusinessValidationException.class,
 			() -> loteService.updateLoteProdutos(1l, produtosUpdateDTO)
 		);
+		assertEquals(ex.getMessage(), "Produto não cadastrado pelo vendedor no lote solicitado.");
 	}
 
 	@Test
@@ -245,10 +249,11 @@ public class LoteServiceTest {
 		Mockito.when(
 			produtoVendedorService.findByLoteIdAndProdutoId(1l, 2l)
 		).thenReturn(ProdutoVendedor.builder().quantidadeAtual(0).build());
-		assertThrows(
+		BusinessValidationException ex = assertThrows(
 			BusinessValidationException.class,
 			() -> loteService.updateLoteProdutos(1l, produtosUpdateDTO)
 		);
+		assertEquals(ex.getMessage(), "A quantidade a retirar não deve exceder a quantidade atual de um produto.");
 	}
 
 	@Test
@@ -296,5 +301,167 @@ public class LoteServiceTest {
 		List<ProdutoDTO> produtos = loteService.updateLoteProdutos(1l, produtosUpdateDTO);
 		assertEquals(produtos.get(0).getQuantidadeAtual(), 0);
 		assertEquals(produtos.get(1).getQuantidadeAtual(), 0);
+	}
+
+	@Test
+	public void shouldReturnLoteProdutosVencimentoResponse() {
+		LocalDate today = LocalDate.now();
+		LocalDate limitDate = today.plusDays(30);
+		List<ProdutoVendedor> anuncios = new ArrayList<>();
+		anuncios.add(
+			ProdutoVendedor.builder()
+				.id(1l)
+				.produto(
+					Produto.builder()
+						.id(1l)
+						.produtoCategoria(
+							ProdutoCategoria.builder()
+								.categoria(Categoria.FS)
+								.build()
+						)
+						.build()
+				)
+				.dataVencimento(today.plusDays(15))
+				.build()
+		);
+		anuncios.add(
+			ProdutoVendedor.builder()
+				.id(2l)
+				.produto(
+					Produto.builder()
+						.id(2l)
+						.produtoCategoria(
+							ProdutoCategoria.builder()
+								.categoria(Categoria.FS)
+								.build()
+						)
+						.build()
+				)
+				.dataVencimento(limitDate)
+				.build()
+		);
+		anuncios.add(
+			ProdutoVendedor.builder()
+				.id(3l)
+				.produto(
+					Produto.builder()
+						.id(3l)
+						.produtoCategoria(
+							ProdutoCategoria.builder()
+								.categoria(Categoria.FS)
+								.build()
+						)
+						.build()
+				)
+				.dataVencimento(today)
+				.build()
+		);
+		anuncios.add(
+			ProdutoVendedor.builder()
+				.id(4l)
+				.produto(
+					Produto.builder()
+						.id(4l)
+						.produtoCategoria(
+							ProdutoCategoria.builder()
+								.categoria(Categoria.FS)
+								.build()
+						)
+						.build()
+				)
+				.dataVencimento(today.plusDays(40))
+				.build()
+		);
+		Lote lote = Lote.builder()
+			.id(1l)
+			.setor(
+				Setor.builder()
+					.id(1l)
+					.build()
+			)
+			.produtoVendedores(anuncios)
+			.build();
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		loteService.getFilteredProdutosByLote(lote, today, limitDate, responseList);
+		assertEquals(responseList.size(), 3);
+		assertEquals(responseList.get(0).getDataVencimento(), today.plusDays(15));
+		assertEquals(responseList.get(1).getDataVencimento(), limitDate);
+		assertEquals(responseList.get(2).getDataVencimento(), today);
+	}
+
+	@Test
+	public void shouldReturnFilteredListByCategory() {
+		List<Setor> setores = new ArrayList<>();
+		setores.add(
+			Setor.builder()
+				.categoria(Categoria.FF)
+				.build()
+		);
+		setores.add(
+			Setor.builder()
+				.categoria(Categoria.FS)
+				.build()
+		);
+		setores.add(
+			Setor.builder()
+				.categoria(Categoria.RR)
+				.build()
+		);
+		List<Setor> setoresResponse = loteService.filterByCategory(setores, Categoria.FS);
+		assertEquals(setoresResponse.size(), 1);
+		assertEquals(setoresResponse.get(0).getCategoria(), Categoria.FS);
+	}
+
+	@Test
+	public void shouldReturnListOrderedByDate() {
+		LocalDate today = LocalDate.now();
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		responseList.add(
+			LoteProdutosVencimentoResponse.builder()
+				.dataVencimento(today.plusDays(15))
+				.build()
+		);
+		responseList.add(
+			LoteProdutosVencimentoResponse.builder()
+				.dataVencimento(today.plusDays(30))
+				.build()
+		);
+		responseList.add(
+			LoteProdutosVencimentoResponse.builder()
+				.dataVencimento(today.plusDays(20))
+				.build()
+		);
+		responseList = loteService.orderByDate(responseList, Ordenamento.asc);
+		responseList = loteService.orderByDate(responseList, Ordenamento.asc);
+		assertEquals(responseList.get(0).getDataVencimento(), today.plusDays(15));
+		assertEquals(responseList.get(2).getDataVencimento(), today.plusDays(30));
+		responseList = loteService.orderByDate(responseList, Ordenamento.desc);
+		assertEquals(responseList.get(0).getDataVencimento(), today.plusDays(30));
+		assertEquals(responseList.get(2).getDataVencimento(), today.plusDays(15));
+	}
+
+	@Test
+	public void shouldReturnListFilteredByDueDate () {
+		LocalDate today = LocalDate.now();
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		responseList.add(
+			LoteProdutosVencimentoResponse.builder()
+				.dataVencimento(today.plusDays(30))
+				.build()
+		);
+		responseList.add(
+			LoteProdutosVencimentoResponse.builder()
+				.dataVencimento(today)
+				.build()
+		);
+		responseList.add(
+			LoteProdutosVencimentoResponse.builder()
+				.dataVencimento(today.plusDays(20))
+				.build()
+		);
+		responseList = loteService.filterDueDateUntilDate(responseList, 25);
+		assertEquals(responseList.size(), 2);
+		assertEquals(responseList.get(0).getDataVencimento(), today);
+		assertEquals(responseList.get(1).getDataVencimento(), today.plusDays(20));
 	}
 }

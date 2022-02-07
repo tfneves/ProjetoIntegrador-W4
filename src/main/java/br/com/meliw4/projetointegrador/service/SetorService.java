@@ -99,7 +99,7 @@ public class SetorService {
 		}
 	}
 
-	public void validateSetorArmzem(Setor setor, Long armazemId) {
+	public void validateSetorArmazem(Setor setor, Long armazemId) {
 		if (!setor.getArmazem().getId().equals(armazemId)) {
 			throw new BusinessValidationException("O setor não pertence a esse armazém.");
 		}

@@ -35,9 +35,9 @@ public class LoteService {
 	private ProdutoVendedorService produtoVendedorService;
 
 	public LoteService(LoteRepository loteRepository, ArmazemService armazemService, VendedorService vendedorService,
-			SetorService setorService, RepresentanteService representanteService,
-			ProdutoService produtoService, RegistroLoteService registroLoteService,
-			ProdutoVendedorService produtoVendedorService) {
+					   SetorService setorService, RepresentanteService representanteService,
+					   ProdutoService produtoService, RegistroLoteService registroLoteService,
+					   ProdutoVendedorService produtoVendedorService) {
 		this.loteRepository = loteRepository;
 		this.armazemService = armazemService;
 		this.vendedorService = vendedorService;
@@ -54,7 +54,7 @@ public class LoteService {
 		Representante representante = representanteService.findRepresentanteById(loteDTO.getRepresentanteId());
 		representanteService.validateRepresentanteArmazem(representante, loteDTO.getArmazemId());
 		Setor setor = setorService.findSetorById(loteDTO.getSetorId());
-		setorService.validateSetorArmzem(setor, loteDTO.getArmazemId());
+		setorService.validateSetorArmazem(setor, loteDTO.getArmazemId());
 		validateProdutosDTOCategoria(setor, loteDTO.getProdutosDTO());
 		Double setorRemainingVolume = setorService.calculateRemainingSetorArea(setor);
 		Double produtosDTOTotalVolume = calculateProdutosDTOTotalVolume(loteDTO.getProdutosDTO());
@@ -83,33 +83,33 @@ public class LoteService {
 		}
 		responseList.sort(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento));
 		return LotesSetorVencimentoResponse.builder()
-				.estoque(responseList)
-				.build();
+			.estoque(responseList)
+			.build();
 	}
 
-	private void getFilteredProdutosByLote(Lote lote, LocalDate today, LocalDate limitDate,
-			List<LoteProdutosVencimentoResponse> responseList) {
+	public void getFilteredProdutosByLote(Lote lote, LocalDate today, LocalDate limitDate,
+										  List<LoteProdutosVencimentoResponse> responseList) {
 		List<ProdutoVendedor> anuncios = lote.getProdutoVendedores();
 		LocalDate dueDate;
 		for (ProdutoVendedor anuncio : anuncios) {
 			dueDate = anuncio.getDataVencimento();
 			if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) || dueDate.isEqual(today)
-					|| dueDate.isEqual(limitDate))
+				|| dueDate.isEqual(limitDate))
 				responseList.add(
-						LoteProdutosVencimentoResponse.builder()
-								.setorId(lote.getSetor().getId())
-								.loteId(lote.getId())
-								.anuncioId(anuncio.getId())
-								.produtoId(anuncio.getProduto().getId())
-								.categoriaProduto(anuncio.getProduto().getProdutoCategoria().getCategoria())
-								.dataVencimento(dueDate)
-								.quantidade(anuncio.getQuantidadeAtual())
-								.build());
+					LoteProdutosVencimentoResponse.builder()
+						.setorId(lote.getSetor().getId())
+						.loteId(lote.getId())
+						.anuncioId(anuncio.getId())
+						.produtoId(anuncio.getProduto().getId())
+						.categoriaProduto(anuncio.getProduto().getProdutoCategoria().getCategoria())
+						.dataVencimento(dueDate)
+						.quantidade(anuncio.getQuantidadeAtual())
+						.build());
 		}
 	}
 
 	public List<LoteProdutosVencimentoResponse> getProdutosInSetorsOrderedAndFilteredByDueDate(
-			Categoria categoria, Ordenamento ordenamento, Integer days) {
+		Categoria categoria, Ordenamento ordenamento, Integer days) {
 		// Considerando armazém do representante
 		// TODO: auth representante
 		Long armazemId = 1L;
@@ -138,37 +138,32 @@ public class LoteService {
 		return responseList;
 	}
 
-	private List<Setor> filterByCategory(List<Setor> setores, Categoria categoria) {
+	public List<Setor> filterByCategory(List<Setor> setores, Categoria categoria) {
 		return setores.stream()
-				.filter(s -> s.getCategoria().equals(categoria))
-				.collect(Collectors.toList());
+			.filter(s -> s.getCategoria().equals(categoria))
+			.collect(Collectors.toList());
 	}
 
-	private List<LoteProdutosVencimentoResponse> orderByDate(List<LoteProdutosVencimentoResponse> responseList,
-			Ordenamento ordenador) {
-		switch (ordenador) {
+	public List<LoteProdutosVencimentoResponse> orderByDate(List<LoteProdutosVencimentoResponse> responseList,
+															Ordenamento ordenador) {
+		if (ordenador.equals(Ordenamento.asc)) {
 			// Ordenado ascendente
-			case asc:
-				return responseList.stream()
-						.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento))
-						.collect(Collectors.toList());
+			return responseList.stream()
+				.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento))
+				.collect(Collectors.toList());
+		} else {
 			// Ordenado decrescente
-			case desc:
-				return responseList.stream()
-						.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento).reversed())
-						.collect(Collectors.toList());
-			default:
-				return responseList;
+			return responseList.stream()
+				.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento).reversed())
+				.collect(Collectors.toList());
 		}
 	}
 
-	private List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
-			List<LoteProdutosVencimentoResponse> loteProdutosVencimentoResponses, Integer days) {
-		LocalDate today = LocalDate.now();
-		LocalDate limitDate = today.plusDays(days);
+	public List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
+		List<LoteProdutosVencimentoResponse> loteProdutosVencimentoResponses, Integer days) {
 		return loteProdutosVencimentoResponses.stream()
-				.filter(l -> ChronoUnit.DAYS.between(today, limitDate) <= days)
-				.collect(Collectors.toList());
+			.filter(l -> ChronoUnit.DAYS.between(LocalDate.now(), l.getDataVencimento()) <= days)
+			.collect(Collectors.toList());
 	}
 
 	public void validateLoteExists(Long id) {
@@ -181,7 +176,7 @@ public class LoteService {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException(
-						"A categoria do setor não é adequada para todos os produtos do lote.");
+					"A categoria do setor não é adequada para todos os produtos do lote.");
 			}
 		}
 	}
@@ -216,10 +211,10 @@ public class LoteService {
 
 	public void createRegister(Lote lote, Representante representante, Vendedor vendedor) {
 		RegistroLote registroLote = RegistroLote.builder()
-				.lote(lote)
-				.representante(representante)
-				.vendedor(vendedor)
-				.build();
+			.lote(lote)
+			.representante(representante)
+			.vendedor(vendedor)
+			.build();
 		registroLoteService.save(registroLote);
 	}
 
@@ -227,7 +222,7 @@ public class LoteService {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			validatePreco(produtoDTO.getPreco());
 			ProdutoVendedor produtoVendedor = ProdutoDTO
-					.convert(produtoDTO, vendedor, produtoService.getProdutoById(produtoDTO.getId()), lote);
+				.convert(produtoDTO, vendedor, produtoService.getProdutoById(produtoDTO.getId()), lote);
 			produtoVendedorService.save(produtoVendedor);
 		}
 	}
@@ -240,16 +235,16 @@ public class LoteService {
 		Integer quantidadeRetira = 0;
 		for (ProdutoUpdateDTO produtoUpdateDTO : produtosUpdateDTO) {
 			ProdutoVendedor produtoVendedor = produtoVendedorService.findByLoteIdAndProdutoId(
-					loteId, produtoUpdateDTO.getId());
+				loteId, produtoUpdateDTO.getId());
 			if (produtoVendedor == null) {
 				throw new BusinessValidationException(
-						"Produto não cadastrado pelo vendedor no lote solicitado.");
+					"Produto não cadastrado pelo vendedor no lote solicitado.");
 			}
 			quantidadeAtual = produtoVendedor.getQuantidadeAtual();
 			quantidadeRetira = produtoUpdateDTO.getQuantidadeRetira();
 			if (quantidadeAtual < quantidadeRetira) {
 				throw new BusinessValidationException(
-						"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
+					"A quantidade a retirar não deve exceder a quantidade atual de um produto.");
 			}
 			produtoVendedor.setQuantidadeAtual(quantidadeAtual - quantidadeRetira);
 			produtosVendedor.add(produtoVendedor);
