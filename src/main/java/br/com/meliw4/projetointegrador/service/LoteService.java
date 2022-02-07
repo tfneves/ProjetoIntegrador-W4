@@ -164,9 +164,8 @@ public class LoteService {
 
 	private List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
 			List<LoteProdutosVencimentoResponse> loteProdutosVencimentoResponses, Integer days) {
-		LocalDate today = LocalDate.now();
 		return loteProdutosVencimentoResponses.stream()
-				.filter(l -> ChronoUnit.DAYS.between(today, l.getDataVencimento()) <= days)
+				.filter(l -> ChronoUnit.DAYS.between(LocalDate.now(), l.getDataVencimento()) <= days)
 				.collect(Collectors.toList());
 	}
 
