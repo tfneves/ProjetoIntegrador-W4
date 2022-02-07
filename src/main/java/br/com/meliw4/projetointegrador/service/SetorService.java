@@ -1,16 +1,15 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.SetorDTO;
+import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.exception.ArmazemException;
-import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
 import br.com.meliw4.projetointegrador.response.SetorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,21 +20,20 @@ import java.util.stream.Collectors;
 public class SetorService {
 
 	private SetorRepository setorRepository;
+	private ArmazemService armazemService;
 
-	public SetorService(SetorRepository setorRepository) {
+	public SetorService(SetorRepository setorRepository, ArmazemService armazemService) {
 		this.setorRepository = setorRepository;
+		this.armazemService = armazemService;
 	}
 
-	@Autowired
-	private ArmazemRepository armazemRepository;
-	@Autowired
-	SetorDTO setorDTO;
-
-	public Setor salva(Setor payload) {
-		if (possuiEspaco(payload)) {
-			return setorRepository.save(payload);
+	public SetorDTO salva(SetorDTO payload) {
+		Armazem armazem = this.armazemService.findArmazemById(payload.getArmazemId());
+		Setor setor = SetorDTO.converte(payload, armazem);
+		if (possuiEspaco(setor)) {
+			return SetorDTO.converte(setorRepository.save(setor));
 		} else
-			throw new ArmazemException("Espaço não disponível no armazem: " + payload.getArmazem().getNome());
+			throw new ArmazemException("Espaço não disponível no armazem: " + setor.getArmazem().getNome());
 	}
 
 	public List<Setor> retornaTodosOsSetores() {
