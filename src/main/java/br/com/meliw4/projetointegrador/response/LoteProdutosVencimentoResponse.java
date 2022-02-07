@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class LoteProdutosVencimentoResponse {
 
+	private Long setorId;
 	private Long loteId;
 	private Long anuncioId;
 	private Long produtoId;
