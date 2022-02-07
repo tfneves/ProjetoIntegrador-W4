@@ -21,7 +21,9 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -111,41 +113,66 @@ public class LoteService {
 
 	public List<LoteProdutosVencimentoResponse> getProdutosInSetorsOrderedAndFilteredByDueDate(
 			Categoria categoria, Ordenamento ordenamento, Integer days) {
-		LocalDate today = LocalDate.now();
-		LocalDate limitDate = today.plusDays(days);
-		LocalDate dueDate;
+		// LocalDate today = LocalDate.now();
+		// LocalDate limitDate = today.plusDays(days);
+		// LocalDate dueDate;
+		//
+		// // Considerando todos os armazéns
+		// List<ProdutoVendedor> produtoVendedores = produtoVendedorService.findAll();
+		//
+		// List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		//
+		// for (ProdutoVendedor pv : produtoVendedores) {
+		// dueDate = pv.getDataVencimento();
+		// if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) ||
+		// dueDate.isEqual(today)
+		// || dueDate.isEqual(limitDate)) {
+		// if (categoria == null) {
+		// categoria = pv.getProduto().getProdutoCategoria().getCategoria();
+		// }
+		//
+		// responseList.add(
+		// LoteProdutosVencimentoResponse.builder()
+		// .setorId(pv.getLote().getSetor().getId())
+		// .loteId(pv.getLote().getId())
+		// .produtoId(pv.getProduto().getId())
+		// .anuncioId(pv.getId())
+		// .categoriaProduto(categoria)
+		// .dataVencimento(pv.getDataVencimento())
+		// .quantidade(pv.getQuantidadeAtual())
+		// .build());
+		// }
+		// }
 
-		List<ProdutoVendedor> produtoVendedores = produtoVendedorService.findAll();
-		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
-
-		for (ProdutoVendedor pv : produtoVendedores) {
-			dueDate = pv.getDataVencimento();
-			if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) || dueDate.isEqual(today)
-					|| dueDate.isEqual(limitDate)) {
-				if (categoria == null) {
-					categoria = pv.getProduto().getProdutoCategoria().getCategoria();
-				}
-
-				responseList.add(
-						LoteProdutosVencimentoResponse.builder()
-								.setorId(pv.getLote().getSetor().getId())
-								.loteId(pv.getLote().getId())
-								.produtoId(pv.getProduto().getId())
-								.anuncioId(pv.getId())
-								.categoriaProduto(categoria)
-								.dataVencimento(pv.getDataVencimento())
-								.quantidade(pv.getQuantidadeAtual())
-								.build());
-			}
+		// Considerando armazém do representante
+		// TODO: auth representante
+		Long armazemId = 1L;
+		List<Setor> setores = this.setorService.findSetorByArmazem_Id(armazemId);
+		// Filtra setor por categoria
+		if (categoria != null) {
+			filterByCategory(setores, categoria);
 		}
-		// TODO: Mudar para passagem por referência ?
+
+		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
+		for (Setor setor : setores) {
+			responseList.addAll(getLotesBySetorFilterProdutosByDays(setor.getId(), days).getEstoque());
+		}
+
+		// Filtra Produtos por período estipulado em dias
 		responseList = filterDueDateUntilDate(responseList, days);
 
+		// Ordena Produtos por data
 		if (ordenamento != null) {
 			responseList = orderByDate(responseList, ordenamento);
 		}
 
 		return responseList;
+	}
+
+	private List<Setor> filterByCategory(List<Setor> setores, Categoria categoria) {
+		return setores.stream()
+				.filter(s -> s.getCategoria().equals(categoria))
+				.collect(Collectors.toList());
 	}
 
 	private List<LoteProdutosVencimentoResponse> orderByDate(List<LoteProdutosVencimentoResponse> responseList,
@@ -167,10 +194,10 @@ public class LoteService {
 	}
 
 	private List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
-			List<LoteProdutosVencimentoResponse> loteResponseDTOs, Integer days) {
+			List<LoteProdutosVencimentoResponse> loteProdutosVencimentoResponses, Integer days) {
 		LocalDate today = LocalDate.now();
 		LocalDate limitDate = today.plusDays(days);
-		return loteResponseDTOs.stream()
+		return loteProdutosVencimentoResponses.stream()
 				.filter(l -> ChronoUnit.DAYS.between(today, limitDate) <= days)
 				.collect(Collectors.toList());
 	}
