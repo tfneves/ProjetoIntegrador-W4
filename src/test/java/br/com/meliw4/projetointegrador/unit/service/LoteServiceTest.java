@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,6 +26,11 @@ public class LoteServiceTest {
 
 	private static LoteService loteService;
 	private static LoteRepository loteRepository = Mockito.mock(LoteRepository.class);
+	private static ArmazemService armazemService = Mockito.mock(ArmazemService.class);
+	private static VendedorService vendedorService = Mockito.mock(VendedorService.class);
+	private static SetorService setorService = Mockito.mock(SetorService.class);
+	private static RepresentanteService representanteService = Mockito.mock(RepresentanteService.class);
+	private static RegistroLoteService registroLoteService = Mockito.mock(RegistroLoteService.class);
 	private static ProdutoService produtoService = Mockito.mock(ProdutoService.class);
 	private static ProdutoVendedorService produtoVendedorService = Mockito.mock(ProdutoVendedorService.class);
 	private static List<ProdutoDTO> produtosDTO;
@@ -36,12 +40,12 @@ public class LoteServiceTest {
 	public static void setUp() {
 		loteService = new LoteService(
 			loteRepository,
-			Mockito.mock(ArmazemService.class),
-			Mockito.mock(VendedorService.class),
-			Mockito.mock(SetorService.class),
-			Mockito.mock(RepresentanteService.class),
+			armazemService,
+			vendedorService,
+			setorService,
+			representanteService,
 			produtoService,
-			Mockito.mock(RegistroLoteService.class),
+			registroLoteService,
 			produtoVendedorService
 		);
 		produtosDTO = makeProdutosDTOList();
@@ -441,7 +445,7 @@ public class LoteServiceTest {
 	}
 
 	@Test
-	public void shouldReturnListFilteredByDueDate () {
+	public void shouldReturnListFilteredByDueDate() {
 		LocalDate today = LocalDate.now();
 		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
 		responseList.add(
@@ -464,4 +468,5 @@ public class LoteServiceTest {
 		assertEquals(responseList.get(0).getDataVencimento(), today);
 		assertEquals(responseList.get(1).getDataVencimento(), today.plusDays(20));
 	}
+
 }
