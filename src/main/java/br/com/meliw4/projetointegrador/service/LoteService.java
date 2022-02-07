@@ -103,6 +103,7 @@ public class LoteService {
 					|| dueDate.isEqual(limitDate))
 				responseList.add(
 						LoteProdutosVencimentoResponse.builder()
+								.setorId(lote.getSetor().getId())
 								.loteId(lote.getId())
 								.anuncioId(anuncio.getId())
 								.produtoId(anuncio.getProduto().getId())
