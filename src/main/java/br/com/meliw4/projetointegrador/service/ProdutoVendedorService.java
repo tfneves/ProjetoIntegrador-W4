@@ -16,7 +16,6 @@ public class ProdutoVendedorService {
 
 	private ProdutoVendedorRepository produtoVendedorRepository;
 
-
 	public ProdutoVendedorService(ProdutoVendedorRepository produtoVendedorRepository) {
 		this.produtoVendedorRepository = produtoVendedorRepository;
 	}
@@ -25,10 +24,13 @@ public class ProdutoVendedorService {
 		produtoVendedorRepository.save(produtoVendedor);
 	}
 
+	public List<ProdutoVendedor> findAll() {
+		return this.produtoVendedorRepository.findAll();
+	}
+
 	public ProdutoVendedor findByLoteIdAndProdutoId(Long loteId, Long produtoId) {
 		return produtoVendedorRepository.findByLoteIdAndProdutoId(loteId, produtoId);
 	}
-
 
 	/**
 	 * Busca ProdutoVendedor pelo id e retorna o obejto
@@ -40,14 +42,14 @@ public class ProdutoVendedorService {
 	public ProdutoVendedor getProdutoById(Long id) {
 		Optional<ProdutoVendedor> produto = produtoVendedorRepository.findById(id);
 		produto.orElseThrow(() -> new OrderCheckoutException("O produto de id " + id + " não existe ou foi deletado " +
-			"da" +
-			" base de dados", 400));
+				"da" +
+				" base de dados", 400));
 		return produto.get();
 	}
 
-
 	/**
-	 * Atualiza (decrementa) quantidade do produto no estoque (tabela produto_vendedor)
+	 * Atualiza (decrementa) quantidade do produto no estoque (tabela
+	 * produto_vendedor)
 	 *
 	 * @param novaQuantidade
 	 * @param idProdutoVendedor
@@ -63,7 +65,6 @@ public class ProdutoVendedorService {
 			throw new OrderCheckoutException("Erro ao atualizar estoque de produtos - " + e.getMessage(), 500);
 		}
 	}
-
 
 	/**
 	 * Devolve produto no estoque caso algum erro ocorra no processo de compra
