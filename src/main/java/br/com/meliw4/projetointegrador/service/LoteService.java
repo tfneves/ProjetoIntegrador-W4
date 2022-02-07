@@ -113,44 +113,14 @@ public class LoteService {
 
 	public List<LoteProdutosVencimentoResponse> getProdutosInSetorsOrderedAndFilteredByDueDate(
 			Categoria categoria, Ordenamento ordenamento, Integer days) {
-		// LocalDate today = LocalDate.now();
-		// LocalDate limitDate = today.plusDays(days);
-		// LocalDate dueDate;
-		//
-		// // Considerando todos os armazéns
-		// List<ProdutoVendedor> produtoVendedores = produtoVendedorService.findAll();
-		//
-		// List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
-		//
-		// for (ProdutoVendedor pv : produtoVendedores) {
-		// dueDate = pv.getDataVencimento();
-		// if ((dueDate.isAfter(today) && dueDate.isBefore(limitDate)) ||
-		// dueDate.isEqual(today)
-		// || dueDate.isEqual(limitDate)) {
-		// if (categoria == null) {
-		// categoria = pv.getProduto().getProdutoCategoria().getCategoria();
-		// }
-		//
-		// responseList.add(
-		// LoteProdutosVencimentoResponse.builder()
-		// .setorId(pv.getLote().getSetor().getId())
-		// .loteId(pv.getLote().getId())
-		// .produtoId(pv.getProduto().getId())
-		// .anuncioId(pv.getId())
-		// .categoriaProduto(categoria)
-		// .dataVencimento(pv.getDataVencimento())
-		// .quantidade(pv.getQuantidadeAtual())
-		// .build());
-		// }
-		// }
-
 		// Considerando armazém do representante
 		// TODO: auth representante
 		Long armazemId = 1L;
 		List<Setor> setores = this.setorService.findSetorByArmazem_Id(armazemId);
 		// Filtra setor por categoria
 		if (categoria != null) {
-			filterByCategory(setores, categoria);
+			// TODO: Passagem por referência
+			setores = filterByCategory(setores, categoria);
 		}
 
 		List<LoteProdutosVencimentoResponse> responseList = new ArrayList<>();
@@ -159,10 +129,12 @@ public class LoteService {
 		}
 
 		// Filtra Produtos por período estipulado em dias
+		// TODO: Passagem por referência
 		responseList = filterDueDateUntilDate(responseList, days);
 
 		// Ordena Produtos por data
 		if (ordenamento != null) {
+			// TODO: Passagem por referência
 			responseList = orderByDate(responseList, ordenamento);
 		}
 
