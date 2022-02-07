@@ -4,28 +4,22 @@ import br.com.meliw4.projetointegrador.dto.LoteDTO;
 import br.com.meliw4.projetointegrador.dto.LoteUpdateDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoUpdateDTO;
-import br.com.meliw4.projetointegrador.dto.response.LoteResponseDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
-import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import br.com.meliw4.projetointegrador.response.LoteProdutosVencimentoResponse;
 import br.com.meliw4.projetointegrador.response.LotesSetorVencimentoResponse;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
