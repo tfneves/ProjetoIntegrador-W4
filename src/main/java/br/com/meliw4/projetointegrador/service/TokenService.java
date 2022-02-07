@@ -27,7 +27,7 @@ public class TokenService {
 		Date expiracao = new Date(hoje.getTime()+exp);
 
 		return Jwts.builder()
-			.setIssuer("Nossa APP")
+			.setIssuer("/api/v1")
 			.setSubject(usuarioLogado.getEmail())
 			.setIssuedAt(hoje)
 			.setExpiration(expiracao)
