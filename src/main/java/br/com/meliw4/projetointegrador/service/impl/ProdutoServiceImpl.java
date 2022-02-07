@@ -10,6 +10,8 @@ import br.com.meliw4.projetointegrador.response.ProdutoVendedorResponse;
 import br.com.meliw4.projetointegrador.entity.Produto;
 import org.springframework.stereotype.Service;
 
+import br.com.meliw4.projetointegrador.dto.response.ArmazemProdutoResponseDTO;
+import br.com.meliw4.projetointegrador.dto.response.ArmazemSelecaoResponseDTO;
 import br.com.meliw4.projetointegrador.dto.response.ProdutoResponseDTO;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
@@ -21,8 +23,11 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	private ProdutoRepository produtoRepository;
 	private ProdutoVendedorRepository produtoVendedorRepository;
+	private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException(
+			"Não há produtos para a seleção");
 
-	ProdutoServiceImpl(ProdutoRepository produtoRepository, ProdutoVendedorRepository produtoVendedorRepository) {
+	ProdutoServiceImpl(
+			ProdutoRepository produtoRepository, ProdutoVendedorRepository produtoVendedorRepository) {
 		this.produtoRepository = produtoRepository;
 		this.produtoVendedorRepository = produtoVendedorRepository;
 	}
@@ -74,37 +79,69 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id, String type) {
 		List<ProdutoVendedor> pv = this.produtoVendedorRepository.findProdutoVendedorByProduto_Id(id);
-		if(pv.size() == 0)
+		if (pv.size() == 0)
 			throw new NotFoundException(String.format("O Id %d nào foi localziado", id));
 		type = type.toUpperCase(Locale.ROOT);
 		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = sanetizaORetorno(pv, type);
 		return response;
 	}
 
-	private Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> sanetizaORetorno(List<ProdutoVendedor> produtoVendedor, String type) {
+	private Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> sanetizaORetorno(
+			List<ProdutoVendedor> produtoVendedor, String type) {
 		Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> response = new LinkedHashMap<>();
 		for (ProdutoVendedor pv : produtoVendedor) {
 			response.put(ProdutoSetorResponse.retornaOSetor(pv),
-				ordenaLista(ProdutoVendedorResponse.converte(produtoVendedor
-					.stream()
-					.filter(p -> p.getLote().getSetor().getId()	== pv.getLote().getSetor().getId())
-					.collect(Collectors.toList())),
-					type));
+					ordenaLista(ProdutoVendedorResponse.converte(produtoVendedor
+							.stream()
+							.filter(p -> p.getLote().getSetor().getId() == pv.getLote().getSetor().getId())
+							.collect(Collectors.toList())),
+							type));
 
 		}
 		return response;
 	}
 
 	private List<ProdutoVendedorResponse> ordenaLista(List<ProdutoVendedorResponse> pv, String type) {
-		switch(type) {
+		switch (type) {
 			case "L":
-				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getLote_id).reversed()).collect(Collectors.toList());
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getLote_id).reversed())
+						.collect(Collectors.toList());
 			case "C":
-				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getQuantidadeAtual).reversed()).collect(Collectors.toList());
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getQuantidadeAtual).reversed())
+						.collect(Collectors.toList());
 			case "F":
-				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getDataVencimento).reversed()).collect(Collectors.toList());
+				return pv.stream().sorted(Comparator.comparing(ProdutoVendedorResponse::getDataVencimento).reversed())
+						.collect(Collectors.toList());
 			default:
 				return pv;
 		}
+	}
+
+	@Override
+	public ArmazemProdutoResponseDTO findArmazemPorProduto(Long produtoId) {
+		List<ProdutoVendedor> produtoVendedores = produtoVendedorRepository.findByProduto_Id(produtoId)
+				.orElseThrow(() -> NOT_FOUND_EXCEPTION);
+
+		Map<Long, Integer> mapper = produtoVendedores.stream()
+				.collect(Collectors.toMap(
+						p -> p.getLote().getRepresentante().getArmazem().getId(),
+						ProdutoVendedor::getQuantidadeAtual,
+						(e1, e2) -> e1 + e2,
+						HashMap::new));
+
+		List<ArmazemSelecaoResponseDTO> armazemSelecaoDTOs = new ArrayList<>();
+		mapper.forEach((k, v) -> {
+			armazemSelecaoDTOs.add(
+					ArmazemSelecaoResponseDTO.builder()
+							.armazemId(k)
+							.quantidadeTotal(v)
+							.build());
+		});
+
+		return ArmazemProdutoResponseDTO.builder()
+				.produtoId(produtoId)
+				.armazem(armazemSelecaoDTOs)
+				.build();
+
 	}
 }
