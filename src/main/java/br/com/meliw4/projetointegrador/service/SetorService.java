@@ -5,6 +5,7 @@ import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import br.com.meliw4.projetointegrador.repository.SetorRepository;
@@ -69,11 +70,11 @@ public class SetorService {
 
 	private Double volumeTotalDosSetores(Setor setor) {
 		return setorRepository.findAll()
-			.stream()
-			.filter(s -> s.getArmazem() == setor.getArmazem())
-			.map(s -> s.getVolume())
-			.reduce((n1, n2) -> n1 + n2)
-			.orElse(0.0);
+				.stream()
+				.filter(s -> s.getArmazem() == setor.getArmazem())
+				.map(s -> s.getVolume())
+				.reduce((n1, n2) -> n1 + n2)
+				.orElse(0.0);
 	}
 
 	public Double calculateRemainingSetorArea(Setor setor) {
@@ -90,8 +91,8 @@ public class SetorService {
 
 	public Setor findSetorById(Long id) {
 		return setorRepository
-			.findById(id)
-			.orElseThrow(() -> new BusinessValidationException("O setor com id " + id + " não existe."));
+				.findById(id)
+				.orElseThrow(() -> new BusinessValidationException("O setor com id " + id + " não existe."));
 	}
 
 	public void validateEnoughRemainingVolume(Double setorRemainingVolume, Double produtosTotalVolume) {
@@ -104,5 +105,10 @@ public class SetorService {
 		if (!setor.getArmazem().getId().equals(armazemId)) {
 			throw new BusinessValidationException("O setor não pertence a esse armazém.");
 		}
+	}
+  
+	public List<Setor> findSetorByArmazem_Id(Long armazemId) {
+		return this.setorRepository.findSetorByArmazem_Id(armazemId)
+				.orElseThrow(() -> new NotFoundException("Não há setores ocupados para o armazém selecionado."));
 	}
 }

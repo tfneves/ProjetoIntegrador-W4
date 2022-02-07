@@ -2,14 +2,18 @@ package br.com.meliw4.projetointegrador.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import br.com.meliw4.projetointegrador.service.impl.ProdutoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.meliw4.projetointegrador.dto.response.ArmazemProdutoResponseDTO;
+import br.com.meliw4.projetointegrador.dto.response.LoteResponseDTO;
 import br.com.meliw4.projetointegrador.dto.response.ProdutoResponseDTO;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
+import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.service.ProdutoService;
 
 @RestController
@@ -34,7 +38,6 @@ public class ProdutoController {
 	 * @return ResponseEntity List<ProdutoResponseDTO>
 	 */
 	@GetMapping
-	@ResponseBody
 	public ResponseEntity<List<ProdutoResponseDTO>> findAllProdutos() {
 		return ResponseEntity.ok(this.produtoService.findAllProdutos());
 	}
@@ -50,7 +53,6 @@ public class ProdutoController {
 	 * @return ResponseEntity List<ProdutoResponseDTO>
 	 */
 	@GetMapping(path = "/list")
-	@ResponseBody
 	public ResponseEntity<List<ProdutoResponseDTO>> findProdutoPorCategoria(
 			@RequestParam() final Categoria categoria) {
 		return ResponseEntity.ok(this.produtoService.findProdutoPorCategoria(categoria));
@@ -71,7 +73,6 @@ public class ProdutoController {
 	 * @return ResponseEntity List<ArmazemProdutoResponseDTO>
 	 */
 	@GetMapping(path = "/warehouse") // TODO: rota auth representante
-	@ResponseBody
 	public ResponseEntity<ArmazemProdutoResponseDTO> findArmazemPorProduto(
 			@RequestParam() final Long produtoId) {
 		return ResponseEntity.ok(this.produtoService.findArmazemPorProduto(produtoId));
