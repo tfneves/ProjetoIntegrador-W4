@@ -26,8 +26,7 @@ public class RepresentanteService {
 		}
 
 		Representante representante = RepresentanteDTO.convert(representanteDTO, armazem);
-		representanteRepository.save(representante);
-		return representante;
+		return representanteRepository.save(representante);
 	}
 
 	public void validateRepresentanteArmazem(Representante representante, Long armazemId) {

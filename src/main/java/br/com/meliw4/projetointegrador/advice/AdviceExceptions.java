@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -127,5 +128,15 @@ public class AdviceExceptions {
 		if(e.getHttpStatusCode() == 400)
 			return ResponseEntity.badRequest().body(response);
 		return ResponseEntity.internalServerError().body(response);
+	}
+
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ResponseBody
+	@ExceptionHandler(BadCredentialsException.class)
+	private Map<String, String> badCredentialsException(BadCredentialsException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", "401");
+		return errors;
 	}
 }
