@@ -106,7 +106,7 @@ public class SetorService {
 			throw new BusinessValidationException("O setor não pertence a esse armazém.");
 		}
 	}
-
+  
 	public List<Setor> findSetorByArmazem_Id(Long armazemId) {
 		return this.setorRepository.findSetorByArmazem_Id(armazemId)
 				.orElseThrow(() -> new NotFoundException("Não há setores ocupados para o armazém selecionado."));

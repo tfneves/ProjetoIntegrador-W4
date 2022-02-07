@@ -6,6 +6,7 @@ import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.exception.ArmazemException;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.RepresentanteRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,7 @@ public class RepresentanteService {
 
 	public Representante register(RepresentanteDTO representanteDTO) {
 		Armazem armazem = armazemService.findArmazemById(representanteDTO.getArmazem_id());
+
 		if (armazem.getRepresentante() != null) {
 			throw new ArmazemException("O armazem tem representante cadastrado");
 		}
