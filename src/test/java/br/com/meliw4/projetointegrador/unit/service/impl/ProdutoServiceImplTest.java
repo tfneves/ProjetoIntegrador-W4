@@ -42,7 +42,7 @@ public class ProdutoServiceImplTest {
 	private static List<ProdutoVendedor> produtoVendedores = new ArrayList<>();
 
 	@BeforeAll
-	public static void setUp() {
+	static void setUp() {
 		produtoService = new ProdutoServiceImpl(produtoRepository, produtoVendedorService);
 		produtoResponseDTOs = makeProdutosResponseDTO();
 		produtoVendedores = makeProdutoVendedores();
@@ -195,7 +195,7 @@ public class ProdutoServiceImplTest {
 
 	@Test
 	void shouldReturnNotFoundExceptionIfProductListIsNullInFindById() {
-		assertThrows(NotFoundException.class, () -> produtoService.findById(-1L));
+		assertThrows(NotFoundException.class, () -> produtoService.findById(any()));
 	}
 
 	@Test

@@ -13,7 +13,6 @@ public class ProdutoServiceOrder {
 	}
 
 	public Produto findProdutoById(Long produtoId) {
-		produtoService.findById(produtoId);
 		return produtoService.findById(produtoId);
 	}
 }

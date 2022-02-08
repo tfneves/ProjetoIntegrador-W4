@@ -24,7 +24,12 @@ public class ProdutoVendedorService {
 	}
 
 	public List<ProdutoVendedor> findAll() {
-		return this.produtoVendedorRepository.findAll();
+		List<ProdutoVendedor> produtoVendedores = this.produtoVendedorRepository.findAll();
+
+		if (produtoVendedores.isEmpty()) {
+			throw new NotFoundException("Não há produtos para a seleção");
+		}
+		return produtoVendedores;
 	}
 
 	public ProdutoVendedor findByLoteIdAndProdutoId(Long loteId, Long produtoId) {

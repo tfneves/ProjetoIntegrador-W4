@@ -15,7 +15,7 @@ public interface ProdutoVendedorRepository extends JpaRepository<ProdutoVendedor
 	@Query(value = "SELECT * FROM produto_vendedor pv WHERE lote_id = :loteId AND produto_id = :produtoId LIMIT 1", nativeQuery = true)
 	ProdutoVendedor findByLoteIdAndProdutoId(@Param("loteId") Long loteId, @Param("produtoId") Long produtoId);
 
-	List<ProdutoVendedor> findProdutoVendedorByProduto_Id(Long id);
+	Optional<List<ProdutoVendedor>> findProdutoVendedorByProduto_Id(Long id);
 
 	Optional<List<ProdutoVendedor>> findByProduto_Id(Long produtoId);
 }
