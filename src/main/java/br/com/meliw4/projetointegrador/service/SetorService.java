@@ -31,17 +31,13 @@ public class SetorService {
 		Armazem armazem = this.armazemService.findArmazemById(payload.getArmazemId());
 		Setor setor = SetorDTO.converte(payload, armazem);
 		if (possuiEspaco(setor)) {
-			return SetorDTO.converte(setorRepository.save(setor));
+			setorRepository.save(setor);
+			return SetorDTO.converte(setor);
 		} else
 			throw new ArmazemException("Espaço não disponível no armazem: " + setor.getArmazem().getNome());
 	}
 
-	public List<Setor> retornaTodosOsSetores() {
-		List<Setor> setores = this.setorRepository.findAll();
-		return this.setorRepository.findAll();
-	}
-
-	public List<SetorResponse> retonraSetores() {
+	public List<SetorResponse> retornaSetores() {
 		List<Setor> setores = setorRepository.findAll();
 		List<SetorResponse> response = new ArrayList<>();
 		for (Setor setor : setores) {
@@ -62,14 +58,10 @@ public class SetorService {
 		return setor.getVolume() <= (volumeTotalArmazem - volumeTotalSetores);
 	}
 
-	private Double volumeResante(Setor setor) {
-		return setor.getVolume() - volumeTotalDosSetores(setor);
-	}
-
-	private Double volumeTotalDosSetores(Setor setor) {
+	public Double volumeTotalDosSetores(Setor setor) {
 		return setorRepository.findAll()
 				.stream()
-				.filter(s -> s.getArmazem() == setor.getArmazem())
+				.filter(s -> s.getArmazem().getId() == setor.getArmazem().getId())
 				.map(s -> s.getVolume())
 				.reduce((n1, n2) -> n1 + n2)
 				.orElse(0.0);
