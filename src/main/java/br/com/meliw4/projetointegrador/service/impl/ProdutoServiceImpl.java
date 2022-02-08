@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.service.impl;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,16 +11,12 @@ import org.springframework.stereotype.Service;
 
 import br.com.meliw4.projetointegrador.dto.response.ArmazemProdutoResponseDTO;
 import br.com.meliw4.projetointegrador.dto.response.ArmazemSelecaoResponseDTO;
-import br.com.meliw4.projetointegrador.dto.response.LoteResponseDTO;
 import br.com.meliw4.projetointegrador.dto.response.ProdutoResponseDTO;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
-import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.ProdutoRepository;
 import br.com.meliw4.projetointegrador.service.ProdutoService;
 import br.com.meliw4.projetointegrador.service.ProdutoVendedorService;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
@@ -32,7 +27,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 	private static final NotFoundException NOT_FOUND_EXCEPTION = new NotFoundException(
 			"Não há produtos para a seleção");
 
-	ProdutoServiceImpl(
+	public ProdutoServiceImpl(
 			ProdutoRepository produtoRepository, ProdutoVendedorService produtoVendedorService) {
 		this.produtoRepository = produtoRepository;
 		this.produtoVendedorService = produtoVendedorService;
@@ -79,6 +74,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 		return true;
 	}
 
+	@Override
 	public Map<ProdutoSetorResponse, List<ProdutoVendedorResponse>> listaTodosOsLotes(Long id, String type) {
 		List<ProdutoVendedor> pv = this.produtoVendedorService.findProdutoVendedorByProduto_Id(id);
 		if (pv.size() == 0)
@@ -125,7 +121,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 		Map<Long, Integer> mapper = produtoVendedores.stream()
 				.collect(Collectors.toMap(
-						p -> p.getLote().getRepresentante().getArmazem().getId(),
+						pv -> pv.getLote().getRepresentante().getArmazem().getId(),
 						ProdutoVendedor::getQuantidadeAtual,
 						(e1, e2) -> e1 + e2,
 						HashMap::new));
@@ -144,61 +140,5 @@ public class ProdutoServiceImpl implements ProdutoService {
 				.armazem(armazemSelecaoDTOs)
 				.build();
 
-	}
-
-	@Override
-	public List<LoteResponseDTO> findLoteFiltroVencimento(Integer validadeDias, Categoria categoria,
-			Ordenamento ordenamento) {
-
-		List<ProdutoVendedor> produtoVendedores = this.produtoVendedorService.findAll();
-
-		List<LoteResponseDTO> loteResponseDTOs = new ArrayList<>();
-		for (ProdutoVendedor pv : produtoVendedores) {
-			if (categoria == null) {
-				categoria = pv.getProduto().getProdutoCategoria().getCategoria();
-			}
-
-			loteResponseDTOs = this.filtroOrderLote(loteResponseDTOs, ordenamento);
-			loteResponseDTOs = this.filtroValidadeProduto(loteResponseDTOs, validadeDias);
-
-			loteResponseDTOs.add(
-					LoteResponseDTO.builder()
-							.setorId(pv.getLote().getSetor().getId())
-							.loteId(pv.getLote().getId())
-							.produtoId(pv.getProduto().getId())
-							.anuncioId(pv.getId())
-							.categoria(categoria)
-							.validade(pv.getDataVencimento())
-							.quantidade(pv.getQuantidadeAtual())
-							.build());
-		}
-
-		return loteResponseDTOs;
-	}
-
-	private List<LoteResponseDTO> filtroOrderLote(List<LoteResponseDTO> loteResponseDTOs,
-			Ordenamento ordenador) {
-		switch (ordenador) {
-			// Ordenado ascendente
-			case asc:
-				return loteResponseDTOs.stream()
-						.sorted(Comparator.comparing(LoteResponseDTO::getValidade))
-						.collect(Collectors.toList());
-			// Ordenado descendente
-			case desc:
-				return loteResponseDTOs.stream()
-						.sorted(Comparator.comparing(LoteResponseDTO::getValidade).reversed())
-						.collect(Collectors.toList());
-			default:
-				return loteResponseDTOs;
-		}
-	}
-
-	private List<LoteResponseDTO> filtroValidadeProduto(List<LoteResponseDTO> loteResponseDTOs,
-			Integer validadeDias) {
-		return loteResponseDTOs.stream()
-				.filter(l -> DAYS.between(LocalDate.now(), l.getValidade()) >= 0)
-				.filter(l -> DAYS.between(LocalDate.now(), l.getValidade()) <= validadeDias)
-				.collect(Collectors.toList());
 	}
 }
