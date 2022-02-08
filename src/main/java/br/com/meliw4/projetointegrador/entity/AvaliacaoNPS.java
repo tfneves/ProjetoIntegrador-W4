@@ -1,35 +1,30 @@
 package br.com.meliw4.projetointegrador.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
-@Table(name = "comprador_teste")
-public class Comprador {
+public class AvaliacaoNPS {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id_nps;
 	@Column
-	private String nome;
+	private Integer nota;
 	@Column
-	private String telefone;
-	@Column
-	private String email;
-	@Column
-	private LocalDate dataNascimento;
-
+	private LocalDate dataAvaliacao;
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "endereco_id")
+	@JoinColumn(name = "comprador_id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Endereco endereco;
+	private Comprador comprador;
 }
