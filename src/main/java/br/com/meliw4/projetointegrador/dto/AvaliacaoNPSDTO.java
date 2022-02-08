@@ -21,15 +21,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AvaliacaoNPSDTO {
-
+	@NotEmpty(message = "Nota não pode estar em branco")
 	private Integer nota;
-
+	@NotEmpty(message = "Data Avaliação não pode estar em branco")
 	private LocalDate dataAvaliacao;
+	@NotEmpty(message = "Id não pode estar em branco")
+	private Long comprador_id;
 
-	public static AvaliacaoNPS convert(AvaliacaoNPSDTO avaliacaoNPSDTO) {
+	public static AvaliacaoNPS convert(AvaliacaoNPSDTO avaliacaoNPSDTO,Comprador comprador) {
 		return AvaliacaoNPS.builder()
 			.nota(avaliacaoNPSDTO.getNota())
 			.dataAvaliacao(avaliacaoNPSDTO.getDataAvaliacao())
+			.comprador(comprador)
 			.build();
 	}
 }
