@@ -37,7 +37,7 @@ public class CompradorDTO {
 		return Comprador.builder()
 			.nome(compradorDTO.getNome())
 			.telefone(compradorDTO.telefone)
-			.email(compradorDTO.getTelefone())
+			.email(compradorDTO.getEmail())
 			.dataNascimento(compradorDTO.getDataNascimento())
 			.endereco(endereco)
 			.build();
