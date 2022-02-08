@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,6 @@ public class AvaliacaoNPS {
 	private LocalDate dataAvaliacao;
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "comprador_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JsonBackReference
 	private Comprador comprador;
 }

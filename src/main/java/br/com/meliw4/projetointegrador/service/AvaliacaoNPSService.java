@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Service
 public class AvaliacaoNPSService {
@@ -25,5 +26,8 @@ public class AvaliacaoNPSService {
 		AvaliacaoNPS avaliacaoNPS = AvaliacaoNPSDTO.convert(avaliacaoNPSDTO,comprador);
 		rep.save(avaliacaoNPS);
 		return avaliacaoNPS;
+	}
+	public List<AvaliacaoNPS> getListAll(){
+		return rep.findAll();
 	}
 }

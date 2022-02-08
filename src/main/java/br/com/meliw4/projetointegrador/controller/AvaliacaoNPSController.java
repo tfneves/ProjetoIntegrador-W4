@@ -11,7 +11,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,5 +30,10 @@ public class AvaliacaoNPSController {
 		URI uri = uriBuilder.path("").build().toUri();
 		response.put("message","Sua avaliação foi registrada !!");
 		return ResponseEntity.created(uri).body(response);
+	}
+	@GetMapping("/list")
+	@ResponseBody
+	private List<AvaliacaoNPS> getALL(){
+		return as.getListAll() ;
 	}
 }
