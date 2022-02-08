@@ -46,6 +46,15 @@ public class Comprador extends Usuario implements UserDetails, GrantedAuthority 
 	public Comprador(Long id, String login, String senha) {
 		super(id, login, senha);
 	}
+	public Comprador(String login, String senha, String nome, String telefone, String email, LocalDate dataNascimento, Endereco endereco) {
+		super.setLogin(login);
+		super.setSenha(senha);
+		this.nome = nome;
+		this.telefone = telefone;
+		this.email = email;
+		this.dataNascimento = dataNascimento;
+		this.endereco = endereco;
+	}
 
 	@Override
 	public String getAuthority() {
@@ -55,7 +64,7 @@ public class Comprador extends Usuario implements UserDetails, GrantedAuthority 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("Representante"));
+		authorities.add(new SimpleGrantedAuthority("Comprador"));
 		return authorities;
 	}
 

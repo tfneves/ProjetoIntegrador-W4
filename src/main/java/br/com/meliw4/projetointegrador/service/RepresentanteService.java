@@ -13,10 +13,12 @@ public class RepresentanteService {
 
 	private RepresentanteRepository representanteRepository;
 	private ArmazemService armazemService;
+	private UsuarioService usuarioService;
 
-	public RepresentanteService(RepresentanteRepository representanteRepository, ArmazemService armazemService) {
+	public RepresentanteService(RepresentanteRepository representanteRepository, ArmazemService armazemService, UsuarioService usuarioService) {
 		this.representanteRepository = representanteRepository;
 		this.armazemService = armazemService;
+		this.usuarioService = usuarioService;
 	}
 
 	public Representante register(RepresentanteDTO representanteDTO) {
@@ -26,6 +28,8 @@ public class RepresentanteService {
 		}
 
 		Representante representante = RepresentanteDTO.convert(representanteDTO, armazem);
+		if(!usuarioService.usuarioCadastrado(representanteDTO.getLogin()))
+			throw new BusinessValidationException("Login já existente na base de dados");
 		representanteRepository.save(representante);
 		return representante;
 	}

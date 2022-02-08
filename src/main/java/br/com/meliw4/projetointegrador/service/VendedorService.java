@@ -11,13 +11,17 @@ public class VendedorService {
 
 
 	private VendedorRepository vendedorRepository;
+	private UsuarioService usuarioService;
 
-	public VendedorService(VendedorRepository vendedorRepository) {
+	public VendedorService(VendedorRepository vendedorRepository, UsuarioService usuarioService) {
 		this.vendedorRepository = vendedorRepository;
+		this.usuarioService = usuarioService;
 	}
 
 	public Vendedor register(VendedorDTO vendedorDTO) {
 		Vendedor vendedor = vendedorDTO.convert(vendedorDTO);
+		if(!usuarioService.usuarioCadastrado(vendedorDTO.getLogin()))
+			throw new BusinessValidationException("Login já existente na base de dados");
 		vendedorRepository.save(vendedor);
 		return vendedor;
 	}

@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.auth.config;
 
+import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.entity.Usuario;
 import br.com.meliw4.projetointegrador.entity.Vendedor;
@@ -23,7 +24,9 @@ public class AuthenticationService implements UserDetailsService {
 		Usuario usuario = usuarioRepository.findByLogin(login);
 		if(usuario instanceof Representante){
 			return new Representante(usuario.getId(), usuario.getLogin(), usuario.getSenha());
+		}else if(usuario instanceof Vendedor){
+			return new Vendedor(usuario.getId(), usuario.getLogin(), usuario.getSenha());
 		}
-		return new Vendedor(usuario.getId(), usuario.getLogin(), usuario.getSenha());
+		return new Comprador(usuario.getId(), usuario.getLogin(), usuario.getSenha());
 	}
 }

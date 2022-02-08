@@ -138,7 +138,7 @@ public class PedidoService {
 	 * @author Thomaz Ferreira
 	 */
 	private boolean verificaValidadeProduto(ProdutoVendedor produtoVendedor) {
-		final int DIAS_MINIMOS_VALIDADE = 22;
+		final int DIAS_MINIMOS_VALIDADE = 21;
 		LocalDate validadeProduto = produtoVendedor.getDataVencimento();
 		if (validadeProduto == null)
 			throw new OrderCheckoutException("Houve um erro ao pegar a validade do produto de ID " + produtoVendedor.getId(), 500);

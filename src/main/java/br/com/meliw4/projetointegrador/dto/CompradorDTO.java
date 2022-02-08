@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -32,14 +33,18 @@ public class CompradorDTO {
 	private LocalDate dataNascimento;
 	@NotNull(message = "Endereco inválido")
 	private Long endereco_id;
+	private String login;
+	private String senha;
 
 	public static Comprador convert(CompradorDTO compradorDTO , Endereco endereco) {
-		return Comprador.builder()
-			.nome(compradorDTO.getNome())
-			.telefone(compradorDTO.telefone)
-			.email(compradorDTO.getTelefone())
-			.dataNascimento(compradorDTO.getDataNascimento())
-			.endereco(endereco)
-			.build();
+		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+		return new Comprador(
+			compradorDTO.login,
+			bc.encode(compradorDTO.getSenha()),
+			compradorDTO.getNome(),
+			compradorDTO.getTelefone(),
+			compradorDTO.getEmail(),
+			compradorDTO.getDataNascimento(),
+			endereco);
 	}
 }

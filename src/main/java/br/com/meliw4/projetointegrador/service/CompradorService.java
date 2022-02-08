@@ -23,6 +23,8 @@ public class CompradorService {
 	EnderecoService enderecoService;
 	@Autowired
 	EnderecoRepository enderecoRepository;
+	@Autowired
+	UsuarioService usuarioService;
 
 
 	/**
@@ -38,8 +40,11 @@ public class CompradorService {
 
 
 	public Comprador register(CompradorDTO compradorDTO){
-		Endereco endereco = enderecoRepository.getById(compradorDTO.getEndereco_id());
+		Endereco endereco = enderecoRepository.findById(compradorDTO.getEndereco_id()).orElseThrow(
+			() -> new BusinessValidationException("O endereço informado não existe"));
 		Comprador comprador = CompradorDTO.convert(compradorDTO,endereco);
+		if(!usuarioService.usuarioCadastrado(compradorDTO.getLogin()))
+			throw new BusinessValidationException("Login já existente na base de dados");
 		compradorRepository.save(comprador);
 		return comprador;
 	}

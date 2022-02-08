@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.auth.config;
 
 import br.com.meliw4.projetointegrador.auth.service.TokenService;
+import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.entity.Usuario;
 import br.com.meliw4.projetointegrador.entity.Vendedor;
@@ -47,9 +48,13 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 			Representante representante = new Representante(usuario.getId(), usuario.getLogin(), usuario.getSenha());
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(representante, null, representante.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication); //forçando autenticacao pelo spring
-		}else{
+		}else if(usuario instanceof Vendedor){
 			Vendedor vendedor = new Vendedor(usuario.getId(), usuario.getLogin(), usuario.getSenha());
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(vendedor, null, vendedor.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication); //forçando autenticacao pelo spring
+		}else{
+			Comprador comprador = new Comprador(usuario.getId(), usuario.getLogin(), usuario.getSenha());
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(comprador, null, comprador.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication); //forçando autenticacao pelo spring
 		}
 
