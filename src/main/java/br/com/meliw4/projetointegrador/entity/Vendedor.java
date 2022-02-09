@@ -47,8 +47,8 @@ public class Vendedor extends Usuario implements UserDetails, GrantedAuthority {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_Vendedor"));
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("Vendedor"));
 		return authorities;
 	}
 

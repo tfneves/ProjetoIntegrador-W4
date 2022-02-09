@@ -28,6 +28,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
+	@Autowired
+	CustomAccessDeniedHandler customAccessDeniedHandler;
+
+	@Autowired
+	CustomAccessForbiddenHandler customAccessForbiddenHandler;
+
 	@Override
 	@Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
@@ -44,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.POST, "/api/v1/insertWareHouse").permitAll()
 			.antMatchers(HttpMethod.GET, "/api/v1/getWareHouses").hasAnyAuthority("Representante")
 			.anyRequest().authenticated()
+			.and().exceptionHandling().authenticationEntryPoint(customAccessDeniedHandler)
+			.accessDeniedHandler(customAccessForbiddenHandler)
 			.and().csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);;

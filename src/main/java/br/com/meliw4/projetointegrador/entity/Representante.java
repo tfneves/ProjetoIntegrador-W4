@@ -50,7 +50,7 @@ public class Representante extends Usuario implements UserDetails, GrantedAuthor
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("Representante"));
 		return authorities;
 	}

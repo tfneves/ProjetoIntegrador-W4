@@ -63,7 +63,7 @@ public class Comprador extends Usuario implements UserDetails, GrantedAuthority 
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("Comprador"));
 		return authorities;
 	}
