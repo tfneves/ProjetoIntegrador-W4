@@ -20,11 +20,11 @@ public class AvaliacaoNPS {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_nps;
-	@Column
+	@Column(nullable = false)
 	private Integer nota;
-	@Column
+	@Column(name = "data_avaliacao" ,nullable = false ,columnDefinition = "DATE")
 	private LocalDate dataAvaliacao;
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "comprador_id")
 	@JsonBackReference
 	private Comprador comprador;

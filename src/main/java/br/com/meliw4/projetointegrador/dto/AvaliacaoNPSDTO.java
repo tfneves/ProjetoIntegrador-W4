@@ -23,10 +23,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AvaliacaoNPSDTO {
 
+	@NotBlank
 	private Integer nota;
-
+	@NotBlank
 	private LocalDate dataAvaliacao;
-
+	@NotBlank
 	private Long comprador_id;
 
 	public static AvaliacaoNPS convert(AvaliacaoNPSDTO avaliacaoNPSDTO,Comprador comprador) {
