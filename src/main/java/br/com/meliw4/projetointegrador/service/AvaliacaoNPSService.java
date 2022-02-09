@@ -16,12 +16,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class AvaliacaoNPSService {
-	@Autowired
+
 	CompradorService compradorService;
-	@Autowired
 	CompradorRepository compradorRepository;
-	@Autowired
 	AvaliacaoNPSRepository rep;
+
+	public AvaliacaoNPSService(CompradorService compradorService, CompradorRepository compradorRepository, AvaliacaoNPSRepository rep) {
+		this.compradorService = compradorService;
+		this.compradorRepository = compradorRepository;
+		this.rep = rep;
+	}
 
 	/**
 	 * Salva avaliaçãoNPS nas tabelas pertinentes
@@ -42,4 +46,10 @@ public class AvaliacaoNPSService {
 	public List<AvaliacaoNPS> getListAll(){
 		return rep.findAll();
 	}
+/*
+	public List<AvaliacaoNPS> getByIdAvaliacao(Long id) {
+		rep.getById(id);
+	}
+	*/
+
 }
