@@ -1,6 +1,9 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.ProdutoCarrinhoDTO;
+import br.com.meliw4.projetointegrador.dto.response.ProdutoVendedorDTO;
+import br.com.meliw4.projetointegrador.dto.response.ProdutoVendedorResponseDTO;
+import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
@@ -8,8 +11,10 @@ import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoVendedorService {
@@ -81,5 +86,13 @@ public class ProdutoVendedorService {
 			this.updateEstoqueProduto((qtdAtual + qtdSolicitada), produtoVendedor.getId());
 		}
 		return true;
+	}
+
+	public ProdutoVendedorResponseDTO devolveLoteAVencerPorProdutoID(Long id){
+		List<ProdutoVendedor> produtos = this.produtoVendedorRepository.findByProduto_Id(id).get();
+		ProdutoVendedor produto = produtos
+			.stream()
+			.sorted(Comparator.comparing(ProdutoVendedor::getDataVencimento)).collect(Collectors.toList()).get(0);
+		return ProdutoVendedorResponseDTO.converte(produto);
 	}
 }

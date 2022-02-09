@@ -1,7 +1,11 @@
 package br.com.meliw4.projetointegrador.dto.response;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import br.com.meliw4.projetointegrador.entity.Lote;
+import br.com.meliw4.projetointegrador.entity.Setor;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +21,6 @@ public class LoteResponseDTO {
 	private Categoria categoria;
 	private LocalDate validade;
 	private Integer quantidade;
+
+
 }

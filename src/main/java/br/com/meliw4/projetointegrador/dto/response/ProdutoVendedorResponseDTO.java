@@ -1,7 +1,10 @@
 package br.com.meliw4.projetointegrador.dto.response;
 
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -10,15 +13,13 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdutoVendedorDTO {
-	private Long id;
+public class ProdutoVendedorResponseDTO {
 	private Long vendedor;
 	private Long produto;
 	private LocalDate dataValidade;
 
-	public static ProdutoVendedorDTO converte (ProdutoVendedor pv){
-		return ProdutoVendedorDTO.builder()
-			.id(pv.getId())
+	public static ProdutoVendedorResponseDTO converte (ProdutoVendedor pv){
+		return ProdutoVendedorResponseDTO.builder()
 			.vendedor(pv.getVendedor().getId())
 			.produto(pv.getProduto().getId())
 			.dataValidade(pv.getDataVencimento())

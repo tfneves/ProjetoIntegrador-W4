@@ -17,7 +17,7 @@ import java.util.List;
 public class ProdutoCarrinhoResponse {
 
 	private Long id;
-	private CarrinhoResponse carrinho;
+	private CarrinhoResponse  carrinho;
 	private ProdutoVendedorDTO produto;
 	private Integer quantidade;
 
