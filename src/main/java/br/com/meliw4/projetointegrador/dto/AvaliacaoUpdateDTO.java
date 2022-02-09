@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AvaliacaoDTO {
+public class AvaliacaoUpdateDTO {
 }

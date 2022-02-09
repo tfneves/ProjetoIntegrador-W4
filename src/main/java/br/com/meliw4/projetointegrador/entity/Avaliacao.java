@@ -4,6 +4,7 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Estrelas;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -16,6 +17,8 @@ public class Avaliacao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	private LocalDate dataAvaliacao = LocalDate.now();
 
 	private String comentario;
 
