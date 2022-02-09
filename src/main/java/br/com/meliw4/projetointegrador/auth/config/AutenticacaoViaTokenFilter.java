@@ -8,6 +8,7 @@ import br.com.meliw4.projetointegrador.entity.Vendedor;
 import br.com.meliw4.projetointegrador.repository.UsuarioRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -43,7 +44,7 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private void realizaAutenticacaoDoTokenNoSpring(String token) {
 		String userName = tokenService.getUsername(token);
-		Usuario usuario = this.repository.findByLogin(userName);
+		Usuario usuario = this.repository.findByLogin(userName).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 		if(usuario instanceof Representante){
 			Representante representante = new Representante(usuario.getId(), usuario.getLogin(), usuario.getSenha());
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(representante, null, representante.getAuthorities());

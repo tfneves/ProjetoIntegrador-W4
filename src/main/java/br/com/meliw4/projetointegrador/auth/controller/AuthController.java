@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class AuthController {
@@ -25,7 +27,7 @@ public class AuthController {
 	private TokenService tokenService;
 
 	@PostMapping("/auth")
-	public ResponseEntity<?> authenticate(@RequestBody LoginDTO usuario) {
+	public ResponseEntity<?> authenticate(@RequestBody @Valid LoginDTO usuario) {
 		UsernamePasswordAuthenticationToken dadosLogin = new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getSenha());
 		Authentication authentication = manager.authenticate(dadosLogin);
 		String token = tokenService.geraToken(authentication);

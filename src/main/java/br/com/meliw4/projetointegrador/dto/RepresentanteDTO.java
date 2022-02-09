@@ -2,12 +2,10 @@ package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Representante;
-import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +25,11 @@ public class RepresentanteDTO {
 	private String nome;
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
+	@NotEmpty(message = "O campo login não pode ser vazio")
+	@Size(max = 30, message = "O campo login não pode exceder 30 caracteres")
 	private String login;
+	@NotEmpty(message = "O campo senha não pode ser vazio")
+	@Size(max = 30, message = "O campo senha não pode exceder 30 caracteres")
 	private String senha;
 
 	public static Representante convert(RepresentanteDTO representanteDTO ,Armazem armazem) {

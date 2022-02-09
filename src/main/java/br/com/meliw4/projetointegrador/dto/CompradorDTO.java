@@ -3,7 +3,6 @@ package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Endereco;
-import br.com.meliw4.projetointegrador.entity.Vendedor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +32,11 @@ public class CompradorDTO {
 	private LocalDate dataNascimento;
 	@NotNull(message = "Endereco inválido")
 	private Long endereco_id;
+	@NotEmpty(message = "O campo login não pode ser vazio")
+	@Size(max = 30, message = "O campo login não pode exceder 30 caracteres")
 	private String login;
+	@NotEmpty(message = "O campo senha não pode ser vazio")
+	@Size(max = 30, message = "O campo senha não pode exceder 30 caracteres")
 	private String senha;
 
 	public static Comprador convert(CompradorDTO compradorDTO , Endereco endereco) {
