@@ -26,80 +26,71 @@ public class RepresentanteServiceTest {
 	@BeforeAll
 	public static void setUp() {
 		representanteService = new RepresentanteService(
-			representanteRepository,
-			armazemService
-		);
+				representanteRepository,
+				armazemService);
 	}
 
 	@Test
 	public void shouldThrowArmazemAlreadyWithRepresentanteException() {
 		RepresentanteDTO representanteDTO = RepresentanteDTO.builder()
-			.armazem_id(1l)
-			.build();
+				.armazem_id(1l)
+				.build();
 		Mockito.when(armazemService.findArmazemById(1l)).thenReturn(
-			Armazem.builder()
-				.representante(Representante.builder().build())
-				.build()
-		);
+				Armazem.builder()
+						.representante(Representante.builder().build())
+						.build());
 		assertThrows(
-			ArmazemException.class,
-			() -> representanteService.register(representanteDTO)
-		);
+				ArmazemException.class,
+				() -> representanteService.register(representanteDTO));
 	}
 
 	@Test
 	public void shouldNotReturnArmazemAlreadyWithRepresentanteException() {
 		RepresentanteDTO representanteDTO = RepresentanteDTO.builder()
-			.armazem_id(1l)
-			.build();
+				.armazem_id(1l)
+				.build();
 		Mockito.when(armazemService.findArmazemById(1l)).thenReturn(Armazem.builder().build());
 		assertDoesNotThrow(
-			() -> representanteService.register(representanteDTO)
-		);
+				() -> representanteService.register(representanteDTO));
 	}
 
 	@Test
 	public void shouldThrowInvalidRepresentanteForArmazemException() {
 		Representante representante = Representante.builder()
-			.armazem(
-				Armazem.builder()
-					.id(2l)
-					.build()
-			)
-			.build();
+				.armazem(
+						Armazem.builder()
+								.id(2l)
+								.build())
+				.build();
 		assertThrows(
-			BusinessValidationException.class,
-			() -> representanteService.validateRepresentanteArmazem(representante, 1l)
-		);
+				BusinessValidationException.class,
+				() -> representanteService.validateRepresentanteArmazem(representante, 1l));
 	}
 
 	@Test
 	public void shouldNotReturnInvalidRepresentanteForArmazemException() {
 		Representante representante = Representante.builder()
-			.armazem(
-				Armazem.builder()
-					.id(1l)
-					.build()
-			)
-			.build();
+				.armazem(
+						Armazem.builder()
+								.id(1l)
+								.build())
+				.build();
 		assertDoesNotThrow(
-			() -> representanteService.validateRepresentanteArmazem(representante, 1l)
-		);
+				() -> representanteService.validateRepresentanteArmazem(representante, 1l));
 	}
 
 	@Test
 	public void shouldThrowInvalidRepresentanteException() {
 		assertThrows(
-			BusinessValidationException.class,
-			() -> representanteService.findRepresentanteById(1l)
-		);
+				BusinessValidationException.class,
+				() -> representanteService.findRepresentanteById(1l));
 	}
 
 	@Test
 	public void shouldNotThrowInvalidRepresentanteException() {
-		Mockito.when(representanteRepository.findById(2l)).thenReturn(Optional.of((Representante) Representante.builder().build()));
+		Mockito.when(representanteRepository.findById(2l))
+				.thenReturn(Optional.of((Representante) Representante.builder().build()));
 		assertDoesNotThrow(
-			() -> representanteService.findRepresentanteById(2l)
-		);
+				() -> representanteService.findRepresentanteById(2l));
 	}
 }

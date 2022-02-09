@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.dto;
 
-
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Endereco;
 import br.com.meliw4.projetointegrador.entity.Vendedor;
@@ -20,6 +19,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CompradorDTO {
 
+	@NotNull
+	private Long id;
 	@NotEmpty(message = "Nome não pode estar em branco")
 	@Size(max = 100, message = "Nome não pode exceder 100 caracteres")
 	private String nome;
@@ -33,13 +34,14 @@ public class CompradorDTO {
 	@NotNull(message = "Endereco inválido")
 	private Long endereco_id;
 
-	public static Comprador convert(CompradorDTO compradorDTO , Endereco endereco) {
+	public static Comprador convert(CompradorDTO compradorDTO, Endereco endereco) {
 		return Comprador.builder()
-			.nome(compradorDTO.getNome())
-			.telefone(compradorDTO.telefone)
-			.email(compradorDTO.getTelefone())
-			.dataNascimento(compradorDTO.getDataNascimento())
-			.endereco(endereco)
-			.build();
+				.id(compradorDTO.getId())
+				.nome(compradorDTO.getNome())
+				.telefone(compradorDTO.telefone)
+				.email(compradorDTO.getTelefone())
+				.dataNascimento(compradorDTO.getDataNascimento())
+				.endereco(endereco)
+				.build();
 	}
 }

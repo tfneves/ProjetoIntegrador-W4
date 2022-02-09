@@ -23,41 +23,36 @@ public class ArmazemServiceTest {
 	@BeforeAll
 	public static void setUp() {
 		armazemService = new ArmazemService(
-			armazemRepository
-		);
+				armazemRepository);
 	}
 
 	@Test
 	public void shouldThrowInvalidArmazemException() {
 		assertThrows(
-			BusinessValidationException.class,
-			() -> armazemService.findArmazemById(1l)
-		);
+				BusinessValidationException.class,
+				() -> armazemService.findArmazemById(1l));
 	}
 
 	@Test
 	public void shouldNotThrowInvalidArmazemException() {
 		Mockito.when(armazemRepository.findById(2l)).thenReturn(Optional.of((Armazem) Armazem.builder().build()));
 		assertDoesNotThrow(
-			() -> armazemService.findArmazemById(2l)
-		);
+				() -> armazemService.findArmazemById(2l));
 	}
 
 	@Test
 	public void shouldReturnListArmazemDTO() {
 		List<Armazem> armazens = new ArrayList<>();
 		armazens.add(
-			Armazem.builder()
-				.nome("Teste 1")
-				.volume(2000.0)
-				.build()
-		);
+				Armazem.builder()
+						.nome("Teste 1")
+						.volume(2000.0)
+						.build());
 		armazens.add(
-			Armazem.builder()
-				.nome("Teste 2")
-				.volume(2000.0)
-				.build()
-		);
+				Armazem.builder()
+						.nome("Teste 2")
+						.volume(2000.0)
+						.build());
 		Mockito.when(armazemRepository.findAll()).thenReturn(armazens);
 		List<ArmazemDTO> armazensDTO = armazemService.findAll();
 		assertEquals(armazensDTO.size(), 2);
@@ -68,7 +63,6 @@ public class ArmazemServiceTest {
 	@Test
 	public void shouldSaveArmazem() {
 		assertDoesNotThrow(
-			() -> armazemService.save(Armazem.builder().build())
-		);
+				() -> armazemService.save(Armazem.builder().build()));
 	}
 }
