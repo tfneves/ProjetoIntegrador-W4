@@ -21,12 +21,22 @@ public class AvaliacaoNPSService {
 	@Autowired
 	AvaliacaoNPSRepository rep;
 
+	/**
+	 * Salva avaliaçãoNPS nas tabelas pertinentes
+	 * @return avaliacaoNPS
+	 * @author Francisco Alves
+	 */
 	public AvaliacaoNPS save(@Valid AvaliacaoNPSDTO avaliacaoNPSDTO ) {
 		Comprador comprador = compradorRepository.getById(avaliacaoNPSDTO.getComprador_id());
 		AvaliacaoNPS avaliacaoNPS = AvaliacaoNPSDTO.convert(avaliacaoNPSDTO,comprador);
 		rep.save(avaliacaoNPS);
 		return avaliacaoNPS;
 	}
+	/**
+	 * Lista todas as  avaliaçãoNPS nas tabelas pertinentes
+	 * @return rep.finall()
+	 * @author Francisco Alves
+	 */
 	public List<AvaliacaoNPS> getListAll(){
 		return rep.findAll();
 	}

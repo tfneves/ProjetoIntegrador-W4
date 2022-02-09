@@ -23,6 +23,11 @@ public class AvaliacaoNPSController {
 	@Autowired
 	AvaliacaoNPSService as ;
 
+	/**
+	 * Salva avaliaçãoNPS nas tabelas pertinentes
+	 * @return RespontityEntity
+	 * @author Francisco Alves
+	 */
 	@PostMapping()
 	public ResponseEntity<Map<String, String>> cadastrarAvaliacao(@RequestBody @Valid AvaliacaoNPSDTO avaliacaoNPSDTO, UriComponentsBuilder uriBuilder) throws Exception {
 		Map<String, String> response = new HashMap<>();
@@ -31,6 +36,10 @@ public class AvaliacaoNPSController {
 		response.put("message","Sua avaliação foi registrada !!");
 		return ResponseEntity.created(uri).body(response);
 	}
+	/**
+	 * Lista avaliaçãoNPS nas tabelas pertinentes
+	 * @author Francisco Alves
+	 */
 	@GetMapping("/list")
 	@ResponseBody
 	private List<AvaliacaoNPS> getALL(){
