@@ -4,7 +4,6 @@ import static  org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import org.junit.jupiter.api.Test;
 import br.com.meliw4.projetointegrador.dto.AvaliacaoNPSDTO;
