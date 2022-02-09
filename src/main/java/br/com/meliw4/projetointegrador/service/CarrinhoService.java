@@ -9,6 +9,8 @@ import br.com.meliw4.projetointegrador.response.CarrinhoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarrinhoService {
 
@@ -43,5 +45,10 @@ public class CarrinhoService {
 		}catch (RuntimeException e){
 			throw new OrderCheckoutException("Erro ao salvar carrinho - " + e.getMessage(), 500);
 		}
+	}
+
+	public List<CarrinhoResponse> retornaTodosOsCarrinhos(){
+		List<Carrinho> carrinhos = this.carrinhoRepository.findAll();
+		return CarrinhoResponse.converte(carrinhos);
 	}
 }

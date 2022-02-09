@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.service;
 
+import br.com.meliw4.projetointegrador.dto.response.ProdutoCarrinhoResponse;
 import br.com.meliw4.projetointegrador.entity.ProdutoCarrinho;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoCarrinhoService {
@@ -41,6 +44,10 @@ public class ProdutoCarrinhoService {
 		if(produtosCarrinho.isEmpty())
 			throw new BusinessValidationException("O carrinho informado não possui nenhum produto");
 		return produtosCarrinho;
+	}
+
+	public List<ProdutoCarrinhoResponse> listaTodosOsProdutosPorCarrinho(){
+		return ProdutoCarrinhoResponse.converte(this.produtoCarrinhoRepository.findAll());
 	}
 
 }
