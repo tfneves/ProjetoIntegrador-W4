@@ -16,12 +16,14 @@ import java.time.LocalDate;
 public class ProdutoVendedorResponseDTO {
 	private Long vendedor;
 	private Long produto;
+	private Long lote;
 	private LocalDate dataValidade;
 
 	public static ProdutoVendedorResponseDTO converte (ProdutoVendedor pv){
 		return ProdutoVendedorResponseDTO.builder()
 			.vendedor(pv.getVendedor().getId())
 			.produto(pv.getProduto().getId())
+			.lote(pv.getLote().getId())
 			.dataValidade(pv.getDataVencimento())
 			.build();
 	}

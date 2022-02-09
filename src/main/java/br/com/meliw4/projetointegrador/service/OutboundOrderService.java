@@ -1,20 +1,15 @@
 package br.com.meliw4.projetointegrador.service;
 
-import br.com.meliw4.projetointegrador.dto.response.ProdutoCarrinhoResponse;
-import br.com.meliw4.projetointegrador.dto.response.ProdutoOutboundResponseDTO;
-import br.com.meliw4.projetointegrador.dto.response.ProdutoVendedorDTO;
-import br.com.meliw4.projetointegrador.dto.response.ProdutoVendedorResponseDTO;
+import br.com.meliw4.projetointegrador.dto.response.*;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.LoteRepository;
 import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +29,19 @@ public class OutboundOrderService {
 			.collect(Collectors.toSet());
 	}
 
-	public List<ProdutoOutboundResponseDTO> baixaOutBoundPorId(Long id) {
+	public Map<Long, List<ProdutoOutboundResponseDTO>>  baixaOutBoundPorId(Long id) {
 		List<ProdutoCarrinhoResponse> produtosCarrinho = retornaAListadeCarrinho(id);
+		CarrinhoOutboundResponseDTO carrinho = CarrinhoOutboundResponseDTO.converte(retornaAListadeCarrinho(id).get(0));
+
+		if(produtosCarrinho.size() == 0)
+			throw new NotFoundException("Carrinho já finalizado ou não existente");
+
 		List<ProdutoOutboundResponseDTO> produtos = retornaOsProdutosOrdenadosPorValidade(produtosCarrinho);
-		return produtos.stream().sorted(Comparator.comparing(ProdutoOutboundResponseDTO::getProduto)).collect(Collectors.toList());
+		produtos = produtos.stream().sorted(Comparator.comparing(ProdutoOutboundResponseDTO::getProduto)).collect(Collectors.toList());
+
+		Map<Long, List<ProdutoOutboundResponseDTO>> response = new HashMap<>();
+		response.put(carrinho.getCarrinho().getId(), produtos);
+		return response;
 	}
 
 	private List<ProdutoCarrinhoResponse> retornaAListadeCarrinho(Long id){
