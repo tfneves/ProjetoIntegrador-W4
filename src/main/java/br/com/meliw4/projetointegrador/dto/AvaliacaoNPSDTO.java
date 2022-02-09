@@ -23,11 +23,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AvaliacaoNPSDTO {
 
-	@NotBlank
+	@NotNull(message = "O campo nota não pode ser vazio")
 	private Integer nota;
-	@NotBlank
+	@NotNull(message = "O campo data avaliação não pode ser vazio")
 	private LocalDate dataAvaliacao;
-	@NotBlank
+	@NotNull(message = "O campo comprador_id não pode ser vazio")
 	private Long comprador_id;
 
 	public static AvaliacaoNPS convert(AvaliacaoNPSDTO avaliacaoNPSDTO,Comprador comprador) {
