@@ -42,16 +42,16 @@ public class LoteController {
 
 	@GetMapping(path = "/fresh-products/due-date/")
 	public ResponseEntity<LotesSetorVencimentoResponse> getLotesProdutosOrderedAndFilteredByDueDate(
-			@RequestParam(value = "section", required = true) Long setorId,
-			@RequestParam(value = "days", required = true) Integer days) {
+			@RequestParam(value = "section", required = true) final Long setorId,
+			@RequestParam(value = "days", required = true) final Integer days) {
 		return ResponseEntity.ok(loteService.getLotesBySetorFilterProdutosByDays(setorId, days));
 	}
 
 	@GetMapping(path = "/fresh-products/due-date/list")
 	public ResponseEntity<List<LoteProdutosVencimentoResponse>> getProdutosInSetorsOrderedAndFilteredByDueDate(
-			@RequestParam(value = "category", required = false) Categoria categoria,
-			@RequestParam(value = "order", required = false) Ordenamento ordenamento,
-			@RequestParam(value = "days") Integer days) {
+			@RequestParam(value = "category", required = false) final Categoria categoria,
+			@RequestParam(value = "order", required = false) final Ordenamento ordenamento,
+			@RequestParam(value = "days") final Integer days) {
 		return ResponseEntity
 				.ok(loteService.getProdutosInSetorsOrderedAndFilteredByDueDate(categoria, ordenamento, days));
 	}

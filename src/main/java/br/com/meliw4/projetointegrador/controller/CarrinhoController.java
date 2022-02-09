@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.controller;
 
-import br.com.meliw4.projetointegrador.entity.Carrinho;
 import br.com.meliw4.projetointegrador.entity.StatusPedido;
 import br.com.meliw4.projetointegrador.response.CarrinhoResponse;
 import br.com.meliw4.projetointegrador.service.CarrinhoService;
@@ -16,7 +15,8 @@ public class CarrinhoController {
 	CarrinhoService carrinhoService;
 
 	@PutMapping("fresh-products/orders/")
-	public ResponseEntity<CarrinhoResponse> atulizarCarrinho(@RequestParam Long idOrder, @RequestBody StatusPedido statusPedido){
+	public ResponseEntity<CarrinhoResponse> atulizarCarrinho(@RequestParam Long idOrder,
+			@RequestBody StatusPedido statusPedido) {
 		return ResponseEntity.ok(carrinhoService.atualizaCarrinho(idOrder, statusPedido));
 	}
 }
