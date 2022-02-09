@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -37,6 +38,7 @@ public class LoteDTO {
 		return Lote.builder()
 			.setor(setor)
 			.representante(representante)
+			.dataAquisicao(LocalDate.now())
 			.build();
 	}
 

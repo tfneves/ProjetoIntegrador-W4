@@ -18,9 +18,12 @@ public class Avaliacao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private LocalDate dataAvaliacao = LocalDate.now();
+	private LocalDate dataAvaliacao;
 
 	private String comentario;
+
+	@ManyToOne
+	private Comprador comprador;
 
 	@ManyToOne(optional = false)
 	@Enumerated(EnumType.STRING)

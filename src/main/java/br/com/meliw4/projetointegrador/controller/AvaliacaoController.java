@@ -22,8 +22,7 @@ public class AvaliacaoController {
 	@PostMapping(path = "/avaliacao")
 	public ResponseEntity<?> registerAvaliacao(@RequestBody @Valid AvaliacaoDTO dto, UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("/avaliacao").build().toUri();
-		Avaliacao avaliacao = AvaliacaoDTO.convert(dto);
-		return ResponseEntity.created(uri).body(avaliacaoService.createAvaliacao(avaliacao));
+		return ResponseEntity.created(uri).body(avaliacaoService.createAvaliacao(dto));
 	}
 
 	@PutMapping(path = "/avaliacao")

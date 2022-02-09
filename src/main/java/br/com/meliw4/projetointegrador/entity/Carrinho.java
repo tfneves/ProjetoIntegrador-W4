@@ -23,4 +23,7 @@ public class Carrinho {
 	@OneToOne
 	@JoinColumn(name = "status_pedido_id", referencedColumnName = "id")
 	private StatusPedido statusPedido;
+	@OneToMany(mappedBy = "carrinho", fetch = FetchType.LAZY)
+	List<ProdutoCarrinho> produtosCarrinho;
+
 }

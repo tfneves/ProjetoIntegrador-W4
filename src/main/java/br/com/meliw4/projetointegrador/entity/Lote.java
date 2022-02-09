@@ -28,5 +28,5 @@ public class Lote {
 	@OneToMany(mappedBy = "lote", fetch = FetchType.LAZY)
 	private List<ProdutoVendedor> produtoVendedores;
 
-	private final LocalDate dataAquisicao = LocalDate.now();
+	private LocalDate dataAquisicao;
 }
