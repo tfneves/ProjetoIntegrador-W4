@@ -24,7 +24,6 @@ public class LoteControllerTest {
 	private MockMvc mockMvc;
 
 	@Test
-	@Order(0)
 	public void shouldSaveLote() throws Exception {
 		LocalDate dueDate = LocalDate.now().plusDays(60);
 		URI uri = new URI("/api/v1/fresh-products/inboundorder/");
@@ -42,16 +41,13 @@ public class LoteControllerTest {
 			.andExpect(MockMvcResultMatchers.status().is(201));
 	}
 
-/*	@Order(1)
 	@Test
 	public void shouldUpdateLote() throws Exception {
-		LocalDate dueDate = LocalDate.now().plusDays(60);
 		URI uri = new URI("/api/v1/fresh-products/inboundorder/");
-		String json = "{\"loteId\":1,\"produtosUpdateDTO\":[{\"id\":2,\"quantidadeRetira\":1}]}";
+		String json = "{\"loteId\":1,\"produtosUpdateDTO\":[{\"id\":1,\"quantidadeRetira\":1}]}";
 		mockMvc.perform(
 			MockMvcRequestBuilders
 				.put(uri).content(json).contentType(MediaType.APPLICATION_JSON))
 			.andExpect(MockMvcResultMatchers.status().is(201));
 	}
-*/
 }
