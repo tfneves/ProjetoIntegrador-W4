@@ -1,5 +1,6 @@
 package br.com.meliw4.projetointegrador.service;
 
+import br.com.meliw4.projetointegrador.dto.ArmazemDTO;
 import br.com.meliw4.projetointegrador.dto.AvaliacaoNPSDTO;
 import br.com.meliw4.projetointegrador.entity.AvaliacaoNPS;
 import br.com.meliw4.projetointegrador.entity.Comprador;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AvaliacaoNPSService {

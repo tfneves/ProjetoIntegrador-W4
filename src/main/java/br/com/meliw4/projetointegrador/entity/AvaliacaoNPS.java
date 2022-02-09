@@ -1,7 +1,6 @@
 package br.com.meliw4.projetointegrador.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +23,10 @@ public class AvaliacaoNPS {
 	private Integer nota;
 	@Column(name = "data_avaliacao" ,nullable = false ,columnDefinition = "DATE")
 	private LocalDate dataAvaliacao;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "comprador_id")
-	@JsonBackReference
+	@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 	private Comprador comprador;
 }

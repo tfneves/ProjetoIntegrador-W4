@@ -26,7 +26,7 @@ public class AvaliacaoNPSDTO {
 	@NotNull(message = "O campo nota não pode ser vazio")
 	private Integer nota;
 	@NotNull(message = "O campo data avaliação não pode ser vazio")
-	private LocalDate dataAvaliacao;
+	private LocalDate dataAvaliacao = LocalDate.now();
 	@NotNull(message = "O campo comprador_id não pode ser vazio")
 	private Long comprador_id;
 

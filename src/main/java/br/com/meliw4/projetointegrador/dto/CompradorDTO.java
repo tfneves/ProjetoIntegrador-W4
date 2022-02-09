@@ -29,6 +29,7 @@ public class CompradorDTO {
 	@NotEmpty(message = "Email não pode estar em branco")
 	@Size(max = 20, message = "Nome não pode exceder 20 caracteres")
 	private String email;
+
 	private LocalDate dataNascimento;
 	@NotNull(message = "Endereco inválido")
 	private Long endereco_id;

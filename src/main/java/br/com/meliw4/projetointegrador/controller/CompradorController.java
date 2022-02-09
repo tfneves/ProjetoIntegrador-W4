@@ -41,7 +41,7 @@ public class CompradorController {
 	public ResponseEntity<Map<String, String>> cadastrarComprador(@RequestBody @Valid CompradorDTO compradorDTO, UriComponentsBuilder uriBuilder) throws Exception {
 		Map<String, String> response = new HashMap<>();
 		compradorService.register(compradorDTO);
-		URI uri = uriBuilder.path("").build().toUri();
+		URI uri = uriBuilder.path("/comprador").build().toUri();
 		response.put("message","Comprador criado com sucesso !!");
 		return ResponseEntity.created(uri).body(response);
 	}

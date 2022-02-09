@@ -1,6 +1,9 @@
 package br.com.meliw4.projetointegrador.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,9 +30,8 @@ public class Comprador {
 	private String email;
 	@Column
 	private LocalDate dataNascimento;
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "endereco_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JsonIgnore
 	private Endereco endereco;
 }
