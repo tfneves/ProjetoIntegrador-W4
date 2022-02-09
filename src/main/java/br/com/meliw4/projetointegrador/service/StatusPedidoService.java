@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class StatusPedidoService {
 
-	@Autowired
 	StatusPedidoRepository statusPedidoRepository;
+
+	public StatusPedidoService(StatusPedidoRepository statusPedidoRepository) {
+		this.statusPedidoRepository = statusPedidoRepository;
+	}
 
 
 	public StatusPedido findStatusCodeWithName(String statusCodeName) {
-		if (statusPedidoRepository.findByStatusCode(statusCodeName) == null){
+		if (statusPedidoRepository.findByStatusCode(statusCodeName) == null) {
 			throw new BusinessValidationException("StatusCode informado não está cadastrado");
 		}
 		return statusPedidoRepository.findByStatusCode(statusCodeName);

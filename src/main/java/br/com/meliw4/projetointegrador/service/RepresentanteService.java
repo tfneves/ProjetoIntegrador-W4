@@ -24,7 +24,7 @@ public class RepresentanteService {
 	public Representante register(RepresentanteDTO representanteDTO) {
 		Armazem armazem = armazemService.findArmazemById(representanteDTO.getArmazem_id());
 		if (armazem.getRepresentante() != null) {
-			throw new ArmazemException("O armazem tem representante cadastrado");
+			throw new ArmazemException("O armazém já tem um representante cadastrado.");
 		}
 
 		Representante representante = RepresentanteDTO.convert(representanteDTO, armazem);

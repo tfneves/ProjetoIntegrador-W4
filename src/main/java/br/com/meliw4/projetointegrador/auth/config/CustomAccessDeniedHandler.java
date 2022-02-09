@@ -20,7 +20,7 @@ public class CustomAccessDeniedHandler implements AuthenticationEntryPoint {
 		Map<String, String> resp = new HashMap<>();
 		response.setContentType("application/json;charset=UTF-8");
 		if(authException.getMessage().equals("Bad credentials")){
-			response.setStatus(400);
+			response.setStatus(401);
 			resp.put("message", "Credenciais inválidas");
 		}else if(authException.getMessage().equals("Full authentication is required to access this resource")){
 			response.setStatus(400);

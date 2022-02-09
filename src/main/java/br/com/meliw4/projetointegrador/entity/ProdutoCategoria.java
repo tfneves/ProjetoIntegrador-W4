@@ -10,7 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
@@ -42,4 +41,3 @@ public class ProdutoCategoria implements Serializable {
 	@Digits(integer = 3, fraction = 2, message = "Temperatura deve ser no formato XXX.XX")
 	private Float temperaturaMinima;
 }
-

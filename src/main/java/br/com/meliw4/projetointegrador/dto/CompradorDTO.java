@@ -1,6 +1,5 @@
 package br.com.meliw4.projetointegrador.dto;
 
-
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Endereco;
 import lombok.AllArgsConstructor;
@@ -20,6 +19,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CompradorDTO {
 
+	@NotNull
+	private Long id;
 	@NotEmpty(message = "Nome não pode estar em branco")
 	@Size(max = 100, message = "Nome não pode exceder 100 caracteres")
 	private String nome;
@@ -38,6 +39,7 @@ public class CompradorDTO {
 	@NotEmpty(message = "O campo senha não pode ser vazio")
 	@Size(max = 30, message = "O campo senha não pode exceder 30 caracteres")
 	private String senha;
+
 
 	public static Comprador convert(CompradorDTO compradorDTO , Endereco endereco) {
 		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
