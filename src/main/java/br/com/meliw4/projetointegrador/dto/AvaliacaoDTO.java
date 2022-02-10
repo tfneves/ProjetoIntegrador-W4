@@ -40,4 +40,16 @@ public class AvaliacaoDTO {
 			.pedido(pedido)
 			.build();
 	}
+
+	public static AvaliacaoDTO convert(Avaliacao avaliacao) {
+		return AvaliacaoDTO.builder()
+			.avaliacaoId(avaliacao.getId())
+			.dataAvaliacao(avaliacao.getDataAvaliacao())
+			.compradorId(avaliacao.getComprador().getId())
+			.pedidoId(avaliacao.getPedido().getId())
+			.anuncioId(avaliacao.getAnuncio().getId())
+			.estrelas(avaliacao.getEstrelas().getClassificacao())
+			.comentario(avaliacao.getComentario())
+			.build();
+	}
 }

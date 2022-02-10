@@ -46,6 +46,11 @@ public class AvaliacaoService {
 		avaliacaoRepository.delete(avaliacao);
 	}
 
+	public AvaliacaoDTO getAvaliacao(Long id) {
+		Avaliacao avaliacao = findAvaliacaoById(id);
+		return AvaliacaoDTO.convert(avaliacao);
+	}
+
 	public Avaliacao getAnuncioByAssociations(Long compradorId, Long pedidoId, Long anuncioId) {
 		return avaliacaoRepository.findByCompradorIdAndPedidoIdAndAnuncioId(compradorId, pedidoId, anuncioId);
 	}
@@ -72,9 +77,6 @@ public class AvaliacaoService {
 		);
 	}
 
-	public Object getAvaliacao(Long id) {
-		return null;
-	}
 
 	public Object getAvaliacoesAnuncio(Long id) {
 		return null;
