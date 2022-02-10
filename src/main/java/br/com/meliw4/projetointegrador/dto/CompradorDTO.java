@@ -19,8 +19,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CompradorDTO {
 
-	@NotNull
-	private Long id;
 	@NotEmpty(message = "Nome não pode estar em branco")
 	@Size(max = 100, message = "Nome não pode exceder 100 caracteres")
 	private String nome;
@@ -36,7 +34,6 @@ public class CompradorDTO {
 
 	public static Comprador convert(CompradorDTO compradorDTO, Endereco endereco) {
 		return Comprador.builder()
-				.id(compradorDTO.getId())
 				.nome(compradorDTO.getNome())
 				.telefone(compradorDTO.telefone)
 				.email(compradorDTO.getTelefone())

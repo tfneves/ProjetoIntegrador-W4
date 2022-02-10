@@ -41,11 +41,10 @@ public class CompradorServiceTest {
 	void testRegister() {
 		Endereco endereco1 = Endereco.builder().id(1L).build();
 		when(enderecoService.getById(1L)).thenReturn(endereco1);
-		CompradorDTO compradorDTO = CompradorDTO.builder().id(1L).nome("Comprador 1").dataNascimento(LocalDate.MIN)
+		CompradorDTO compradorDTO = CompradorDTO.builder().nome("Comprador 1").dataNascimento(LocalDate.MIN)
 				.email("email@email.com").telefone("9999999").endereco_id(1L).build();
 
 		Comprador response = compradorService.register(compradorDTO);
-		assertEquals(1L, response.getId());
 		assertEquals(1L, response.getEndereco().getId());
 	}
 }

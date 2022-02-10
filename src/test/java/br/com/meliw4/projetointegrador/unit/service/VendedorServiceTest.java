@@ -34,10 +34,9 @@ public class VendedorServiceTest {
 
 	@Test
 	void shouldRegister() {
-		VendedorDTO vendedorDTO = VendedorDTO.builder().id(1L).nome("Vendedor 1").build();
+		VendedorDTO vendedorDTO = VendedorDTO.builder().nome("Vendedor 1").build();
 		Vendedor response = vendedorService.register(vendedorDTO);
 
-		assertEquals(1L, response.getId());
 		assertEquals("Vendedor 1", response.getNome());
 	}
 }
