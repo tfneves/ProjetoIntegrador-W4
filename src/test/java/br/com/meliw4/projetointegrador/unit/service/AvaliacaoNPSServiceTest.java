@@ -14,8 +14,12 @@ import br.com.meliw4.projetointegrador.repository.CompradorRepository;
 import br.com.meliw4.projetointegrador.service.AvaliacaoNPSService;
 import br.com.meliw4.projetointegrador.service.CompradorService;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AvaliacaoNPSServiceTest {
 	private static CompradorService compradorService = mock(CompradorService.class);
@@ -34,4 +38,5 @@ public class AvaliacaoNPSServiceTest {
 		AvaliacaoNPS response = avaliacaoNPSService.save(avaliacaoNPSDTO);
 		assertEquals(8,response.getNota());
 	}
-}
+
+	}
