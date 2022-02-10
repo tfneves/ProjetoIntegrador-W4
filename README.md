@@ -16,7 +16,7 @@
 
 - Consultar o nível de satisfação e identificar os perfis de compradores através da Metodologia NPS
 
-# - End Point
+# End Point
 
 GET -   /api/v1/avaliacao/list - Obtenha a nota de todos os compradores.
 
