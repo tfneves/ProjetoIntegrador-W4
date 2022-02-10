@@ -1,7 +1,5 @@
 # Desafio Final - Time 07
 
-## Implementação
-
-## Rodando a aplicação
+## Rodando a aplicação e os testes
 
 ## Endpoints e Payloads
