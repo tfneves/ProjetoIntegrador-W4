@@ -1,13 +1,11 @@
 package br.com.meliw4.projetointegrador.unit.service;
 
-import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.entity.Usuario;
 import br.com.meliw4.projetointegrador.entity.Vendedor;
 import br.com.meliw4.projetointegrador.repository.UsuarioRepository;
 import br.com.meliw4.projetointegrador.service.UsuarioService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
