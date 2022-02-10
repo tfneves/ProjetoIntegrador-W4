@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "bdcf9b0b-4e53-4254-964f-e66b36b4de9f",
+		"name": "Requisito6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "avaliacao",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data_avaliacao\":\"2022-02-08\",\n    \"nota\":9   \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/avaliacao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"avaliacao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comprador",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data_nascimento\":\"1974-05-11\",\n    \"email\":\"comprador1@gamil.com\",\n    \"nome\":\"Comprador NPS\",\n    \"telefone\":\"85 99999-9999\",\n    \"endereco_id\":1 \n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/comprador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"comprador"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "endereco",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Transfer-Encoding",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bairro\":\"Centro\",\n    \"cidade\":\"Fortaleza\",\n    \"estado\":\"Ceará\",\n    \"logradouro\":\"Rua João Pessoa\",\n    \"numero\":123\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/endereco",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"endereco"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listarAvaliacoes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/avaliacao/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"avaliacao",
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
