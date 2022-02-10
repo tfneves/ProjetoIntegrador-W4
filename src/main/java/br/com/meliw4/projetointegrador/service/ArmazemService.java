@@ -6,7 +6,6 @@ import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -26,7 +25,11 @@ public class ArmazemService {
 				.orElseThrow(() -> new BusinessValidationException("O armazém com id " + id + " não existe."));
 	}
 
-	public List<ArmazemDTO> findAll() {
+	public List<Armazem> findAll() {
+		return this.armazemRepository.findAll();
+	}
+
+	public List<ArmazemDTO> findAllDTO() {
 		return this.armazemRepository.findAll().stream()
 				.map(ArmazemDTO::parseToDTO)
 				.collect(Collectors.toList());

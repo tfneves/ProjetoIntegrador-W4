@@ -104,7 +104,6 @@ public class AdviceExceptions {
 		return errors;
 	}
 
-
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	@ExceptionHandler(InternalServerErrorException.class)
@@ -115,7 +114,6 @@ public class AdviceExceptions {
 		return errors;
 	}
 
-
 	@ResponseBody
 	@ExceptionHandler(OrderCheckoutException.class)
 	private ResponseEntity<Map<String, String>> orderCheckoutError(OrderCheckoutException e) {
@@ -124,8 +122,17 @@ public class AdviceExceptions {
 		response.put("statusCode", Integer.toString(e.getHttpStatusCode()));
 		produtoVendedorRepository.devolveProdutoEstoque(PedidoService.previousStateProdutoVendedor);
 		PedidoService.clearQueueProdutoVendedor();
-		if(e.getHttpStatusCode() == 400)
+		if (e.getHttpStatusCode() == 400)
 			return ResponseEntity.badRequest().body(response);
 		return ResponseEntity.internalServerError().body(response);
+	}
+
+	@ResponseBody
+	@ExceptionHandler(APILocationException.class)
+	private Map<String, String> apiLocationException(APILocationException e) {
+		Map<String, String> errors = new HashMap<>();
+		errors.put("error_message", e.getMessage());
+		errors.put("statusCode", e.getHttpStatusCode());
+		return errors;
 	}
 }

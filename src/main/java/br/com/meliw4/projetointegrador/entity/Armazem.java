@@ -19,4 +19,6 @@ public class Armazem {
 	private Double volume;
 	@OneToOne(mappedBy = "armazem")
 	private Representante representante;
+	private Double lat;
+	private Double lon;
 }

@@ -2,26 +2,17 @@ package br.com.meliw4.projetointegrador.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
-import br.com.meliw4.projetointegrador.service.impl.ProdutoServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.meliw4.projetointegrador.dto.response.ArmazemProdutoResponseDTO;
-import br.com.meliw4.projetointegrador.dto.response.LoteResponseDTO;
 import br.com.meliw4.projetointegrador.dto.response.ProdutoResponseDTO;
 import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
-import br.com.meliw4.projetointegrador.entity.enumeration.Ordenamento;
 import br.com.meliw4.projetointegrador.service.ProdutoService;
 
 @RestController
 @RequestMapping("/api/v1/fresh-products")
 public class ProdutoController {
-
-	@Autowired
-	ProdutoServiceImpl produtoServiceimpl;
 
 	private final ProdutoService produtoService;
 
@@ -61,7 +52,7 @@ public class ProdutoController {
 	@GetMapping("/list/product")
 	public ResponseEntity<?> listaTodosOsLotesOrdenadoPOrParametro(@RequestParam Long idProduto,
 			@RequestParam(defaultValue = "L") final String type) {
-		return ResponseEntity.ok(produtoServiceimpl.listaTodosOsLotes(idProduto, type));
+		return ResponseEntity.ok(produtoService.listaTodosOsLotes(idProduto, type));
 	}
 
 	/**

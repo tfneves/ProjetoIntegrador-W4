@@ -53,6 +53,6 @@ public class ArmazemController {
 	 */
 	@GetMapping("/getWareHouses")
 	public ResponseEntity<List<ArmazemDTO>> getAllWareHouses() {
-		return ResponseEntity.ok().body(this.armazemService.findAll());
+		return ResponseEntity.ok().body(this.armazemService.findAllDTO());
 	}
 }
