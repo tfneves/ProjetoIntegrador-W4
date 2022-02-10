@@ -218,25 +218,26 @@ public class PedidoService {
 	 *
 	 * Atualiza status do carrinho,
 	 * e caso o status seja cancelavel, depois do timeout, o carrinho será excluído e os itens serão devolvidos no estoque.
-	 * O timeout padrão para fins de demonstração é de 5 segundos (5000ms)
+	 * O timeout padrão para fins de demonstração é de 15 segundos (15000ms). O valor de timeout pode ser alterado na
+	 * dentro de PedidoController, na funcao updateCartStatus, na constante TIMEOUT
 	 * @param updateCartStatusDTO
 	 * @param timeout
 	 * @return Boolean
 	 */
 	public Boolean excluiCarrinho(UpdateCartStatusDTO updateCartStatusDTO, Long timeout) {
 		StatusPedido novoStatusPedido = statusPedidoService.findStatusCodeWithName(updateCartStatusDTO.getStatusCode());
-		if(novoStatusPedido.getIsDisposable()) {
-			Carrinho carrinho = carrinhoRepository.findById(updateCartStatusDTO.getCarrinho_id()).orElseThrow(
-				() -> new BusinessValidationException("O carrinho informado não existe"));
-			this.atualizaStatusCarrinho(carrinho.getId(), novoStatusPedido);
+		Carrinho carrinho = this.atualizaStatusCarrinho(updateCartStatusDTO.getCarrinho_id(), novoStatusPedido);
+		if(carrinho.getStatusPedido().getIsDisposable()) {
 			CompletableFuture.delayedExecutor(timeout, TimeUnit.MILLISECONDS).execute(()-> {
-				System.out.println("[" + LocalDate.now() + "] - " +"EXCLUSÃO CARRINHO INICIADA");
-				List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoService.buscaProdutosCarrinhoById(carrinho.getId());
-				List<ProdutoCarrinhoDTO> produtosCarrinhoDTO = parseProdutoCarrinhoToDTO(produtosCarrinho);
-				produtoVendedorService.devolveProdutoEstoque(produtosCarrinhoDTO);
-				this.deletaListaProdutoCarrinho(produtosCarrinho);
-				carrinhoRepository.delete(carrinho);
-				System.out.println("[" + LocalDate.now() + "] - " +"CARRINHO EXCLUIDO COM SUCESSO");
+				Carrinho c2 = carrinhoRepository.findById(updateCartStatusDTO.getCarrinho_id()).orElseThrow(
+					() -> new BusinessValidationException("O carrinho informado não existe ou não foi localizado"));
+				if(c2.getStatusPedido().getIsDisposable()){
+					List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoService.buscaProdutosCarrinhoById(carrinho.getId());
+					List<ProdutoCarrinhoDTO> produtosCarrinhoDTO = parseProdutoCarrinhoToDTO(produtosCarrinho);
+					produtoVendedorService.devolveProdutoEstoque(produtosCarrinhoDTO);
+					this.deletaListaProdutoCarrinho(produtosCarrinho);
+					carrinhoRepository.delete(carrinho);
+				}
 			});
 		}
 		return true;
@@ -277,10 +278,12 @@ public class PedidoService {
 	 * Atualiza status do carrinho em questão
 	 * @param carrinhoId
 	 * @param statusPedido
-	 * @return boolean
+	 * @return Carrinho
 	 */
-	public Boolean atualizaStatusCarrinho(Long carrinhoId, StatusPedido statusPedido) {
-		carrinhoService.atualizaCarrinho(carrinhoId, statusPedido);
-		return true;
+	public Carrinho atualizaStatusCarrinho(Long carrinhoId, StatusPedido statusPedido) {
+		Carrinho carrinho = carrinhoRepository.findById(carrinhoId).orElseThrow(
+			() -> new BusinessValidationException("O carrinho informado não existe ou não foi localizado"));
+		carrinho.setStatusPedido(statusPedido);
+		return carrinhoService.salvaCarrinho(carrinho);
 	}
 }

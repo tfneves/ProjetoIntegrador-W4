@@ -37,12 +37,9 @@ public class CarrinhoService {
 	 *
 	 * @author Thomaz Ferreira
 	 * @param carrinho
+	 * @return Carrinho
 	 */
-	public void salvaCarrinho(Carrinho carrinho) {
-		try {
-			this.carrinhoRepository.save(carrinho);
-		} catch (RuntimeException e) {
-			throw new OrderCheckoutException("Erro ao salvar carrinho - " + e.getMessage(), 500);
-		}
+	public Carrinho salvaCarrinho(Carrinho carrinho) {
+		return this.carrinhoRepository.save(carrinho);
 	}
 }

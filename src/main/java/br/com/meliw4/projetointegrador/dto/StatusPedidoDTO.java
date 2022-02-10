@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -18,7 +19,7 @@ public class StatusPedidoDTO {
 	@NotEmpty(message = "O campo nome não pode ser vazio")
 	@Size(max = 100, message = "O campo nome não pode exceder 100 caracteres")
 	private String statusCode;
-	@NotEmpty(message = "O campo isDisposable não pode ser vazio")
+	@NotNull(message = "O campo isDisposable não pode ser vazio")
 	private Boolean isDisposable;
 
 	public static StatusPedido parseToEntity(StatusPedidoDTO dto) {

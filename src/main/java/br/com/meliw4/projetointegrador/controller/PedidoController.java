@@ -57,8 +57,9 @@ public class PedidoController {
 
 	@PutMapping("/orders/updateCartStatus")
 	public ResponseEntity<Map<String, String>> updateCartStatus(@RequestBody @Valid UpdateCartStatusDTO updateCartStatusDTO) {
+		final Long TIMEOUT = 15000L;
 		Map<String, String> response = new HashMap<>();
-		if(pedidoService.excluiCarrinho(updateCartStatusDTO, 5000L)){
+		if(pedidoService.excluiCarrinho(updateCartStatusDTO, TIMEOUT)){
 			response.put("message", "Status atualizado com sucesso");
 			return ResponseEntity.ok().body(response);
 		}
