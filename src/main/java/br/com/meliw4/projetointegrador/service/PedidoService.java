@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.CarrinhoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoCarrinhoDTO;
+import br.com.meliw4.projetointegrador.dto.UpdateCartStatusDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -138,7 +141,7 @@ public class PedidoService {
 	 * @author Thomaz Ferreira
 	 */
 	public boolean verificaValidadeProduto(ProdutoVendedor produtoVendedor) {
-		final int DIAS_MINIMOS_VALIDADE = 22;
+		final int DIAS_MINIMOS_VALIDADE = 21;
 		LocalDate validadeProduto = produtoVendedor.getDataVencimento();
 		if (validadeProduto == null)
 			throw new OrderCheckoutException("Houve um erro ao pegar a validade do produto de ID " + produtoVendedor.getId(), 500);
@@ -203,10 +206,81 @@ public class PedidoService {
 		if (!carrinhoRepository.existsById(id)) {
 			throw new BusinessValidationException("O pedido não existe.");
 		}
-			Carrinho pedido = carrinhoRepository.findById(id).orElse(new Carrinho());
-			if (!pedido.getStatusPedido().getStatusCode().equalsIgnoreCase("FINALIZADO")) {
-				throw new BusinessValidationException("O pedido não foi finalizado.");
-			}
-			return pedido;
+		Carrinho pedido = carrinhoRepository.findById(id).orElse(new Carrinho());
+		if (!pedido.getStatusPedido().getStatusCode().equalsIgnoreCase("FINALIZADO")) {
+			throw new BusinessValidationException("O pedido não foi finalizado.");
 		}
+		return pedido;
 	}
+
+
+	/**
+	 *
+	 * Atualiza status do carrinho,
+	 * e caso o status seja cancelavel, depois do timeout, o carrinho será excluído e os itens serão devolvidos no estoque.
+	 * O timeout padrão para fins de demonstração é de 5 segundos (5000ms)
+	 * @param updateCartStatusDTO
+	 * @param timeout
+	 * @return Boolean
+	 */
+	public Boolean excluiCarrinho(UpdateCartStatusDTO updateCartStatusDTO, Long timeout) {
+		StatusPedido novoStatusPedido = statusPedidoService.findStatusCodeWithName(updateCartStatusDTO.getStatusCode());
+		if(novoStatusPedido.getIsDisposable()) {
+			Carrinho carrinho = carrinhoRepository.findById(updateCartStatusDTO.getCarrinho_id()).orElseThrow(
+				() -> new BusinessValidationException("O carrinho informado não existe"));
+			this.atualizaStatusCarrinho(carrinho.getId(), novoStatusPedido);
+			CompletableFuture.delayedExecutor(timeout, TimeUnit.MILLISECONDS).execute(()-> {
+				System.out.println("[" + LocalDate.now() + "] - " +"EXCLUSÃO CARRINHO INICIADA");
+				List<ProdutoCarrinho> produtosCarrinho = produtoCarrinhoService.buscaProdutosCarrinhoById(carrinho.getId());
+				List<ProdutoCarrinhoDTO> produtosCarrinhoDTO = parseProdutoCarrinhoToDTO(produtosCarrinho);
+				produtoVendedorService.devolveProdutoEstoque(produtosCarrinhoDTO);
+				this.deletaListaProdutoCarrinho(produtosCarrinho);
+				carrinhoRepository.delete(carrinho);
+				System.out.println("[" + LocalDate.now() + "] - " +"CARRINHO EXCLUIDO COM SUCESSO");
+			});
+		}
+		return true;
+	}
+
+
+	/**
+	 *
+	 * Converte lista de entidades para DTO
+	 * @param produtosCarrinho
+	 * @return List
+	 */
+	public List<ProdutoCarrinhoDTO> parseProdutoCarrinhoToDTO(List<ProdutoCarrinho> produtosCarrinho) {
+		List<ProdutoCarrinhoDTO> produtosCarrinhoDTO = new ArrayList<>();
+		for(ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
+			produtosCarrinhoDTO.add(ProdutoCarrinhoDTO.parseToDTO(produtoCarrinho));
+		}
+		return produtosCarrinhoDTO;
+	}
+
+
+	/**
+	 *
+	 * Deleta tuplas da tabela produto_carrinho
+	 * @param produtosCarrinho
+	 * @return boolean
+	 */
+	public Boolean deletaListaProdutoCarrinho(List<ProdutoCarrinho> produtosCarrinho) {
+		for(ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
+			produtoCarrinhoRepository.delete(produtoCarrinho);
+		}
+		return true;
+	}
+
+
+	/**
+	 *
+	 * Atualiza status do carrinho em questão
+	 * @param carrinhoId
+	 * @param statusPedido
+	 * @return boolean
+	 */
+	public Boolean atualizaStatusCarrinho(Long carrinhoId, StatusPedido statusPedido) {
+		carrinhoService.atualizaCarrinho(carrinhoId, statusPedido);
+		return true;
+	}
+}

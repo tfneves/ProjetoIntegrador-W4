@@ -16,4 +16,5 @@ public class StatusPedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String statusCode;
+	private Boolean isDisposable;
 }

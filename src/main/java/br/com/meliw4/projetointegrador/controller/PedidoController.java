@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.CarrinhoDTO;
+import br.com.meliw4.projetointegrador.dto.UpdateCartStatusDTO;
 import br.com.meliw4.projetointegrador.entity.Carrinho;
 import br.com.meliw4.projetointegrador.repository.CarrinhoRepository;
 import br.com.meliw4.projetointegrador.response.PedidoResponse;
@@ -51,5 +52,17 @@ public class PedidoController {
 	@GetMapping("/fresh-products/orders/{id}")
 	public ResponseEntity<PedidoResponse> getPedidoById(@PathVariable Long id) {
 		return ResponseEntity.ok(pedidoService.getPedido(id));
+	}
+
+
+	@PutMapping("/orders/updateCartStatus")
+	public ResponseEntity<Map<String, String>> updateCartStatus(@RequestBody @Valid UpdateCartStatusDTO updateCartStatusDTO) {
+		Map<String, String> response = new HashMap<>();
+		if(pedidoService.excluiCarrinho(updateCartStatusDTO, 5000L)){
+			response.put("message", "Status atualizado com sucesso");
+			return ResponseEntity.ok().body(response);
+		}
+		response.put("message", "Falha ao atualizar o status do carrinho");
+		return ResponseEntity.internalServerError().body(response);
 	}
 }

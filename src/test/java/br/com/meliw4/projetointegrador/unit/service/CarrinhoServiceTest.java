@@ -31,8 +31,8 @@ public class CarrinhoServiceTest {
 
 	@Test
 	void shouldAtualizaCarrinho() {
-		StatusPedido statusPedido1 = new StatusPedido(1L, "Status 1");
-		StatusPedido statusPedido2 = new StatusPedido(2L, "Status 2");
+		StatusPedido statusPedido1 = new StatusPedido(1L, "Status 1", true);
+		StatusPedido statusPedido2 = new StatusPedido(2L, "Status 2", true);
 		Carrinho carrinho = Carrinho.builder().id(1L).data(LocalDate.MIN)
 				.comprador(Comprador.builder().id(1L).build())
 				.statusPedido(statusPedido1).build();

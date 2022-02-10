@@ -18,10 +18,13 @@ public class StatusPedidoDTO {
 	@NotEmpty(message = "O campo nome não pode ser vazio")
 	@Size(max = 100, message = "O campo nome não pode exceder 100 caracteres")
 	private String statusCode;
+	@NotEmpty(message = "O campo isDisposable não pode ser vazio")
+	private Boolean isDisposable;
 
 	public static StatusPedido parseToEntity(StatusPedidoDTO dto) {
 		return StatusPedido.builder()
 				.statusCode(dto.getStatusCode())
+				.isDisposable(dto.getIsDisposable())
 				.build();
 	}
 }
