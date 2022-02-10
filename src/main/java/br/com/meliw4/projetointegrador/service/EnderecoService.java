@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.EnderecoDTO;
 import br.com.meliw4.projetointegrador.entity.Endereco;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,6 @@ public class EnderecoService {
 	}
 
 	public Endereco getById(Long enderecoId) {
-		return enderecoRepository.getById(enderecoId);
+		return enderecoRepository.findById(enderecoId).orElseThrow(() -> new NotFoundException("Id não localizado"));
 	}
 }
