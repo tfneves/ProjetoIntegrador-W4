@@ -45,9 +45,9 @@ public class ProdutoVendedorService {
 	 */
 	public ProdutoVendedor getProdutoById(Long id) {
 		Optional<ProdutoVendedor> produto = produtoVendedorRepository.findById(id);
-		produto.orElseThrow(() -> new OrderCheckoutException("O produto de id " + id + " não existe ou foi deletado " +
-				"da" +
-				" base de dados", 400));
+		produto.orElseThrow(() -> new OrderCheckoutException("O anúncio de id " + id + " não existe ou foi deletado " +
+			"da" +
+			" base de dados", 400));
 		return produto.get();
 	}
 
@@ -89,7 +89,7 @@ public class ProdutoVendedorService {
 
 	public List<ProdutoVendedor> findProdutoVendedorByProduto_Id(Long id) {
 		return produtoVendedorRepository.findByProduto_Id(id)
-				.orElseThrow(() -> new NotFoundException(
-						"Não há produtos para a seleção"));
+			.orElseThrow(() -> new NotFoundException(
+				"Não há produtos para a seleção"));
 	}
 }

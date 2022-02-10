@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,7 +21,7 @@ public class AvaliacaoController {
 	AvaliacaoService avaliacaoService;
 
 	@PostMapping(path = "/avaliacao")
-	public ResponseEntity<?> registerAvaliacao(@RequestBody @Valid AvaliacaoDTO dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<AvaliacaoDTO> registerAvaliacao(@RequestBody @Valid AvaliacaoDTO dto, UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("/avaliacao").build().toUri();
 		return ResponseEntity.created(uri).body(avaliacaoService.createAvaliacao(dto));
 	}
@@ -39,12 +40,12 @@ public class AvaliacaoController {
 	}
 
 	@GetMapping(path = "/avaliacao/{id}")
-	public ResponseEntity<?> getAvaliacao(@PathVariable Long id) {
+	public ResponseEntity<AvaliacaoDTO> getAvaliacao(@PathVariable Long id) {
 		return ResponseEntity.ok(avaliacaoService.getAvaliacao(id));
 	}
 
 	@GetMapping(path = "/avaliacao/anuncio/{id}")
-	public ResponseEntity<?> getAvaliacoesAnuncio(@PathVariable Long id) {
+	public ResponseEntity<List<AvaliacaoDTO>> getAvaliacoesAnuncio(@PathVariable Long id) {
 		return ResponseEntity.ok(avaliacaoService.getAvaliacoesAnuncio(id));
 	}
 

@@ -25,11 +25,11 @@ public class Avaliacao {
 	@ManyToOne
 	private Comprador comprador;
 
-	@ManyToOne(optional = false)
+	@ManyToOne
 	@Enumerated(EnumType.STRING)
 	private ClassificacaoAvaliacao estrelas;
 
-	@ManyToOne(optional = false)
+	@ManyToOne
 	private ProdutoVendedor anuncio;
 
 	@ManyToOne

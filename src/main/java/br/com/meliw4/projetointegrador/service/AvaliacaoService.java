@@ -10,6 +10,9 @@ import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.AvaliacaoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AvaliacaoService {
 
@@ -51,10 +54,19 @@ public class AvaliacaoService {
 		return AvaliacaoDTO.convert(avaliacao);
 	}
 
+	public List<AvaliacaoDTO> getAvaliacoesAnuncio(Long anuncioId) {
+		produtoVendedorService.getProdutoById(anuncioId);
+		List<AvaliacaoDTO> avaliacoesDTO = new ArrayList<>();
+		List<Avaliacao> avaliacoes = avaliacaoRepository.findByAnuncioId(anuncioId);
+		for (Avaliacao avaliacao : avaliacoes) {
+			avaliacoesDTO.add(AvaliacaoDTO.convert(avaliacao));
+		}
+		return avaliacoesDTO;
+	}
+
 	public Avaliacao getAnuncioByAssociations(Long compradorId, Long pedidoId, Long anuncioId) {
 		return avaliacaoRepository.findByCompradorIdAndPedidoIdAndAnuncioId(compradorId, pedidoId, anuncioId);
 	}
-
 
 	public void validateAssociation(Comprador comprador, Carrinho pedido, ProdutoVendedor anuncio) {
 		if (!comprador.getId().equals(pedido.getComprador().getId())) {
@@ -77,8 +89,4 @@ public class AvaliacaoService {
 		);
 	}
 
-
-	public Object getAvaliacoesAnuncio(Long id) {
-		return null;
-	}
 }
