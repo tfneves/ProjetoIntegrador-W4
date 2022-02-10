@@ -10,3 +10,11 @@ Para o requisito 06, decidi construir um CRUD básico que simulasse o sistema de
 Mercado Livre. Foram implementadas 5 rotas desse processo, criação de uma avaliação, exclusão, atualização do
 comentário, recuperação de uma avaliação pelo id e recuperação de todas as avaliações de um anúncio de um produto a
 partir do id desse anúncio.
+
+## Rodando a aplicação
+
+Para realizar testes funcionais da aplicação, basta inicializá-la a partir da classe main
+[ProjetoIntegradorApplication](src/main/java/br/com/meliw4/projetointegrador/ProjetoIntegradorApplication.java), que
+subirá o Spring em conjunto com o banco de dados H2 configurado em
+[application.properties](src/main/resources/application.properties) e carregado com dados iniciais a partir da execução
+do [data.sql](src/main/resources/data.sql).
