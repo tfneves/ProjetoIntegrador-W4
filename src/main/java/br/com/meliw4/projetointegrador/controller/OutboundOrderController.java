@@ -26,4 +26,9 @@ public class OutboundOrderController {
 	public ResponseEntity<?> outboundCarrinhoPorId(@RequestParam Long idCarrinho){
 		return ResponseEntity.ok(outboundOrderService.baixaOutBoundPorId(idCarrinho));
 	}
+
+	@GetMapping("/checkout")
+	public ResponseEntity<?> confirmarOutboundPedido(@RequestParam Long idCarrinho){
+		return ResponseEntity.ok(outboundOrderService.realizaOOutboundDoPedidoPorId(idCarrinho));
+	}
 }

@@ -29,6 +29,10 @@ public class OutboundOrderService {
 			.collect(Collectors.toSet());
 	}
 
+	public boolean realizaOOutboundDoPedidoPorId(Long id){
+		return false;
+	}
+
 	public Map<Long, List<ProdutoOutboundResponseDTO>>  baixaOutBoundPorId(Long id) {
 		List<ProdutoCarrinhoResponse> produtosCarrinho = retornaAListadeCarrinho(id);
 		CarrinhoOutboundResponseDTO carrinho = CarrinhoOutboundResponseDTO.converte(retornaAListadeCarrinho(id).get(0));
