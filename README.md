@@ -6,7 +6,7 @@
 
 
 
-### Features
+## :hammer: Funcionalidades do projeto
 
 - [x] Cadastro de avaliação NPS
 - [x] Lista de todas avaliaçõesNPS
@@ -16,13 +16,14 @@
 
 - Consultar o nível de satisfação e identificar os perfis de compradores através da Metodologia NPS
 
+![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=CONCLUIDO&color=GREEN&style=for-the-badge)
+
 ## End Point
 
 GET -   /api/v1/avaliacao/list - Obtenha a nota de todos os compradores.
 
 POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
 
-![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20CONCLUIDO&color=GREEN&style=for-the-badge)
 
 ## Finalidade 
 
