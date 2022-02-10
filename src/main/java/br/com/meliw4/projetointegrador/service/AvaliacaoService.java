@@ -41,9 +41,15 @@ public class AvaliacaoService {
 		return dto;
 	}
 
+	public void deleteAvaliacao(Long id) {
+		Avaliacao avaliacao = findAvaliacaoById(id);
+		avaliacaoRepository.delete(avaliacao);
+	}
+
 	public Avaliacao getAnuncioByAssociations(Long compradorId, Long pedidoId, Long anuncioId) {
 		return avaliacaoRepository.findByCompradorIdAndPedidoIdAndAnuncioId(compradorId, pedidoId, anuncioId);
 	}
+
 
 	public void validateAssociation(Comprador comprador, Carrinho pedido, ProdutoVendedor anuncio) {
 		if (!comprador.getId().equals(pedido.getComprador().getId())) {
@@ -59,8 +65,11 @@ public class AvaliacaoService {
 		return null;
 	}
 
-	public Object deleteAvaliacao(Long id) {
-		return null;
+
+	private Avaliacao findAvaliacaoById(Long id) {
+		return avaliacaoRepository.findById(id).orElseThrow(() -> new BusinessValidationException("Não existe " +
+			"avaliação com o id " + id + ".")
+		);
 	}
 
 	public Object getAvaliacao(Long id) {

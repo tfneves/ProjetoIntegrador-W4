@@ -25,8 +25,8 @@ public class AvaliacaoController {
 		return ResponseEntity.created(uri).body(avaliacaoService.createAvaliacao(dto));
 	}
 
-	@PutMapping(path = "/avaliacao")
-	public ResponseEntity<?> registerAvaliacao(@RequestBody @Valid AvaliacaoUpdateDTO dto,
+	@PutMapping(path = "/avaliacao/{id}")
+	public ResponseEntity<?> registerAvaliacao(@PathVariable Long id, @RequestBody @Valid AvaliacaoUpdateDTO dto,
 											   UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("/avaliacao").build().toUri();
 		return ResponseEntity.created(uri).body(avaliacaoService.updateAvaliacao(dto));
@@ -34,7 +34,8 @@ public class AvaliacaoController {
 
 	@DeleteMapping(path = "/avaliacao/{id}")
 	public ResponseEntity<?> deleteAvaliacao(@PathVariable Long id) {
-		return ResponseEntity.ok(avaliacaoService.deleteAvaliacao(id));
+		avaliacaoService.deleteAvaliacao(id);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping(path = "/avaliacao/{id}")
