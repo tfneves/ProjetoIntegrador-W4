@@ -16,12 +16,13 @@
 
 - Consultar o nível de satisfação e identificar os perfis de compradores através da Metodologia NPS
 
-# End Point
+## End Point
 
 GET -   /api/v1/avaliacao/list - Obtenha a nota de todos os compradores.
 
 POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
 
+## TESTES
 
 
 Francisco Alves  – [IT Bootcamp - wave4 - grupo 7 – francisco.fcosta@mercadolivre.com
