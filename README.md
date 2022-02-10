@@ -24,6 +24,11 @@ POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
 
 ## Teste
 
+## Finalidade 
+
+O Net Promoter Score é uma metodologia de satisfação de clientes desenvolvida para avaliar o grau de fidelidade dos clientes
+Utilizaremos a coletatas das notas para calcular o nivel de satisfação do comprador apos receber seu produto de um dos armazens.
+
 
 Francisco Alves  – [IT Bootcamp - wave4 - grupo 7 – francisco.fcosta@mercadolivre.com
 
