@@ -30,14 +30,22 @@ public class AvaliacaoService {
 		Comprador comprador = compradorService.findCompradorById(dto.getCompradorId());
 		Carrinho pedido = pedidoService.validatePedido(dto.getPedidoId());
 		ProdutoVendedor anuncio = produtoVendedorService.getProdutoById(dto.getAnuncioId());
+		Avaliacao avaliacao = getAnuncioByAssociations(dto.getCompradorId(), dto.getPedidoId(), dto.getAnuncioId());
+		if (avaliacao != null) {
+			throw new BusinessValidationException("Já existe uma avaliação feita.");
+		}
 		validateAssociation(comprador, pedido, anuncio);
-		Avaliacao avalicao = avaliacaoRepository.save(AvaliacaoDTO.convert(dto, anuncio, comprador));
+		Avaliacao avalicao = avaliacaoRepository.save(AvaliacaoDTO.convert(dto, anuncio, comprador, pedido));
 		dto.setAvaliacaoId(avalicao.getId());
 		dto.setDataAvaliacao(avalicao.getDataAvaliacao());
 		return dto;
 	}
 
-	private void validateAssociation(Comprador comprador, Carrinho pedido, ProdutoVendedor anuncio) {
+	public Avaliacao getAnuncioByAssociations(Long compradorId, Long pedidoId, Long anuncioId) {
+		return avaliacaoRepository.findByCompradorIdAndPedidoIdAndAnuncioId(compradorId, pedidoId, anuncioId);
+	}
+
+	public void validateAssociation(Comprador comprador, Carrinho pedido, ProdutoVendedor anuncio) {
 		if (!comprador.getId().equals(pedido.getComprador().getId())) {
 			throw new BusinessValidationException("O comprador não está associado a esse pedido.");
 		}

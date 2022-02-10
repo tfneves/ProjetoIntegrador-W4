@@ -1,9 +1,6 @@
 package br.com.meliw4.projetointegrador.dto;
 
-import br.com.meliw4.projetointegrador.entity.Avaliacao;
-import br.com.meliw4.projetointegrador.entity.ClassificacaoAvaliacao;
-import br.com.meliw4.projetointegrador.entity.Comprador;
-import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
+import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.entity.enumeration.Estrelas;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,13 +30,14 @@ public class AvaliacaoDTO {
 	@NotEmpty(message = "Comentário inválido.")
 	private String comentario;
 
-	public static Avaliacao convert(AvaliacaoDTO dto, ProdutoVendedor anuncio, Comprador comprador) {
+	public static Avaliacao convert(AvaliacaoDTO dto, ProdutoVendedor anuncio, Comprador comprador, Carrinho pedido) {
 		return Avaliacao.builder()
 			.comentario(dto.comentario)
 			.estrelas(ClassificacaoAvaliacao.builder().classificacao(dto.estrelas).build())
 			.dataAvaliacao(LocalDate.now())
 			.anuncio(anuncio)
 			.comprador(comprador)
+			.pedido(pedido)
 			.build();
 	}
 }

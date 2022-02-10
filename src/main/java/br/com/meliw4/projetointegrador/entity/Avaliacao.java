@@ -32,4 +32,7 @@ public class Avaliacao {
 	@ManyToOne(optional = false)
 	private ProdutoVendedor anuncio;
 
+	@ManyToOne
+	private Carrinho pedido;
+
 }
