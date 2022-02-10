@@ -1,8 +1,8 @@
 <h1 align="center"> IT BOOTCAMP - GRUPO 7 Requisito 06 </h1>
-<h1 align="center">
-    <a href="https://start.spring.io/">🔗 Spring Boot</a>
-</h1>
-<p align="center">🚀 Api para avaliação do nivel de satisfação do cliente  , utilizando a metodologia NPS</p>
+
+
+## Funcionalidades do projeto
+<p align="right">🚀 Api para avaliação do nivel de satisfação do cliente  , utilizando a metodologia NPS</p>
 
 
 
