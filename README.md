@@ -28,7 +28,7 @@ POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
 
 ## Testes
 Cobertura de teste :
-
+<img width="1792" alt="Captura de Tela 2022-02-10 às 10 12 03" src="https://user-images.githubusercontent.com/96193215/153415699-d8a20550-05d5-47e8-b74b-8339001d14c5.png">
 ## Autor
 Francisco Alves  – [IT Bootcamp - wave4 - grupo 7 – francisco.fcosta@mercadolivre.com
 github https://github.com/tfneves/ProjetoIntegrador-W4/blob/feature/requisito6_Francisco
