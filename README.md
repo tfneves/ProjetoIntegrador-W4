@@ -8,21 +8,24 @@
 
 ### Features
 
-- [x] Cadastro de usuário
-- [x] Cadastro de cliente
-- [ ] Cadastro de produtos
+- [x] Cadastro de avaliação NPS
+- [x] Lista de todas avaliaçõesNPS
 
 
+## Descrição 
 
-## Usage example
+- Consultar o nível de satisfação e identificar os perfis de compradores através da Metodologia NPS
 
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
+# - End Point
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
+GET -   /api/v1/avaliacao/list - Obtenha a nota de todos os compradores.
+
+POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
+
 
 
 Francisco Alves  – [@YourTwitter](https://twitter.com/dbader_org) – francisco.fcosta@mercadolivre.com
 
 IT Bootcamp - Weve 4 - Equipe 7
 
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+
