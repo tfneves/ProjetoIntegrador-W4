@@ -2,7 +2,7 @@
 
 
 ## Funcionalidades do projeto
-<p align="right">🚀 Api para avaliação do nivel de satisfação do cliente  , utilizando a metodologia NPS</p>
+<p align="left">🚀 Api para avaliação do nivel de satisfação do cliente  , utilizando a metodologia NPS</p>
 
 
 
