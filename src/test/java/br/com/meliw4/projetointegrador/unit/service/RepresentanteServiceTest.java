@@ -1,6 +1,7 @@
 package br.com.meliw4.projetointegrador.unit.service;
 
 import br.com.meliw4.projetointegrador.dto.RepresentanteDTO;
+import br.com.meliw4.projetointegrador.dto.VendedorDTO;
 import br.com.meliw4.projetointegrador.entity.Armazem;
 import br.com.meliw4.projetointegrador.entity.Representante;
 import br.com.meliw4.projetointegrador.exception.ArmazemException;
@@ -8,26 +9,28 @@ import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.RepresentanteRepository;
 import br.com.meliw4.projetointegrador.service.ArmazemService;
 import br.com.meliw4.projetointegrador.service.RepresentanteService;
+import br.com.meliw4.projetointegrador.service.UsuarioService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RepresentanteServiceTest {
 
 	private static RepresentanteService representanteService;
 	private static RepresentanteRepository representanteRepository = Mockito.mock(RepresentanteRepository.class);
 	private static ArmazemService armazemService = Mockito.mock(ArmazemService.class);
+	private static UsuarioService usuarioService = Mockito.mock(UsuarioService.class);
 
 	@BeforeAll
 	public static void setUp() {
 		representanteService = new RepresentanteService(
 				representanteRepository,
-				armazemService);
+				armazemService,
+				usuarioService);
 	}
 
 	@Test
@@ -47,9 +50,13 @@ public class RepresentanteServiceTest {
 	@Test
 	public void shouldNotReturnArmazemAlreadyWithRepresentanteException() {
 		RepresentanteDTO representanteDTO = RepresentanteDTO.builder()
+				.nome("xpto")
+				.login("xpto")
+				.senha("xpto")
 				.armazem_id(1l)
 				.build();
 		Mockito.when(armazemService.findArmazemById(1l)).thenReturn(Armazem.builder().build());
+		Mockito.when(usuarioService.usuarioCadastrado(Mockito.anyString())).thenReturn(true);
 		assertDoesNotThrow(
 				() -> representanteService.register(representanteDTO));
 	}
@@ -92,5 +99,18 @@ public class RepresentanteServiceTest {
 				.thenReturn(Optional.of((Representante) Representante.builder().build()));
 		assertDoesNotThrow(
 				() -> representanteService.findRepresentanteById(2l));
+	}
+
+
+	@Test
+	void shouldReturnExceptionWhenRegistering() {
+		RepresentanteDTO representanteDTO = RepresentanteDTO.builder().nome("xpto").login("xpto").senha("xpto").armazem_id(1l).build();
+		Mockito.when(armazemService.findArmazemById(1l)).thenReturn(Armazem.builder().build());
+		Mockito.when(usuarioService.usuarioCadastrado(Mockito.anyString())).thenReturn(false);
+		BusinessValidationException b = assertThrows(
+			BusinessValidationException.class,
+			() -> representanteService.register(representanteDTO)
+		);
+		assertTrue(b.getMessage().equals("Login já existente na base de dados"));
 	}
 }

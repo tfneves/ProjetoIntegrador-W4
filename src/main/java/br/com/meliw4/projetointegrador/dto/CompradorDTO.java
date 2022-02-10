@@ -2,11 +2,11 @@ package br.com.meliw4.projetointegrador.dto;
 
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Endereco;
-import br.com.meliw4.projetointegrador.entity.Vendedor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -33,15 +33,23 @@ public class CompradorDTO {
 	private LocalDate dataNascimento;
 	@NotNull(message = "Endereco inválido")
 	private Long endereco_id;
+	@NotEmpty(message = "O campo login não pode ser vazio")
+	@Size(max = 30, message = "O campo login não pode exceder 30 caracteres")
+	private String login;
+	@NotEmpty(message = "O campo senha não pode ser vazio")
+	@Size(max = 30, message = "O campo senha não pode exceder 30 caracteres")
+	private String senha;
 
-	public static Comprador convert(CompradorDTO compradorDTO, Endereco endereco) {
-		return Comprador.builder()
-				.id(compradorDTO.getId())
-				.nome(compradorDTO.getNome())
-				.telefone(compradorDTO.telefone)
-				.email(compradorDTO.getTelefone())
-				.dataNascimento(compradorDTO.getDataNascimento())
-				.endereco(endereco)
-				.build();
+
+	public static Comprador convert(CompradorDTO compradorDTO , Endereco endereco) {
+		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+		return new Comprador(
+			compradorDTO.login,
+			bc.encode(compradorDTO.getSenha()),
+			compradorDTO.getNome(),
+			compradorDTO.getTelefone(),
+			compradorDTO.getEmail(),
+			compradorDTO.getDataNascimento(),
+			endereco);
 	}
 }

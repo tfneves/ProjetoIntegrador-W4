@@ -2,6 +2,7 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.EnderecoDTO;
 import br.com.meliw4.projetointegrador.entity.Endereco;
+import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,8 @@ public class EnderecoService {
 		return endereco;
 	}
 
-	public Endereco getById(Long enderecoId) {
-		return enderecoRepository.getById(enderecoId);
+	public Endereco findById(Long enderecoId) {
+		return enderecoRepository.findById(enderecoId).orElseThrow(
+			() -> new BusinessValidationException("O endereço informado não existe no sistema"));
 	}
 }

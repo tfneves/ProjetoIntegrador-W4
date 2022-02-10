@@ -201,7 +201,7 @@ public class PedidoServiceTest {
 				OrderCheckoutException.class,
 				() -> pedidoService.verificaValidadeProduto(produtoVendedor)
 			);
-		assertEquals(ex.getMessage(), "O produto de ID 1 possui um prazo de validade inferior a 22 dias");
+		assertEquals(ex.getMessage(), "O produto de ID 1 possui um prazo de validade inferior a 21 dias");
 	}
 
 	@Test
