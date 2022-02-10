@@ -1,7 +1,7 @@
 <h1 align="center"> IT BOOTCAMP - GRUPO 7 Requisito 06 </h1>
 
 
-## Funcionalidades do projeto
+## Descrição do projeto
 <p align="left">🚀 Api para avaliação do nivel de satisfação do cliente  , utilizando a metodologia NPS</p>
 
 
