@@ -22,7 +22,7 @@ GET -   /api/v1/avaliacao/list - Obtenha a nota de todos os compradores.
 
 POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
 
-## TESTES
+## Teste
 
 
 Francisco Alves  – [IT Bootcamp - wave4 - grupo 7 – francisco.fcosta@mercadolivre.com
