@@ -44,6 +44,13 @@ public class AvaliacaoService {
 		return dto;
 	}
 
+	public AvaliacaoDTO updateAvaliacao(AvaliacaoUpdateDTO dto) {
+		Avaliacao avaliacao = findAvaliacaoById(dto.getAvaliacaoId());
+		avaliacao.setComentario(dto.getComentario());
+		avaliacaoRepository.save(avaliacao);
+		return AvaliacaoDTO.convert(avaliacao);
+	}
+
 	public void deleteAvaliacao(Long id) {
 		Avaliacao avaliacao = findAvaliacaoById(id);
 		avaliacaoRepository.delete(avaliacao);
@@ -77,11 +84,6 @@ public class AvaliacaoService {
 			.findAny()
 			.orElseThrow(() -> new BusinessValidationException("O anúncio não está vinculado a esse pedido."));
 	}
-
-	public Object updateAvaliacao(AvaliacaoUpdateDTO dto) {
-		return null;
-	}
-
 
 	private Avaliacao findAvaliacaoById(Long id) {
 		return avaliacaoRepository.findById(id).orElseThrow(() -> new BusinessValidationException("Não existe " +

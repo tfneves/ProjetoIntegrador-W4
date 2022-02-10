@@ -2,7 +2,6 @@ package br.com.meliw4.projetointegrador.controller;
 
 import br.com.meliw4.projetointegrador.dto.AvaliacaoDTO;
 import br.com.meliw4.projetointegrador.dto.AvaliacaoUpdateDTO;
-import br.com.meliw4.projetointegrador.entity.Avaliacao;
 import br.com.meliw4.projetointegrador.service.AvaliacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +20,15 @@ public class AvaliacaoController {
 	AvaliacaoService avaliacaoService;
 
 	@PostMapping(path = "/avaliacao")
-	public ResponseEntity<AvaliacaoDTO> registerAvaliacao(@RequestBody @Valid AvaliacaoDTO dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<AvaliacaoDTO> createAvaliacao(@RequestBody @Valid AvaliacaoDTO dto,
+														  UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("/avaliacao").build().toUri();
 		return ResponseEntity.created(uri).body(avaliacaoService.createAvaliacao(dto));
 	}
 
-	@PutMapping(path = "/avaliacao/{id}")
-	public ResponseEntity<?> registerAvaliacao(@PathVariable Long id, @RequestBody @Valid AvaliacaoUpdateDTO dto,
-											   UriComponentsBuilder uriBuilder) {
+	@PutMapping(path = "/avaliacao")
+	public ResponseEntity<AvaliacaoDTO> updateAvaliacao(@RequestBody @Valid AvaliacaoUpdateDTO dto,
+														  UriComponentsBuilder uriBuilder) {
 		URI uri = uriBuilder.path("/avaliacao").build().toUri();
 		return ResponseEntity.created(uri).body(avaliacaoService.updateAvaliacao(dto));
 	}
