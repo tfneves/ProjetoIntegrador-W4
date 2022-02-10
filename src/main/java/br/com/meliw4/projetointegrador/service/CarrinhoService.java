@@ -6,7 +6,6 @@ import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.CarrinhoRepository;
 import br.com.meliw4.projetointegrador.response.CarrinhoResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,27 +21,29 @@ public class CarrinhoService {
 		this.carrinhoRepository = carrinhoRepository;
 	}
 
-	public CarrinhoResponse atualizaCarrinho(Long id, StatusPedido statusPedido){
-		Carrinho carrinho = this.carrinhoRepository.findById(id).orElseThrow(() -> new BusinessValidationException("Id não localizado"));
+	public CarrinhoResponse atualizaCarrinho(Long id, StatusPedido statusPedido) {
+		Carrinho carrinho = this.carrinhoRepository.findById(id)
+				.orElseThrow(() -> new BusinessValidationException("Id não localizado"));
 		StatusPedido newStatusPedido = statusPedidoService.findStatusPedidoById(statusPedido.getId());
 		carrinho.setStatusPedido(newStatusPedido);
 		carrinhoRepository.save(carrinho);
 		return CarrinhoResponse.builder()
-			.id(carrinho.getId())
-			.data(carrinho.getData())
-			.compradorId(carrinho.getComprador().getId())
-			.statusPedido(newStatusPedido).build();
+				.id(carrinho.getId())
+				.data(carrinho.getData())
+				.compradorId(carrinho.getComprador().getId())
+				.statusPedido(newStatusPedido).build();
 	}
 
 	/**
 	 * Faz persistencia do carrinho
+	 *
 	 * @author Thomaz Ferreira
 	 * @param carrinho
 	 */
 	public void salvaCarrinho(Carrinho carrinho) {
-		try{
+		try {
 			this.carrinhoRepository.save(carrinho);
-		}catch (RuntimeException e){
+		} catch (RuntimeException e) {
 			throw new OrderCheckoutException("Erro ao salvar carrinho - " + e.getMessage(), 500);
 		}
 	}

@@ -1,11 +1,9 @@
 package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.response.*;
-import br.com.meliw4.projetointegrador.entity.Lote;
-import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
+import br.com.meliw4.projetointegrador.entity.StatusPedido;
 import br.com.meliw4.projetointegrador.exception.NotFoundException;
-import br.com.meliw4.projetointegrador.repository.LoteRepository;
-import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
+import br.com.meliw4.projetointegrador.response.CarrinhoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +19,12 @@ public class OutboundOrderService {
 	@Autowired
 	private ProdutoVendedorService produtoVendedorService;
 
+	@Autowired
+	private CarrinhoService carrinhoService;
+
+	@Autowired
+	private StatusPedidoService statusPedidoService;
+
 	public Set<Long> listaTodosOsCarrinhosParaOutBound() {
 		List<ProdutoCarrinhoResponse> produtos = produtoCarrinhoService.listaTodosOsProdutosPorCarrinho();
 		return produtos.stream()
@@ -29,8 +33,9 @@ public class OutboundOrderService {
 			.collect(Collectors.toSet());
 	}
 
-	public boolean realizaOOutboundDoPedidoPorId(Long id){
-		return false;
+	public CarrinhoResponse realizaOOutboundDoPedidoPorId(Long id){
+		StatusPedido statusPedido = this.statusPedidoService.findStatusPedidoById(3L);
+		return carrinhoService.atualizaCarrinho(id, statusPedido);
 	}
 
 	public Map<Long, List<ProdutoOutboundResponseDTO>>  baixaOutBoundPorId(Long id) {

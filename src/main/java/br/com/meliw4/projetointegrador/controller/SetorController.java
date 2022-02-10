@@ -26,7 +26,7 @@ public class SetorController {
 
 	@GetMapping("/setor")
 	public ResponseEntity<List<SetorResponse>> devolveTodosOsSetores() {
-		return ResponseEntity.ok(setorService.retonraSetores());
+		return ResponseEntity.ok(setorService.retornaSetores());
 	}
 
 	@PostMapping("/setor")

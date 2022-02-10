@@ -55,7 +55,7 @@ public class LoteService {
 		Representante representante = representanteService.findRepresentanteById(loteDTO.getRepresentanteId());
 		representanteService.validateRepresentanteArmazem(representante, loteDTO.getArmazemId());
 		Setor setor = setorService.findSetorById(loteDTO.getSetorId());
-		setorService.validateSetorArmzem(setor, loteDTO.getArmazemId());
+		setorService.validateSetorArmazem(setor, loteDTO.getArmazemId());
 		validateProdutosDTOCategoria(setor, loteDTO.getProdutosDTO());
 		Double setorRemainingVolume = setorService.calculateRemainingSetorArea(setor);
 		Double produtosDTOTotalVolume = calculateProdutosDTOTotalVolume(loteDTO.getProdutosDTO());
@@ -88,8 +88,8 @@ public class LoteService {
 			.build();
 	}
 
-	private void getFilteredProdutosByLote(Lote lote, LocalDate today, LocalDate limitDate,
-										   List<LoteProdutosVencimentoResponse> responseList) {
+	public void getFilteredProdutosByLote(Lote lote, LocalDate today, LocalDate limitDate,
+										  List<LoteProdutosVencimentoResponse> responseList) {
 		List<ProdutoVendedor> anuncios = lote.getProdutoVendedores();
 		LocalDate dueDate;
 		for (ProdutoVendedor anuncio : anuncios) {
@@ -139,31 +139,28 @@ public class LoteService {
 		return responseList;
 	}
 
-	private List<Setor> filterByCategory(List<Setor> setores, Categoria categoria) {
+	public List<Setor> filterByCategory(List<Setor> setores, Categoria categoria) {
 		return setores.stream()
 			.filter(s -> s.getCategoria().equals(categoria))
 			.collect(Collectors.toList());
 	}
 
-	private List<LoteProdutosVencimentoResponse> orderByDate(List<LoteProdutosVencimentoResponse> responseList,
-															 Ordenamento ordenador) {
-		switch (ordenador) {
+	public List<LoteProdutosVencimentoResponse> orderByDate(List<LoteProdutosVencimentoResponse> responseList,
+															Ordenamento ordenador) {
+		if (ordenador.equals(Ordenamento.asc)) {
 			// Ordenado ascendente
-			case asc:
-				return responseList.stream()
-					.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento))
-					.collect(Collectors.toList());
+			return responseList.stream()
+				.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento))
+				.collect(Collectors.toList());
+		} else {
 			// Ordenado decrescente
-			case desc:
-				return responseList.stream()
-					.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento).reversed())
-					.collect(Collectors.toList());
-			default:
-				return responseList;
+			return responseList.stream()
+				.sorted(Comparator.comparing(LoteProdutosVencimentoResponse::getDataVencimento).reversed())
+				.collect(Collectors.toList());
 		}
 	}
 
-	private List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
+	public List<LoteProdutosVencimentoResponse> filterDueDateUntilDate(
 		List<LoteProdutosVencimentoResponse> loteProdutosVencimentoResponses, Integer days) {
 		return loteProdutosVencimentoResponses.stream()
 			.filter(l -> ChronoUnit.DAYS.between(LocalDate.now(), l.getDataVencimento()) <= days)
@@ -195,7 +192,7 @@ public class LoteService {
 				produtos.add(produto);
 				produtoDTO.setId(produto.getId());
 			} else {
-				produtos.add(produtoService.getProdutoById(produtoDTO.getId()));
+				produtos.add(produtoService.findById(produtoDTO.getId()));
 			}
 		}
 		return produtos;
@@ -226,7 +223,7 @@ public class LoteService {
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			validatePreco(produtoDTO.getPreco());
 			ProdutoVendedor produtoVendedor = ProdutoDTO
-				.convert(produtoDTO, vendedor, produtoService.getProdutoById(produtoDTO.getId()), lote);
+				.convert(produtoDTO, vendedor, produtoService.findById(produtoDTO.getId()), lote);
 			produtoVendedorService.save(produtoVendedor);
 		}
 	}

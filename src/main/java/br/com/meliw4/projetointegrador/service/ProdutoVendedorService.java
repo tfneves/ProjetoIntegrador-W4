@@ -5,10 +5,9 @@ import br.com.meliw4.projetointegrador.dto.response.ProdutoVendedorDTO;
 import br.com.meliw4.projetointegrador.dto.response.ProdutoVendedorResponseDTO;
 import br.com.meliw4.projetointegrador.entity.Lote;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
-import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -30,7 +29,12 @@ public class ProdutoVendedorService {
 	}
 
 	public List<ProdutoVendedor> findAll() {
-		return this.produtoVendedorRepository.findAll();
+		List<ProdutoVendedor> produtoVendedores = this.produtoVendedorRepository.findAll();
+
+		if (produtoVendedores.isEmpty()) {
+			throw new NotFoundException("Não há produtos para a seleção");
+		}
+		return produtoVendedores;
 	}
 
 	public ProdutoVendedor findByLoteIdAndProdutoId(Long loteId, Long produtoId) {
@@ -47,8 +51,8 @@ public class ProdutoVendedorService {
 	public ProdutoVendedor getProdutoById(Long id) {
 		Optional<ProdutoVendedor> produto = produtoVendedorRepository.findById(id);
 		produto.orElseThrow(() -> new OrderCheckoutException("O produto de id " + id + " não existe ou foi deletado " +
-				"da" +
-				" base de dados", 400));
+			"da" +
+			" base de dados", 400));
 		return produto.get();
 	}
 
@@ -88,11 +92,17 @@ public class ProdutoVendedorService {
 		return true;
 	}
 
-	public ProdutoVendedorResponseDTO devolveLoteAVencerPorProdutoID(Long id){
+	public ProdutoVendedorResponseDTO devolveLoteAVencerPorProdutoID(Long id) {
 		List<ProdutoVendedor> produtos = this.produtoVendedorRepository.findByProduto_Id(id).get();
 		ProdutoVendedor produto = produtos
 			.stream()
 			.sorted(Comparator.comparing(ProdutoVendedor::getDataVencimento)).collect(Collectors.toList()).get(0);
 		return ProdutoVendedorResponseDTO.converte(produto);
+	}
+
+	public List<ProdutoVendedor> findProdutoVendedorByProduto_Id(Long id) {
+		return produtoVendedorRepository.findByProduto_Id(id)
+			.orElseThrow(() -> new NotFoundException(
+				"Não há produtos para a seleção"));
 	}
 }
