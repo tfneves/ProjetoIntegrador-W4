@@ -85,7 +85,7 @@ public class AvaliacaoService {
 			.orElseThrow(() -> new BusinessValidationException("O anúncio não está vinculado a esse pedido."));
 	}
 
-	private Avaliacao findAvaliacaoById(Long id) {
+	public Avaliacao findAvaliacaoById(Long id) {
 		return avaliacaoRepository.findById(id).orElseThrow(() -> new BusinessValidationException("Não existe " +
 			"avaliação com o id " + id + ".")
 		);
