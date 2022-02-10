@@ -22,7 +22,8 @@ GET -   /api/v1/avaliacao/list - Obtenha a nota de todos os compradores.
 
 POST - /api/v1/avaliacao - Cadastrar uma avaliação NPS no sistema
 
-## Teste
+## Status do projeto
+Concluido
 
 ## Finalidade 
 
