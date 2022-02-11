@@ -45,7 +45,6 @@ public class CompradorServiceTest {
 				.email("email@email.com").telefone("9999999").endereco_id(1L).build();
 
 		Comprador response = compradorService.register(compradorDTO);
-		assertEquals(1L, response.getId());
 		assertEquals(1L, response.getEndereco().getId());
 	}
 }

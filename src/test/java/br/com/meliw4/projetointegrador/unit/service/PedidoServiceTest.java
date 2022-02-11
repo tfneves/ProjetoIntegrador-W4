@@ -2,15 +2,19 @@ package br.com.meliw4.projetointegrador.unit.service;
 
 import br.com.meliw4.projetointegrador.dto.CarrinhoDTO;
 import br.com.meliw4.projetointegrador.dto.ProdutoCarrinhoDTO;
+import br.com.meliw4.projetointegrador.dto.UpdateCartStatusDTO;
 import br.com.meliw4.projetointegrador.entity.*;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.CarrinhoRepository;
 import br.com.meliw4.projetointegrador.repository.ProdutoCarrinhoRepository;
+import br.com.meliw4.projetointegrador.repository.StatusPedidoRepository;
 import br.com.meliw4.projetointegrador.response.PedidoResponse;
 import br.com.meliw4.projetointegrador.service.*;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -201,7 +205,7 @@ public class PedidoServiceTest {
 				OrderCheckoutException.class,
 				() -> pedidoService.verificaValidadeProduto(produtoVendedor)
 			);
-		assertEquals(ex.getMessage(), "O produto de ID 1 possui um prazo de validade inferior a 22 dias");
+		assertEquals(ex.getMessage(), "O produto de ID 1 possui um prazo de validade inferior a 21 dias");
 	}
 
 	@Test
@@ -367,4 +371,75 @@ public class PedidoServiceTest {
 			() -> pedidoService.salvaPedido(dto)
 		);
 	}
+
+	@Test
+	void testDeletaListaProdutoCarrinho() {
+		List<ProdutoCarrinho> lista = new ArrayList<>();
+		lista.add(ProdutoCarrinho.builder().build());
+		Assert.assertTrue(pedidoService.deletaListaProdutoCarrinho(lista));
+	}
+
+	@Test
+	void testAtualizaStatusCarrinho() {
+		Carrinho carrinho = Carrinho.builder().id(1L).build();
+		Mockito.when(carrinhoRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(carrinho));
+		Mockito.when(carrinhoRepository.save(carrinho)).thenReturn(carrinho);
+		Mockito.when(carrinhoService.salvaCarrinho(carrinho)).thenReturn(carrinho);
+		Carrinho resp = pedidoService.atualizaStatusCarrinho(Mockito.anyLong(), StatusPedido.builder().build());
+		assertEquals(carrinho.getId(), resp.getId());
+	}
+
+	@Test
+	void testAtualizaStatusCarrinhoException() {
+		Mockito.when(carrinhoRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		BusinessValidationException e = assertThrows(
+			BusinessValidationException.class,
+			() -> pedidoService.atualizaStatusCarrinho(Mockito.anyLong(), StatusPedido.builder().build()));
+		assertTrue(e.getMessage().equals("O carrinho informado não existe ou não foi localizado"));
+	}
+
+	@Test
+	void testParseProdutoCarrinhoToDTO() {
+		List<ProdutoCarrinhoDTO> lista = new ArrayList<>();
+		List<ProdutoCarrinho> produtoCarrinho = new ArrayList<>();
+		Produto p = Produto.builder().id(1L).build();
+		ProdutoVendedor pv = ProdutoVendedor.builder().produto(p).build();
+		ProdutoCarrinho pc = ProdutoCarrinho.builder().produto(pv).quantidade(1).build();
+		lista.add(ProdutoCarrinhoDTO.parseToDTO(pc));
+		produtoCarrinho.add(pc);
+		pedidoService.parseProdutoCarrinhoToDTO(produtoCarrinho);
+		assertTrue(!lista.isEmpty());
+	}
+
+	@Test
+	void testExcluiCarrinhoWhenIsDisposibleFalse() {
+		StatusPedidoRepository statusPedidoRepository = Mockito.mock(StatusPedidoRepository.class);
+		UpdateCartStatusDTO updateCartStatusDTO = UpdateCartStatusDTO.builder().statusCode("status").carrinho_id(1L).build();
+		StatusPedido novoStatusPedido = StatusPedido.builder().id(1L).statusCode("Teste").isDisposable(false).build();
+		Carrinho carrinho = Carrinho.builder().statusPedido(novoStatusPedido).build();
+
+		Mockito.when(statusPedidoRepository.findByStatusCode(Mockito.anyString())).thenReturn(novoStatusPedido);
+		Mockito.when(statusPedidoService.findStatusCodeWithName(Mockito.anyString())).thenReturn(novoStatusPedido);
+		Mockito.when(carrinhoRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(carrinho));
+		Mockito.when(pedidoService.atualizaStatusCarrinho(Mockito.anyLong(), novoStatusPedido)).thenReturn(carrinho);
+		assertTrue(pedidoService.excluiCarrinho(updateCartStatusDTO, Mockito.anyLong()));
+	}
+
+	/*@Test
+	void testExcluiCarrinhoWhenIsDisposibleTrue() {
+		StatusPedidoRepository statusPedidoRepository = Mockito.mock(StatusPedidoRepository.class);
+		UpdateCartStatusDTO updateCartStatusDTO = UpdateCartStatusDTO.builder().statusCode("status").carrinho_id(1L).build();
+		StatusPedido novoStatusPedido = StatusPedido.builder().id(1L).statusCode("Teste").isDisposable(true).build();
+		Carrinho carrinho = Carrinho.builder().statusPedido(novoStatusPedido).build();
+
+		Mockito.when(statusPedidoRepository.findByStatusCode(Mockito.anyString())).thenReturn(novoStatusPedido);
+		Mockito.when(statusPedidoService.findStatusCodeWithName(Mockito.anyString())).thenReturn(novoStatusPedido);
+		Mockito.when(pedidoService.atualizaStatusCarrinho(Mockito.anyLong(), novoStatusPedido)).thenReturn(carrinho);
+
+		BusinessValidationException b = assertThrows(
+			BusinessValidationException.class,
+			() -> pedidoService.excluiCarrinho(updateCartStatusDTO, Mockito.anyLong()));
+
+		assertTrue(b.getMessage().equals("O carrinho informado não existe ou não foi localizado"));
+	}*/
 }
