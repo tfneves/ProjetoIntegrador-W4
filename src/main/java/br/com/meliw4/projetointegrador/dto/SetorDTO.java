@@ -6,13 +6,14 @@ import br.com.meliw4.projetointegrador.entity.enumeration.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
 @Builder
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Component

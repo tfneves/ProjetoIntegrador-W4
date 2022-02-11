@@ -7,10 +7,10 @@ import br.com.meliw4.projetointegrador.entity.Produto;
 import br.com.meliw4.projetointegrador.entity.ProdutoCategoria;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 @Builder
-@Data
+@Getter
 public class ProdutoResponseDTO {
 	private Long id;
 	private final String nome;

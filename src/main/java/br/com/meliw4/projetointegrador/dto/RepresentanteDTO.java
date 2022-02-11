@@ -6,6 +6,7 @@ import br.com.meliw4.projetointegrador.repository.ArmazemRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -27,10 +28,10 @@ public class RepresentanteDTO {
 	@NotNull(message = "Armazém inválido")
 	private Long armazem_id;
 
-	public static Representante convert(RepresentanteDTO representanteDTO ,Armazem armazem) {
+	public static Representante convert(RepresentanteDTO representanteDTO, Armazem armazem) {
 		return Representante.builder()
-			.nome(representanteDTO.getNome())
-			.armazem(armazem)
-			.build();
+				.nome(representanteDTO.getNome())
+				.armazem(armazem)
+				.build();
 	}
 }

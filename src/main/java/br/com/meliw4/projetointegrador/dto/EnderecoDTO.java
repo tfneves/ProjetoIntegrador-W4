@@ -5,12 +5,13 @@ import br.com.meliw4.projetointegrador.entity.Representante;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -33,11 +34,11 @@ public class EnderecoDTO {
 
 	public static Endereco convert(EnderecoDTO enderecoDTO) {
 		return Endereco.builder()
-			.logradouro(enderecoDTO.getLogradouro())
-			.numero(enderecoDTO.getNumero())
-			.bairro(enderecoDTO.getBairro())
-			.cidade(enderecoDTO.getCidade())
-			.estado(enderecoDTO.getEstado())
-			.build();
+				.logradouro(enderecoDTO.getLogradouro())
+				.numero(enderecoDTO.getNumero())
+				.bairro(enderecoDTO.getBairro())
+				.cidade(enderecoDTO.getCidade())
+				.estado(enderecoDTO.getEstado())
+				.build();
 	}
 }

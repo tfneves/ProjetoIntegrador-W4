@@ -15,13 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import br.com.meliw4.projetointegrador.dto.ArmazemDTO;
 import br.com.meliw4.projetointegrador.dto.response.ArmazemResponseDTO;
-import br.com.meliw4.projetointegrador.dto.response.ResponseAddressLatLonDTO;
 import br.com.meliw4.projetointegrador.dto.response.ResponseLatLonDTO;
-import br.com.meliw4.projetointegrador.exception.APILocationException;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 

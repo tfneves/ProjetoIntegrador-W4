@@ -8,6 +8,7 @@ import br.com.meliw4.projetointegrador.entity.Setor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
@@ -15,11 +16,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
 public class LoteDTO {
 
 	@NotNull(message = "Id do setor inválido")
@@ -35,11 +35,9 @@ public class LoteDTO {
 
 	public static Lote convert(LoteDTO loteDTO, Setor setor, Representante representante) {
 		return Lote.builder()
-			.setor(setor)
-			.representante(representante)
-			.build();
+				.setor(setor)
+				.representante(representante)
+				.build();
 	}
 
 }
-
-

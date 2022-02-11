@@ -3,13 +3,13 @@ package br.com.meliw4.projetointegrador.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
 public class ProdutoPedidoResponse {
 
 	private Long produtoCarrinhoId;

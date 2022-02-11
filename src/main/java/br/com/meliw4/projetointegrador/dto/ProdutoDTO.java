@@ -3,8 +3,9 @@ package br.com.meliw4.projetointegrador.dto;
 import br.com.meliw4.projetointegrador.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
@@ -15,7 +16,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 public class ProdutoDTO {
 
 	@NotNull(message = "Id do produto inválido")
@@ -42,40 +44,39 @@ public class ProdutoDTO {
 
 	public static Produto convert(ProdutoDTO produtoDTO) {
 		return Produto.builder()
-			.nome(produtoDTO.getNome())
-			.volume(produtoDTO.getVolume())
-			.produtoCategoria(produtoDTO.getProdutoCategoria())
-			.build();
+				.nome(produtoDTO.getNome())
+				.volume(produtoDTO.getVolume())
+				.produtoCategoria(produtoDTO.getProdutoCategoria())
+				.build();
 	}
 
 	public static ProdutoVendedor convert(ProdutoDTO produtoDTO, Vendedor vendedor, Produto produto, Lote lote) {
 		return ProdutoVendedor.builder()
-			.vendedor(vendedor)
-			.produto(produto)
-			.preco(produtoDTO.getPreco())
-			.temperaturaAtual(produtoDTO.getTemperaturaAtual())
-			.dataVencimento(produtoDTO.getDataVencimento())
-			.dataManufatura(produtoDTO.getDataManufatura())
-			.quantidadeInicial(produtoDTO.getQuantidadeInicial())
-			.quantidadeAtual(produtoDTO.getQuantidadeAtual())
-			.lote(lote)
-			.build();
+				.vendedor(vendedor)
+				.produto(produto)
+				.preco(produtoDTO.getPreco())
+				.temperaturaAtual(produtoDTO.getTemperaturaAtual())
+				.dataVencimento(produtoDTO.getDataVencimento())
+				.dataManufatura(produtoDTO.getDataManufatura())
+				.quantidadeInicial(produtoDTO.getQuantidadeInicial())
+				.quantidadeAtual(produtoDTO.getQuantidadeAtual())
+				.lote(lote)
+				.build();
 	}
 
-	public static ProdutoDTO convert(ProdutoVendedor produtoVendedor){
+	public static ProdutoDTO convert(ProdutoVendedor produtoVendedor) {
 		return ProdutoDTO.builder()
-			.id(produtoVendedor.getProduto().getId())
-			.nome(produtoVendedor.getProduto().getNome())
-			.dataVencimento(produtoVendedor.getDataVencimento())
-			.volume(produtoVendedor.getProduto().getVolume())
-			.quantidadeInicial(produtoVendedor.getQuantidadeInicial())
-			.quantidadeAtual(produtoVendedor.getQuantidadeAtual())
-			.dataManufatura(produtoVendedor.getDataManufatura())
-			.produtoCategoria(produtoVendedor.getProduto().getProdutoCategoria())
-			.temperaturaAtual(produtoVendedor.getTemperaturaAtual())
-			.preco(produtoVendedor.getPreco())
-			.build();
+				.id(produtoVendedor.getProduto().getId())
+				.nome(produtoVendedor.getProduto().getNome())
+				.dataVencimento(produtoVendedor.getDataVencimento())
+				.volume(produtoVendedor.getProduto().getVolume())
+				.quantidadeInicial(produtoVendedor.getQuantidadeInicial())
+				.quantidadeAtual(produtoVendedor.getQuantidadeAtual())
+				.dataManufatura(produtoVendedor.getDataManufatura())
+				.produtoCategoria(produtoVendedor.getProduto().getProdutoCategoria())
+				.temperaturaAtual(produtoVendedor.getTemperaturaAtual())
+				.preco(produtoVendedor.getPreco())
+				.build();
 	}
 
 }
-

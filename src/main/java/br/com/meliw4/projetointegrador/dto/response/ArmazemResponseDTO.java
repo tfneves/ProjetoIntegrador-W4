@@ -3,11 +3,11 @@ package br.com.meliw4.projetointegrador.dto.response;
 import br.com.meliw4.projetointegrador.entity.Armazem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Builder
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArmazemResponseDTO {

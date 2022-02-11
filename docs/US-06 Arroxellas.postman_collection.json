@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "7b15594c-ee5c-4414-a8f1-37c13344eb92",
+		"name": "US-06 Arroxellas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "/warehouse/location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "/api/v1/warehouse/location?address=Avenida Paulista 1000",
+							"path": [
+								"api",
+								"v1",
+								"warehouse",
+								"location"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "Avenida Paulista 1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/warehouse/closest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "/api/v1/warehouse/closest?address=Avenida Paulista 1000",
+							"path": [
+								"api",
+								"v1",
+								"warehouse",
+								"closest"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "Avenida Paulista 1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/warehouse/closestlist",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "/api/v1/warehouse/closest?address=Avenida Paulista 1000",
+							"path": [
+								"api",
+								"v1",
+								"warehouse",
+								"closest"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "Avenida Paulista 1000"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
