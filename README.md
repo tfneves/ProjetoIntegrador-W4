@@ -17,9 +17,7 @@ Foi implementado apenas uma rota do tipo PUT para realizar o procedimento e solu
 
 Para realizar testes funcionais da aplicação, basta inicializá-la a partir da classe main
 [ProjetoIntegradorApplication](src/main/java/br/com/meliw4/projetointegrador/ProjetoIntegradorApplication.java), que
-subirá o Spring em conjunto com o banco de dados H2 configurado em
-[application.properties](src/main/resources/application.properties) e carregado com dados iniciais a partir da execução
-do [data.sql](src/main/resources/data.sql).
+subirá o Spring. Para o banco de dados, será necessário criar um arquivo <b><i>application.properties</i></b> e configurá-lo. Após a configuração, basta executar o [script_base.sql](src/main/resources/script_base.sql) com dados iniciais e necessários para o teste do endpoint.
 
 
 ## Endpoints e Payloads
