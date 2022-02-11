@@ -1,0 +1,674 @@
+{
+	"info": {
+		"_postman_id": "995da898-4bcf-4c6d-8362-9f1bde5f598d",
+		"name": "Projeto Integrador 4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/auth(FF)",
+			"item": [
+				{
+					"name": "Gerar token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\" : \"testee@teste.com\",\n    \"senha\" : \"bolinho\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/auth",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/setor",
+			"item": [
+				{
+					"name": "Buscar todos os setores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/setor",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"setor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar um setor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \"categoria\" : \"FS\",\n    \"volume\" : 1000,\n    \"armazemId\" : 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/setor",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"setor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/warehouse",
+			"item": [
+				{
+					"name": "Cadastrar um armazem",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIvYXBpL3YxIiwic3ViIjoidGVzdGVAdGVzdGUuY29tIiwiaWF0IjoxNjQ0MjYxMTY0LCJleHAiOjE2NDQzNDc1NjR9.qCA9vYPEQMrN1rrZ1Dqgi3EZzvR-6_dR-gJApkGvm6Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"MLB Cajamar II\",\n    \"volume\": 1000.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/insertWareHouse",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"insertWareHouse"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/representante",
+			"item": [
+				{
+					"name": "Cadastrar representante",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"Representante TOP\",\n    \"armazem_id\":\n}\n ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/representante",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"representante"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/fresh-products",
+			"item": [
+				{
+					"name": "/inboundorder",
+					"item": [
+						{
+							"name": "Cadastrar um lote",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"setorId\": 2,\n    \"armazemId\": 1,\n    \"vendedorId\": 1,\n    \"representanteId\": 1,\n    \"produtosDTO\": [\n        {\n            \"id\": 1,\n            \"nome\": \"banana\",\n            \"dataVencimento\": \"2023-03-01\",\n            \"volume\": 1,\n            \"quantidadeInicial\": 10,\n            \"quantidadeAtual\": 10,\n            \"dataManufatura\": \"2023-03-01\",\n            \"produtoCategoria\": {\n                \"categoria\":\"FS\",\n                \"temperaturaMinima\": 19.0\n            },\n            \"temperaturaAtual\": 25.0,\n            \"preco\": 2\n        },\n        {\n            \"id\": 2,\n            \"nome\": \"avocado\",\n            \"dataVencimento\": \"2023-03-01\",\n            \"volume\": 1,\n            \"quantidadeInicial\": 10,\n            \"quantidadeAtual\": 10,\n            \"dataManufatura\": \"2023-03-01\",\n            \"produtoCategoria\": {\n                \"categoria\":\"FS\",\n                \"temperaturaMinima\": 19.0\n            },\n            \"temperaturaAtual\": 25.0,\n            \"preco\": 2\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{fresh-products}}/inboundorder/",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"inboundorder",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atuliza um lote",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"setorId\": 2,\n    \"armazemId\": 1,\n    \"vendedorId\": 1,\n    \"representanteId\": 1,\n    \"produtosDTO\": [\n        {\n            \"id\": 1,\n            \"nome\": \"banana\",\n            \"dataVencimento\": \"2023-10-10\",\n            \"volume\": 1,\n            \"quantidadeInicial\": 2,\n            \"quantidadeAtual\": 2,\n            \"dataManufatura\": \"2021-10-10\",\n            \"produtoCategoria\": {\n                \"categoria\":\"FS\",\n                \"temperaturaMinima\": 19.0\n            },\n            \"temperaturaAtual\": 25.0,\n            \"preco\": 2\n        },\n        {\n            \"id\": 2,\n            \"nome\": \"avocado\",\n            \"dataVencimento\": \"2023-10-10\",\n            \"volume\": 1,\n            \"quantidadeInicial\": 2,\n            \"quantidadeAtual\": 2,\n            \"dataManufatura\": \"2021-10-10\",\n            \"produtoCategoria\": {\n                \"categoria\":\"FS\",\n                \"temperaturaMinima\": 19.0\n            },\n            \"temperaturaAtual\": 25.0,\n            \"preco\": 2\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{fresh-products}}/inboundorder",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"inboundorder"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/due-date",
+					"item": [
+						{
+							"name": "Filtra lotes por data de vencimento",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{fresh-products}}/due-date",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"due-date"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/due-date/list",
+					"item": [
+						{
+							"name": "Filtra produtos por data de vencimento",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{fresh-products}}/due-date/list",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"due-date",
+										"list"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/orders/createOrder",
+					"item": [
+						{
+							"name": "Busca carrinho por Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{fresh-products}}/orders/createOrder/1",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"orders",
+										"createOrder",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cria um carrinho",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"idComprador\": 2,\n    \"produtos\":[\n        {\n            \"anuncioId\": 2,\n            \"quantidade\": 4\n        },\n        {\n            \"anuncioId\": 1,\n            \"quantidade\": 6\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{fresh-products}}/orders/createOrder",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"orders",
+										"createOrder"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Atualizar Carrinho",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": \"2021-10-21\",\n    \"statusPedido\": {\n        \"id\": 1\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{fresh-products}}/orders/?idOrder=3",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"orders",
+										""
+									],
+									"query": [
+										{
+											"key": "idOrder",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/warehouse",
+					"item": [
+						{
+							"name": "Lista todos os produtos por armazem",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{fresh-products}}/warehouse?produtoId",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"warehouse"
+									],
+									"query": [
+										{
+											"key": "produtoId",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/list",
+					"item": [
+						{
+							"name": "Filtra todos os produtos por categoris",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{fresh-products}}/list",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"list"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/list/product",
+					"item": [
+						{
+							"name": "Filtra todos os lotes ordenado por parametros",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{fresh-products}}/list/product?idProduto&type",
+									"host": [
+										"{{fresh-products}}"
+									],
+									"path": [
+										"list",
+										"product"
+									],
+									"query": [
+										{
+											"key": "idProduto",
+											"value": null
+										},
+										{
+											"key": "type",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Retorna todos os produtos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{fresh-products}}",
+							"host": [
+								"{{fresh-products}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/statusPedido",
+			"item": [
+				{
+					"name": "/cadastrar",
+					"item": [
+						{
+							"name": "Cadastar novo status",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"statusCode\" : \"PAGAMENTO_APROVADO\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{status-pedido}}/cadastrar",
+									"host": [
+										"{{status-pedido}}"
+									],
+									"path": [
+										"cadastrar"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/listarTodos",
+					"item": [
+						{
+							"name": "Lista todos os status de pedido",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{status-pedido}}/listarTodos",
+									"host": [
+										"{{status-pedido}}"
+									],
+									"path": [
+										"listarTodos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "/ping",
+			"item": [
+				{
+					"name": "Testar conexão",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8085/ping",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/comprador",
+			"item": [
+				{
+					"name": "Cadastrar Comprador",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nome\": \"Teste-nome\",\n\t\"telefone\": \"11 99999-9999\",\n\t\"email\": \"testee@teste.com\",\n\t\"dataNascimento\": \"1976-02-08\",\n\t\"endereco_id\": 1\n\t}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/comprador",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"comprador"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/endereco",
+			"item": [
+				{
+					"name": "Adiciona endereço",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"logradouro\" : \"Teste-Rua\",\n\t\"numero\": 112,\n\t\"bairro\" : \"Teste-Baiiro\",\n\t\"cidade\" : \"Teste-cidade\",\n\t\"estado\" : \"SP\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/endereco",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"endereco"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/vendedor",
+			"item": [
+				{
+					"name": "Cadastrar vendedor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\" : \"Teste-Vendedor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/vendedor",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"vendedor"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/outbound",
+			"item": [
+				{
+					"name": "Retorna todos os carrinhos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{outbound}}/list",
+							"host": [
+								"{{outbound}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Realiza a outboundOrder",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Realiza o Outbound do carrinho",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

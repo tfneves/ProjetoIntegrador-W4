@@ -68,7 +68,8 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	@Override
 	public boolean validateProdutoExists(Long id) {
-		if (!produtoRepository.existsById(id)) {
+		boolean teste = produtoRepository.existsById(id);
+		if (!teste) {
 			return false;
 		}
 		return true;

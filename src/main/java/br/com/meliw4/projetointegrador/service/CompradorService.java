@@ -4,6 +4,7 @@ import br.com.meliw4.projetointegrador.dto.CompradorDTO;
 import br.com.meliw4.projetointegrador.entity.Comprador;
 import br.com.meliw4.projetointegrador.entity.Endereco;
 import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.repository.CompradorRepository;
 import org.springframework.stereotype.Service;
 

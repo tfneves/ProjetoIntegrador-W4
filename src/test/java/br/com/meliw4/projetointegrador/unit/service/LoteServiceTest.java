@@ -179,11 +179,11 @@ public class LoteServiceTest {
 
 	@Test
 	public void shouldRegisterNewProducts() {
-		Mockito.when(produtoService.validateProdutoExists(10l)).thenReturn(false);
-		Mockito.when(produtoService.validateProdutoExists(20l)).thenReturn(false);
+		Mockito.when(produtoService.validateProdutoExists(10l)).thenReturn(true);
+		Mockito.when(produtoService.validateProdutoExists(20l)).thenReturn(true);
 		List<Produto> produtos = loteService.checkProdutosDTO(produtosDTO);
-		assertEquals(0l, produtos.get(0).getId());
-		assertEquals(0l, produtos.get(1).getId());
+		assertEquals(10l, produtos.get(0).getId());
+		assertEquals(20l, produtos.get(1).getId());
 	}
 
 	@Test
