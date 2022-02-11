@@ -173,6 +173,7 @@ public class LoteService {
 	}
 
 	public void validateProdutosDTOCategoria(Setor setor, List<ProdutoDTO> produtosDTO) {
+
 		for (ProdutoDTO produtoDTO : produtosDTO) {
 			if (produtoDTO.getProdutoCategoria().getCategoria() != setor.getCategoria()) {
 				throw new BusinessValidationException(
@@ -183,18 +184,21 @@ public class LoteService {
 
 	public List<Produto> checkProdutosDTO(List<ProdutoDTO> produtosDTO) {
 		List<Produto> produtos = new ArrayList<>();
-		// TODO Usar stream
-		for (ProdutoDTO produtoDTO : produtosDTO) {
-			if (!produtoService.validateProdutoExists(produtoDTO.getId())) {
-				Produto produto = ProdutoDTO.convert(produtoDTO);
-				produtoService.save(produto);
-				produtos.add(produto);
-				produtoDTO.setId(produto.getId());
-			} else {
-				produtos.add(produtoService.findById(produtoDTO.getId()));
+		try {
+			for (ProdutoDTO produtoDTO : produtosDTO) {
+				if (!produtoService.validateProdutoExists(produtoDTO.getId())) {
+					Produto produto = ProdutoDTO.convert(produtoDTO);
+					produtoService.save(produto);
+					produtos.add(produto);
+					produtoDTO.setId(produto.getId());
+				} else {
+					produtos.add(produtoService.findById(produtoDTO.getId()));
+				}
 			}
+			return produtos;
+		}catch (Exception e){
+			throw new BusinessValidationException("Erro ao cadastrar o lote");
 		}
-		return produtos;
 	}
 
 	public Double calculateProdutosDTOTotalVolume(List<ProdutoDTO> produtosDTO) {

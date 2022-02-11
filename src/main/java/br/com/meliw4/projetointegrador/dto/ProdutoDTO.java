@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @Data
 public class ProdutoDTO {
 
-	@NotNull(message = "Id do produto inválido")
 	private Long id;
 	@NotEmpty(message = "Nome do produto inválido")
 	private String nome;
@@ -42,6 +41,7 @@ public class ProdutoDTO {
 
 	public static Produto convert(ProdutoDTO produtoDTO) {
 		return Produto.builder()
+			.id(produtoDTO.id)
 			.nome(produtoDTO.getNome())
 			.volume(produtoDTO.getVolume())
 			.produtoCategoria(produtoDTO.getProdutoCategoria())
