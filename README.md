@@ -17,10 +17,20 @@ Foi implementado apenas uma rota do tipo PUT para realizar o procedimento e solu
 
 Para realizar testes funcionais da aplicação, basta inicializá-la a partir da classe main
 [ProjetoIntegradorApplication](src/main/java/br/com/meliw4/projetointegrador/ProjetoIntegradorApplication.java), que
-subirá o Spring. Para o banco de dados, será necessário criar um arquivo <b><i>application.properties</i></b> e configurá-lo. Após a configuração, basta executar o [script_base.sql](src/main/resources/script_base.sql) com dados iniciais e necessários para o teste do endpoint.
+subirá o Spring. Para o banco de dados, será necessário criar um arquivo <b><i>application.properties</i></b> e configurá-lo. Após a configuração, basta executar o [script_base.sql](src/main/resources/script_base.sql) com dados necessários para o teste do endpoint.
 
 
-## Endpoints e Payloads
+## Endpoint e Payload
 
-Para chamar corretamente os endpoints construídos, basta importar no Postman a collection disponibilizada em
-[Requisito 06 - Avaliação.postman_collection](Requisito-US06/Requisito%2006%20-%20Avaliação.postman_collection.json).
+Para chamar corretamente o endpoint construído, basta realizar uma requisição do tipo <b>PUT</b> para o seguinte endpoint:
+```
+/api/v1/orders/updateCartStatus
+```
+
+Passando o seguinte Payload:
+```JSON
+{
+    "carrinho_id": 1,
+    "statusCode": "PAGAMENTO_APROVADO"
+}
+```
