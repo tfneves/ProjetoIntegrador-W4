@@ -84,9 +84,9 @@ public class PedidoService {
 	 * @return boolean
 	 * @author Thomaz Ferreira
 	 */
-	private boolean atualizaQuantidadeEstoque(ProdutoVendedor produtoVendedor, ProdutoCarrinhoDTO produtoCarrinhoDTO) {
+	public boolean atualizaQuantidadeEstoque(ProdutoVendedor produtoVendedor, ProdutoCarrinhoDTO produtoCarrinhoDTO) {
 		Integer estoqueDisponivel = produtoVendedor.getQuantidadeAtual();
-		if (estoqueDisponivel == null)
+		if (estoqueDisponivel == 0)
 			throw new OrderCheckoutException(
 				"Houve um erro ao pegar a quantidade disponível em estoque do produto de ID " + produtoVendedor.getId(), 500
 			);
@@ -108,7 +108,7 @@ public class PedidoService {
 	 * @return boolean
 	 * @author Thomaz Ferreira
 	 */
-	private boolean verificaDisponibilidadeEstoque(ProdutoVendedor produtoVendedor,
+	public boolean verificaDisponibilidadeEstoque(ProdutoVendedor produtoVendedor,
 												   ProdutoCarrinhoDTO produtoCarrinhoDTO) {
 		Integer estoqueDisponivel = produtoVendedor.getQuantidadeAtual();
 		Integer quantidadeSolicitada = produtoCarrinhoDTO.getQuantidade();
@@ -121,7 +121,7 @@ public class PedidoService {
 			throw new OrderCheckoutException(
 				"O produto de ID " + produtoVendedor.getId() + " não se encontra disponível em estoque no momento", 400
 			);
-		if (estoqueDisponivel > 0 && estoqueDisponivel < quantidadeSolicitada)
+		if (estoqueDisponivel < quantidadeSolicitada)
 			throw new OrderCheckoutException(
 				"A quantidade solicitada do produto de ID " + produtoVendedor.getId() + " é superior a existente em " +
 					"estoque. \n "
@@ -137,7 +137,7 @@ public class PedidoService {
 	 * @return boolean
 	 * @author Thomaz Ferreira
 	 */
-	private boolean verificaValidadeProduto(ProdutoVendedor produtoVendedor) {
+	public boolean verificaValidadeProduto(ProdutoVendedor produtoVendedor) {
 		final int DIAS_MINIMOS_VALIDADE = 22;
 		LocalDate validadeProduto = produtoVendedor.getDataVencimento();
 		if (validadeProduto == null)
@@ -199,9 +199,9 @@ public class PedidoService {
 		return pedidoResponse;
 	}
 
-	private Carrinho validatePedido(Long id) {
+	public Carrinho validatePedido(Long id) {
 		if (!carrinhoRepository.existsById(id)) {
-			throw new BusinessValidationException("O pedido näo existe.");
+			throw new BusinessValidationException("O pedido não existe.");
 		}
 			Carrinho pedido = carrinhoRepository.findById(id).orElse(new Carrinho());
 			if (!pedido.getStatusPedido().getStatusCode().equalsIgnoreCase("FINALIZADO")) {

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class VendedorService {
 
-
 	private VendedorRepository vendedorRepository;
 
 	public VendedorService(VendedorRepository vendedorRepository) {
@@ -17,14 +16,14 @@ public class VendedorService {
 	}
 
 	public Vendedor register(VendedorDTO vendedorDTO) {
-		Vendedor vendedor = vendedorDTO.convert(vendedorDTO);
+		Vendedor vendedor = VendedorDTO.convert(vendedorDTO);
 		vendedorRepository.save(vendedor);
 		return vendedor;
 	}
 
 	public Vendedor findVendedorById(Long id) {
 		return vendedorRepository
-			.findById(id)
-			.orElseThrow(() -> new BusinessValidationException("O vendedor com id " + id + " não existe."));
+				.findById(id)
+				.orElseThrow(() -> new BusinessValidationException("O vendedor com id " + id + " não existe."));
 	}
 }

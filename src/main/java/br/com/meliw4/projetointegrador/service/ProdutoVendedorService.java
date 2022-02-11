@@ -2,10 +2,9 @@ package br.com.meliw4.projetointegrador.service;
 
 import br.com.meliw4.projetointegrador.dto.ProdutoCarrinhoDTO;
 import br.com.meliw4.projetointegrador.entity.ProdutoVendedor;
-import br.com.meliw4.projetointegrador.exception.BusinessValidationException;
+import br.com.meliw4.projetointegrador.exception.NotFoundException;
 import br.com.meliw4.projetointegrador.exception.OrderCheckoutException;
 import br.com.meliw4.projetointegrador.repository.ProdutoVendedorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +24,12 @@ public class ProdutoVendedorService {
 	}
 
 	public List<ProdutoVendedor> findAll() {
-		return this.produtoVendedorRepository.findAll();
+		List<ProdutoVendedor> produtoVendedores = this.produtoVendedorRepository.findAll();
+
+		if (produtoVendedores.isEmpty()) {
+			throw new NotFoundException("Não há produtos para a seleção");
+		}
+		return produtoVendedores;
 	}
 
 	public ProdutoVendedor findByLoteIdAndProdutoId(Long loteId, Long produtoId) {
@@ -81,5 +85,11 @@ public class ProdutoVendedorService {
 			this.updateEstoqueProduto((qtdAtual + qtdSolicitada), produtoVendedor.getId());
 		}
 		return true;
+	}
+
+	public List<ProdutoVendedor> findProdutoVendedorByProduto_Id(Long id) {
+		return produtoVendedorRepository.findByProduto_Id(id)
+				.orElseThrow(() -> new NotFoundException(
+						"Não há produtos para a seleção"));
 	}
 }

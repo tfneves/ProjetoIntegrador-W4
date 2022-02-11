@@ -24,20 +24,17 @@ public class SetorController {
 	@Autowired
 	SetorService setorService;
 
-	@Autowired
-	SetorDTO setorDTO;
-
 	@GetMapping("/setor")
 	public ResponseEntity<List<SetorResponse>> devolveTodosOsSetores() {
-		return ResponseEntity.ok(setorService.retonraSetores());
+		return ResponseEntity.ok(setorService.retornaSetores());
 	}
 
 	@PostMapping("/setor")
-	public ResponseEntity<?> cadastraSetor(@RequestBody @Valid SetorDTO payload, UriComponentsBuilder uriBuilder) throws ArmazemException {
-		Setor setor = setorDTO.converte(payload);
+	public ResponseEntity<?> cadastraSetor(@RequestBody @Valid SetorDTO payload,
+			UriComponentsBuilder uriBuilder) throws ArmazemException {
 		URI uri = uriBuilder.path("/setor").build().toUri();
 		try {
-			return ResponseEntity.created(uri).body(setorService.salva(setor));
+			return ResponseEntity.created(uri).body(setorService.salva(payload));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
