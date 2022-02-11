@@ -3,7 +3,8 @@
 ## Documentos Entregáveis
 
 Os documentos entregáveis exigidos no nível 1 do desafio estão no diretório [Requisito-US06](docs).
-Leia o User Story em [Requisito 06 - Avaliação.postman_collection](docs/Requisito%206%20-%20ml-check-closest-warehouse-01.pdf).
+
+Leia o User Story em [Requisito 06 - ml-check-closest-warehouse-01](docs/Requisito%206%20-%20ml-check-closest-warehouse-01.pdf).
 
 ## Implementação
 
