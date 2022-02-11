@@ -11,6 +11,9 @@ seja possível a identificação de um carrinho abandonado de acordo com seu sta
 de produtos nesses carrinhos abandonados. <br>
 Os carrinhos que forem definidos com um status do tipo <b><i>Disposable</i> (descartável)</b>, serão excluídos depois de algum tempo e, os produtos serão devolvidos ao estoque.<br>
 Foi implementado apenas uma rota do tipo PUT para realizar o procedimento e solucionar o problema descrito no anteriormente.
+<br>
+<br>
+<b>Obs.:</b> Para os testes, o tempo para exclusão de um carrinho que foi altardo para um status <i>Disposable</i>, foi definido em <b>15000 milisegundos (15 segundos)</b>. Esse tempo pode ser modificado na constante <b>TIMEOUT</b>, que se encontra dentro da função <b>updateCartStatus</b> em [PedidoController.java](src/main/java/br/com/meliw4/projetointegrador/controller/PedidoController.java)
 
 
 ## Rodando a aplicação
