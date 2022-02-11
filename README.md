@@ -1,4 +1,4 @@
-# Requisito - 06 - Desafio Final
+# Requisito 06
 
 ## Documentos Entregáveis
 
@@ -6,10 +6,12 @@ Os documentos entregáveis exigidos no nível 1 do desafio estão no diretório 
 
 ## Implementação
 
-Para o requisito 06, decidi construir um CRUD básico que simulasse o sistema de avaliação dos anúncios de produtos no
-Mercado Livre. Foram implementadas 5 rotas desse processo, criação de uma avaliação, exclusão, atualização do
-comentário, recuperação de uma avaliação pelo id e recuperação de todas as avaliações de um anúncio de um produto a
-partir do id desse anúncio.
+Para este requisito, decidi construir uma API que possibilita a alteração do status de um carrinho, de forma que, 
+seja possível a identificação de um carrinho abandonado de acordo com seu status atual, e evitar o represamento 
+de produtos nesses carrinhos abandonados. <br>
+Os carrinhos que forem definidos com um status do tipo <b><i>Disposable</i> (descartável)</b>, serão excluídos depois de algum tempo e, os produtos serão devolvidos ao estoque.<br>
+Foi implementado apenas uma rota do tipo PUT para realizar o procedimento e solucionar o problema descrito no anteriormente.
+
 
 ## Rodando a aplicação
 
