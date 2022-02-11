@@ -38,7 +38,3 @@ build/
 
 ### MacOS ###
 **/.DS_Store
-
-### Project ENV Config ###
-
-src/main/resources/application.properties
